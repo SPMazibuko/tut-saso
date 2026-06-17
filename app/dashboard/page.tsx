@@ -27,361 +27,45 @@ import { SupportedModulesPerDepartment, type BreakdownCategory } from "@/compone
 import { ModuleSupportDrilldownDialog } from "@/components/admin/module-support-drilldown-dialog"
 import { ModulesPerDepartment } from "@/components/admin/modules-per-department"
 import { StudentStatusPieChart } from "@/components/admin/student-statistics copy"
-import { AtRiskFundingBreakdown } from "@/components/admin/at-risk-funding-breakdown"
 import { AtRiskResidencyBreakdown } from "@/components/admin/at-risk-residency-breakdown"
 import { AtRiskResidencyDifference } from "@/components/admin/at-risk-residency-difference"
 import { ReadmittedFundingBreakdown } from "@/components/admin/readmitted-funding-breakdown"
-import { ConditionalLetterWithoutProbation } from "@/components/admin/conditional-letter-without-probation"
 import { FinancialExclusionDropoutMetric } from "@/components/admin/financial-exclusion-dropout-metric"
 import { ProbationReasonBreakdown } from "@/components/admin/probation-reason-breakdown"
 import { ReadmittedFundingDrilldownDialog } from "@/components/admin/readmitted-funding-drilldown-dialog"
 import { StudentFundingDrilldownDialog } from "@/components/admin/student-funding-drilldown-dialog"
 import { ProbationReasonDrilldownDialog } from "@/components/admin/probation-reason-drilldown-dialog"
-import { AtRiskFundingDrilldownDialog } from "@/components/admin/at-risk-funding-drilldown-dialog"
 import { AtRiskResidencyDrilldownDialog } from "@/components/admin/at-risk-residency-drilldown-dialog"
 import { ResidencyDifferenceDrilldownDialog } from "@/components/admin/residency-difference-drilldown-dialog"
 import {
-  getModulesPerDepartment,
-  getSupportedModulesPerDepartment,
-  getModuleBreakdownByDepartment,
-  getIdentifiedModulesTotals,
-} from "@/lib/mock/module-identification"
+  SASO_DASHBOARD_STATS,
+  SASO_CAMPUS_PERFORMANCE,
+  getSasoDepartmentPerformance,
+  getSasoModuleBreakdownByDepartment,
+} from "@/lib/tut-saso-data"
 
-// Mock data for admin dashboard
-const mockStats2 = {
-  totalStudents: 1797,
-  teachers: 19,
-  identifiedSubjects: 59,
-  supportedSubjects: 39,
-  communicationsToday: 45,
-  pendingImports: 3,
-}
+const enhancedStudentStatus = SASO_DASHBOARD_STATS.studentStatus
+const firstYearUnitData = SASO_DASHBOARD_STATS.breakdown
+const moduleTutorsCount = SASO_DASHBOARD_STATS.moduleTutors
+const identifiedModulesData = SASO_DASHBOARD_STATS.identifiedModules
+const modulesPerDepartmentData = SASO_DASHBOARD_STATS.modulesPerDepartment
+const supportedModulesPerDepartmentData = SASO_DASHBOARD_STATS.supportedModulesPerDepartment
+const conditionalLettersData = SASO_DASHBOARD_STATS.conditionalLetters
+const probationFormData = SASO_DASHBOARD_STATS.probationForm
+const exclusionPerDepartmentData = SASO_DASHBOARD_STATS.exclusionPerDepartment
+const readmissionPerDepartmentData = SASO_DASHBOARD_STATS.readmissionPerDepartment
+const probationPerDepartmentData = SASO_DASHBOARD_STATS.probationPerDepartment
 
+// TUT Campus Performance (mock rates aligned to departmental breakdown)
+const additionalCampusPerformance = SASO_CAMPUS_PERFORMANCE
 
-
-const grade8UnitData = {
-  academicWarningRepeaters: 300,
-  failedRepeaters: 300,
-  newAcademicWarningFirstTime: 89,
-  newFailedFirstTime: 300,
-}
-
-const subjectTeachersCount = 14
-
-const identifiedSubjectsData = {
-  departmentSubjects: 20,
-  supportedSubjects: 39,
-  totalSubjects: 15,
-}
-
-const conditionalLettersData = {
-  lettersSigned: 50,
-  lettersNotSigned: 150,
-}
-
-const academicWarningFormData = {
-  lettersSigned: 800,
-  lettersNotSigned: 200,
-}
-
-// Subject Departments
-const subjectsPerDepartmentData = [
-  { name: "Mathematics & Sciences", count: 28 },
-  { name: "Languages", count: 18 },
-  { name: "Commerce & Economics", count: 15 },
-  { name: "Humanities", count: 22 },
-  { name: "Life Orientation", count: 20 },
-]
-
-const supportedSubjectsPerDepartmentData = [
-  { name: "Mathematics & Sciences", count: 15 },
-  { name: "Languages", count: 12 },
-  { name: "Commerce & Economics", count: 10 },
-]
-
-// Subject breakdown data for each department
-const subjectBreakdownData = {
-  "Mathematics & Sciences": {
-    supportedBySchool: 12,
-    supportedByDepartment: 8,
-    notSupported: 8
-  },
-  "Humanities": {
-    supportedBySOLUSI: 8,
-    supportedByDepartment: 5,
-    notSupported: 5
-  },
-  "Agriculture": {
-    supportedBySOLUSI: 7,
-    supportedByDepartment: 4,
-    notSupported: 4
-  },
-  "Sciences": {
-    supportedBySOLUSI: 10,
-    supportedByDepartment: 6,
-    notSupported: 6
-  },
-  "Health Professions": {
-    supportedBySOLUSI: 12,
-    supportedByDepartment: 5,
-    notSupported: 3
-  },
-  "Management": {
-    supportedBySOLUSI: 10,
-    supportedByDepartment: 8,
-    notSupported: 7
-  },
-  "Accounting": {
-    supportedBySOLUSI: 8,
-    supportedByDepartment: 6,
-    notSupported: 6
-  },
-  "Marketing": {
-    supportedBySOLUSI: 7,
-    supportedByDepartment: 5,
-    notSupported: 6
-  },
-  "Management Information Systems (MIS)": {
-    supportedBySOLUSI: 8,
-    supportedByDepartment: 5,
-    notSupported: 3
-  },
-  "Theology": {
-    supportedBySOLUSI: 6,
-    supportedByDepartment: 4,
-    notSupported: 2
-  },
-  "Chaplaincy / Religious Studies": {
-    supportedBySOLUSI: 4,
-    supportedByDepartment: 2,
-    notSupported: 2
-  }
-}
-
-const failedPerDepartmentData: { name: string; count: number }[] = []
-const repeatingGradePerDepartmentData: { name: string; count: number }[] = []
-const academicWarningsPerDepartmentData: { name: string; count: number }[] = []
-
-// Subjects by Course Level
-const subjectsByGrade = {
-  grade8: {
-    mathematics: 12,
-    languages: 8,
-    sciences: 6,
-    humanities: 10,
-    lifeOrientation: 8,
-  }
-}
-
-const studentStatus = [
-  { name: "Faculty SCI", value: 0 },
-  { name: "Academic Warning", value: 1315 },
-  { name: "Repeating Grade", value: 329 },
-  { name: "Failed", value: 153 },
-]
-
-// Subject Department Breakdown
-const departmentBreakdown = {
-  failed: [
-    { name: "Mathematics & Sciences", value: 105 },
-    { name: "Languages", value: 92 },
-    { name: "Commerce & Economics", value: 88 },
-    { name: "Humanities", value: 115 },
-    { name: "Life Orientation", value: 78 },
-  ],
-  repeatingGrade: [
-    { name: "Mathematics & Sciences", value: 85 },
-    { name: "Languages", value: 72 },
-    { name: "Commerce & Economics", value: 68 },
-    { name: "Humanities", value: 95 },
-    { name: "Life Orientation", value: 58 },
-  ],
-  academicWarning: [
-    { name: "Mathematics & Sciences", value: 185 },
-    { name: "Languages", value: 152 },
-    { name: "Commerce & Economics", value: 128 },
-    { name: "Humanities", value: 198 },
-    { name: "Life Orientation", value: 112 },
-  ],
-  excluded: [
-    // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
-    { name: "Education", value: 105 },
-    { name: "Humanities", value: 92 },
-    { name: "Agriculture", value: 88 },
-    { name: "Sciences", value: 115 },
-    { name: "Health Professions", value: 78 },
-    // Faculty of Business Administration
-    { name: "Management", value: 145 },
-    { name: "Accounting", value: 128 },
-    { name: "Marketing", value: 98 },
-    { name: "Management Information Systems (MIS)", value: 85 },
-    // Faculty of Theology and Chaplaincy
-    { name: "Theology", value: 55 },
-    { name: "Chaplaincy / Religious Studies", value: 42 },
-  ],
-  readmitted: [
-    // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
-    { name: "Education", value: 85 },
-    { name: "Humanities", value: 72 },
-    { name: "Agriculture", value: 68 },
-    { name: "Sciences", value: 95 },
-    { name: "Health Professions", value: 58 },
-    // Faculty of Business Administration
-    { name: "Management", value: 125 },
-    { name: "Accounting", value: 108 },
-    { name: "Marketing", value: 78 },
-    { name: "Management Information Systems (MIS)", value: 65 },
-    // Faculty of Theology and Chaplaincy
-    { name: "Theology", value: 35 },
-    { name: "Chaplaincy / Religious Studies", value: 22 },
-  ],
-  probation: [
-    // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
-    { name: "Education", value: 185 },
-    { name: "Humanities", value: 152 },
-    { name: "Agriculture", value: 128 },
-    { name: "Sciences", value: 198 },
-    { name: "Health Professions", value: 112 },
-    // Faculty of Business Administration
-    { name: "Management", value: 245 },
-    { name: "Accounting", value: 218 },
-    { name: "Marketing", value: 168 },
-    { name: "Management Information Systems (MIS)", value: 135 },
-    // Faculty of Theology and Chaplaincy
-    { name: "Theology", value: 78 },
-    { name: "Chaplaincy / Religious Studies", value: 52 },
-  ]
-}
-
-// Mock data for admin dashboard
-const mockStats = {
-  totalStudents: 1797,
-  tutors: 19,
-  identifiedModules: 59,
-  supportedModules: 39,
-  communicationsToday: 45,
-  pendingImports: 3,
-
-
-  teachers: 19,
-  identifiedSubjects: 59,
-  supportedSubjects: 39,
-
-
-}
-
-// Enhanced data from the dashboard image
-const enhancedStudentStatus = {
-  probation: 1000,
-  exclusion: 600,
-  readmitted: 200,
-  excluded: 400,
-}
-
-const firstYearUnitData = {
-  probationRepeaters: 300,
-  exclusionRepeaters: 300,
-  newProbationFirstTime: 89,
-  newExclusionFirstTime: 300,
-}
-
-const moduleTutorsCount = 14
-
-// Modules identified per department (from shared mock dataset)
-const identifiedModulesData = getIdentifiedModulesTotals()
-const modulesPerDepartmentData = getModulesPerDepartment()
-const supportedModulesPerDepartmentData = getSupportedModulesPerDepartment()
-
-const probationFormData = {
-  lettersSigned: 800,
-  lettersNotSigned: 200,
-}
-
-const exclusionPerDepartmentData: { name: string; count: number }[] = []
-
-const readmissionPerDepartmentData: { name: string; count: number }[] = []
-
-const probationPerDepartmentData: { name: string; count: number }[] = []
-
-// Solusi University Modules by Level
-const modulesByLevel = {
-  firstYear: {
-    education: 12,
-    humanities: 8,
-    agriculture: 6,
-    sciences: 10,
-    healthProfessions: 8,
-    management: 10,
-    accounting: 8,
-    marketing: 7,
-    mis: 6,
-    theology: 5,
-    chaplaincy: 3,
-  }
-}
-
-const studentHighrStatus = [
-  { name: "First Year", value: 0 },
-  { name: "Probation", value: 1315 },
-  { name: "Readmitted", value: 329 },
-  { name: "Excluded", value: 153 },
-]
-
-
-
-// Update the department data arrays with the correct format
-exclusionPerDepartmentData.push(...departmentBreakdown.excluded.map(item => ({ name: item.name, count: item.value })))
-readmissionPerDepartmentData.push(...departmentBreakdown.readmitted.map(item => ({ name: item.name, count: item.value })))
-probationPerDepartmentData.push(...departmentBreakdown.probation.map(item => ({ name: item.name, count: item.value })))
-
-// Solusi University Campus Performance
-const additionalCampusPerformance = {
-  mainCampus: {
-    campus: "Main Campus",
-    departments: [
-      { name: "Education", passRate: 82, successRate: 79 },
-      { name: "Health Professions", passRate: 85, successRate: 83 },
-      { name: "Management", passRate: 79, successRate: 77 },
-      { name: "Accounting", passRate: 81, successRate: 79 },
-      { name: "Theology", passRate: 84, successRate: 82 },
-    ],
-    overall: { passRate: 82, successRate: 80 }
-  },
-  online: {
-    campus: "Online",
-    departments: [
-      { name: "Education", passRate: 79, successRate: 76 },
-      { name: "Humanities", passRate: 77, successRate: 74 },
-      { name: "Management", passRate: 76, successRate: 74 },
-      { name: "Accounting", passRate: 78, successRate: 76 },
-      { name: "Theology", passRate: 81, successRate: 79 },
-    ],
-    overall: { passRate: 78, successRate: 76 }
-  },
-  extension: {
-    campus: "Extension",
-    departments: [
-      { name: "Education", passRate: 80, successRate: 77 },
-      { name: "Sciences", passRate: 75, successRate: 73 },
-      { name: "Management", passRate: 77, successRate: 75 },
-      { name: "Accounting", passRate: 79, successRate: 77 },
-    ],
-    overall: { passRate: 78, successRate: 76 }
-  }
-}
-
-// Update the department data arrays with the correct format
-failedPerDepartmentData.push(...departmentBreakdown.failed.map(item => ({ name: item.name, count: item.value })))
-repeatingGradePerDepartmentData.push(...departmentBreakdown.repeatingGrade.map(item => ({ name: item.name, count: item.value })))
-academicWarningsPerDepartmentData.push(...departmentBreakdown.academicWarning.map(item => ({ name: item.name, count: item.value })))
-
-// Subject Department Statistics
+// TUT ICT department statistics (aligned to SASO probation/exclusion totals)
 const departmentStats = [
-  { name: "Mathematics & Sciences", failed: 105, repeatingGrade: 85, academicWarning: 185 },
-  { name: "Languages", failed: 92, repeatingGrade: 72, academicWarning: 152 },
-  { name: "Commerce & Economics", failed: 88, repeatingGrade: 68, academicWarning: 128 },
-  { name: "Humanities", failed: 115, repeatingGrade: 95, academicWarning: 198 },
-  { name: "Life Orientation", failed: 78, repeatingGrade: 58, academicWarning: 112 },
+  { name: "Computer Science", failed: 105, repeatingGrade: 85, academicWarning: 185 },
+  { name: "Informatics", failed: 92, repeatingGrade: 72, academicWarning: 152 },
+  { name: "Information Technology", failed: 88, repeatingGrade: 68, academicWarning: 128 },
+  { name: "Computer Systems Engineering", failed: 115, repeatingGrade: 95, academicWarning: 198 },
+  { name: "ICT First Year Unit", failed: 78, repeatingGrade: 58, academicWarning: 112 },
 ]
 
 const conditionalLetters = [
@@ -389,79 +73,8 @@ const conditionalLetters = [
   { name: "Not signed", value: 201 },
 ]
 
-// Solusi University Faculty Overview - Performance by Department
-// Base data (used for 2024)
-const mockFacultyOverview = [
-  // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
-  {
-    department: "Education",
-    passRate: 81,
-    successRate: 78,
-    trend: "up",
-  },
-  {
-    department: "Humanities",
-    passRate: 79,
-    successRate: 76,
-    trend: "stable",
-  },
-  {
-    department: "Agriculture",
-    passRate: 82,
-    successRate: 80,
-    trend: "up",
-  },
-  {
-    department: "Sciences",
-    passRate: 77,
-    successRate: 75,
-    trend: "down",
-  },
-  {
-    department: "Health Professions",
-    passRate: 84,
-    successRate: 82,
-    trend: "up",
-  },
-  // Faculty of Business Administration
-  {
-    department: "Management",
-    passRate: 78,
-    successRate: 76,
-    trend: "down",
-  },
-  {
-    department: "Accounting",
-    passRate: 80,
-    successRate: 78,
-    trend: "stable",
-  },
-  {
-    department: "Marketing",
-    passRate: 79,
-    successRate: 77,
-    trend: "down",
-  },
-  {
-    department: "Management Information Systems (MIS)",
-    passRate: 77,
-    successRate: 75,
-    trend: "stable",
-  },
-  // Faculty of Theology and Chaplaincy
-  {
-    department: "Theology",
-    passRate: 83,
-    successRate: 81,
-    trend: "up",
-  },
-  {
-    department: "Chaplaincy / Religious Studies",
-    passRate: 81,
-    successRate: 79,
-    trend: "down",
-  },
-]
+// TUT faculty overview from SASO departmental breakdown
+const mockFacultyOverview = getSasoDepartmentPerformance()
 
 // Derive historical performance with slightly lower rates for previous years
 const facultyOverview2022: typeof mockFacultyOverview = mockFacultyOverview.map((dept) => ({
@@ -486,48 +99,25 @@ const departmentPerformanceByYear: Record<string, typeof mockFacultyOverview> = 
 
 // Solusi University Campus Performance - Detailed Breakdown
 const campusPerformance = {
-  mainCampus: {
-    campus: "Main Campus",
-    departments: [
-      { name: "Education", passRate: 82, successRate: 79 },
-      { name: "Humanities", passRate: 80, successRate: 77 },
-      { name: "Agriculture", passRate: 83, successRate: 81 },
-      { name: "Sciences", passRate: 78, successRate: 76 },
-      { name: "Health Professions", passRate: 85, successRate: 83 },
-      { name: "Management", passRate: 79, successRate: 77 },
-      { name: "Accounting", passRate: 81, successRate: 79 },
-      { name: "Marketing", passRate: 80, successRate: 78 },
-      { name: "Management Information Systems (MIS)", passRate: 78, successRate: 76 },
-      { name: "Theology", passRate: 84, successRate: 82 },
-      { name: "Chaplaincy / Religious Studies", passRate: 82, successRate: 80 },
-    ],
-    overall: { passRate: 82, successRate: 80 }
+  soshanguveSouth: {
+    campus: "Soshanguve (South)",
+    departments: additionalCampusPerformance.soshanguveSouth.departments,
+    overall: additionalCampusPerformance.soshanguveSouth.overall,
   },
-  online: {
-    campus: "Online",
-    departments: [
-      { name: "Education", passRate: 79, successRate: 76 },
-      { name: "Humanities", passRate: 77, successRate: 74 },
-      { name: "Management", passRate: 76, successRate: 74 },
-      { name: "Accounting", passRate: 78, successRate: 76 },
-      { name: "Theology", passRate: 81, successRate: 79 },
-    ],
-    overall: { passRate: 78, successRate: 76 }
+  polokwane: {
+    campus: "Polokwane",
+    departments: additionalCampusPerformance.polokwane.departments,
+    overall: additionalCampusPerformance.polokwane.overall,
   },
-  extension: {
-    campus: "Extension",
-    departments: [
-      { name: "Education", passRate: 80, successRate: 77 },
-      { name: "Sciences", passRate: 75, successRate: 73 },
-      { name: "Management", passRate: 77, successRate: 75 },
-      { name: "Accounting", passRate: 79, successRate: 77 },
-    ],
-    overall: { passRate: 78, successRate: 76 }
-  }
+  emalahleni: {
+    campus: "eMalahleni",
+    departments: additionalCampusPerformance.emalahleni.departments,
+    overall: additionalCampusPerformance.emalahleni.overall,
+  },
 }
 
 const getModuleBreakdown = (departmentName: string) => {
-  return getModuleBreakdownByDepartment(departmentName)
+  return getSasoModuleBreakdownByDepartment(departmentName)
 }
 
 // School Performance (removed - high schools don't have multiple campuses)
@@ -608,6 +198,8 @@ const schoolPerformance = {
   }
 }
 
+const mockAtRisk = SASO_DASHBOARD_STATS.atRiskAnalytics
+
 export default function DashboardPage() {
   const [userRole, setUserRole] = useState<string | null>(null)
   const [stats, setStats] = useState<DashboardStats | null>(null)
@@ -618,25 +210,19 @@ export default function DashboardPage() {
   )
   const [selectedCategory, setSelectedCategory] = useState<BreakdownCategory | undefined>(undefined)
   const [drilldownDialogOpen, setDrilldownDialogOpen] = useState(false)
-  const [selectedYear, setSelectedYear] = useState<keyof typeof departmentPerformanceByYear>("2024")
+  const [selectedYear, setSelectedYear] = useState<keyof typeof departmentPerformanceByYear>("2026")
   // New metrics for at-risk and readmitted students
-  const [atRiskFunding, setAtRiskFunding] = useState({ selfFunded: 0, nsfas: 0 })
-  const [atRiskResidency, setAtRiskResidency] = useState({ onCampus: 0, offCampus: 0 })
-  const [readmittedFunding, setReadmittedFunding] = useState({ selfFunded: 0, nsfas: 0 })
-  const [conditionalNoProbation, setConditionalNoProbation] = useState<Learner[]>([])
-  const [financialExclusionDropoutCount, setFinancialExclusionDropoutCount] = useState(0)
-  const [probationReasonBreakdown, setProbationReasonBreakdown] = useState({
-    module_cancellation: 0,
-    low_credits: 0,
-    academic_performance: 0,
-    other: 0,
-  })
+  const [atRiskResidency, setAtRiskResidency] = useState(mockAtRisk.residency)
+  const [readmittedFunding, setReadmittedFunding] = useState(mockAtRisk.readmittedFunding)
+  const [financialExclusionDropoutCount, setFinancialExclusionDropoutCount] = useState(
+    mockAtRisk.financialExclusionDropout
+  )
+  const [probationReasonBreakdown, setProbationReasonBreakdown] = useState(mockAtRisk.probationReasons)
   const [allStudents, setAllStudents] = useState<Learner[]>([])
-  const [studentFundingData, setStudentFundingData] = useState({ nsfas: 0, selfFunded: 0 })
+  const [studentFundingData, setStudentFundingData] = useState(mockAtRisk.studentFunding)
   const [readmittedDrilldownOpen, setReadmittedDrilldownOpen] = useState(false)
   const [studentFundingDrilldownOpen, setStudentFundingDrilldownOpen] = useState(false)
   const [probationDrilldownOpen, setProbationDrilldownOpen] = useState(false)
-  const [atRiskFundingDrilldownOpen, setAtRiskFundingDrilldownOpen] = useState(false)
   const [atRiskResidencyDrilldownOpen, setAtRiskResidencyDrilldownOpen] = useState(false)
   const [residencyDifferenceDrilldownOpen, setResidencyDifferenceDrilldownOpen] = useState(false)
 
@@ -674,17 +260,6 @@ export default function DashboardPage() {
         (s) => s.riskLevel === "At Risk" || s.riskLevel === "Satisfactory"
       )
 
-      // At-risk funding breakdown
-      const atRiskFundingCounts = atRiskLearners.reduce(
-        (acc, s) => {
-          if (s.fundingType === "self") acc.selfFunded++
-          else if (s.fundingType === "nsfas") acc.nsfas++
-          return acc
-        },
-        { selfFunded: 0, nsfas: 0 }
-      )
-      setAtRiskFunding(atRiskFundingCounts)
-
       // At-risk residency breakdown
       const atRiskResidencyCounts = atRiskLearners.reduce(
         (acc, s) => {
@@ -694,7 +269,11 @@ export default function DashboardPage() {
         },
         { onCampus: 0, offCampus: 0 }
       )
-      setAtRiskResidency(atRiskResidencyCounts)
+      setAtRiskResidency(
+        atRiskResidencyCounts.onCampus + atRiskResidencyCounts.offCampus > 0
+          ? atRiskResidencyCounts
+          : mockAtRisk.residency
+      )
 
       // Readmitted funding breakdown
       const readmittedLearners = studentsList.filter((s) => s.isReadmitted === true)
@@ -706,7 +285,11 @@ export default function DashboardPage() {
         },
         { selfFunded: 0, nsfas: 0 }
       )
-      setReadmittedFunding(readmittedFundingCounts)
+      setReadmittedFunding(
+        readmittedFundingCounts.nsfas + readmittedFundingCounts.selfFunded > 0
+          ? readmittedFundingCounts
+          : mockAtRisk.readmittedFunding
+      )
 
       // Student funding breakdown (all students)
       const fundingCounts = studentsList.reduce(
@@ -717,13 +300,9 @@ export default function DashboardPage() {
         },
         { nsfas: 0, selfFunded: 0 }
       )
-      setStudentFundingData(fundingCounts)
-
-      // Conditional letter signed but probation form not signed
-      const conditionalNoProbationList = studentsList.filter(
-        (s) => s.conditionalLetterSigned === true && s.probationFormSigned !== true
+      setStudentFundingData(
+        fundingCounts.nsfas + fundingCounts.selfFunded > 0 ? fundingCounts : mockAtRisk.studentFunding
       )
-      setConditionalNoProbation(conditionalNoProbationList)
 
       // Financial exclusion dropout metric: financially excluded + academically approved + dropped out
       const financialExclusionDropout = studentsList.filter(
@@ -732,8 +311,11 @@ export default function DashboardPage() {
           (s.riskLevel === "Good" || s.riskLevel === "Satisfactory") &&
           s.hasDroppedOut === true
       )
-      setFinancialExclusionDropoutCount(financialExclusionDropout.length)
-
+      setFinancialExclusionDropoutCount(
+        financialExclusionDropout.length > 0
+          ? financialExclusionDropout.length
+          : mockAtRisk.financialExclusionDropout
+      )
 
       // Probation reason breakdown
       const probationBreakdown = studentsList
@@ -751,7 +333,14 @@ export default function DashboardPage() {
             other: 0,
           }
         )
-      setProbationReasonBreakdown(probationBreakdown)
+      const probationTotal =
+        probationBreakdown.module_cancellation +
+        probationBreakdown.low_credits +
+        probationBreakdown.academic_performance +
+        probationBreakdown.other
+      setProbationReasonBreakdown(
+        probationTotal > 0 ? probationBreakdown : mockAtRisk.probationReasons
+      )
 
 
 
@@ -762,10 +351,6 @@ export default function DashboardPage() {
 
   const handleDepartmentSelect = (departmentName: string) => {
     setSelectedDepartment(departmentName)
-  }
-
-  const getSubjectBreakdown = (departmentName: string) => {
-    return subjectBreakdownData[departmentName as keyof typeof subjectBreakdownData]
   }
 
   // if (userRole === "student") {
@@ -798,9 +383,8 @@ export default function DashboardPage() {
   //   return <ProvincialAdminDashboard />
   // }
 
-  if (!stats) return null
-
-  const statCards = [
+  const statCards = stats
+    ? [
     {
       title: "Total Students",
       value: stats.totalStudents,
@@ -832,6 +416,7 @@ export default function DashboardPage() {
       trend: stats.averageAttendance > 85 ? "up" : "down",
     },
   ]
+    : []
 
   return (
     <div className="p-6 space-y-6">
@@ -1131,46 +716,43 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Main Campus */}
             <div className="text-center p-6 bg-gradient-to-r from-muted/70 via-muted/40 to-transparent dark:from-muted/40 dark:via-muted/20 dark:to-transparent rounded-xl border border-border/60 hover:border-primary/40 hover:shadow-md transition-all duration-200">
-              <h3 className="mb-4 text-lg font-semibold text-foreground">Main Campus</h3>
+              <h3 className="mb-4 text-lg font-semibold text-foreground">{additionalCampusPerformance.soshanguveSouth.campus}</h3>
               <div className="space-y-3">
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.mainCampus.overall.passRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.soshanguveSouth.overall.passRate}%</div>
                   <div className="text-sm text-muted-foreground">Pass Rate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.mainCampus.overall.successRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.soshanguveSouth.overall.successRate}%</div>
                   <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
             </div>
 
-            {/* Online Campus */}
             <div className="text-center p-6 bg-gradient-to-r from-muted/70 via-muted/40 to-transparent dark:from-muted/40 dark:via-muted/20 dark:to-transparent rounded-xl border border-border/60 hover:border-primary/40 hover:shadow-md transition-all duration-200">
-              <h3 className="mb-4 text-lg font-semibold text-foreground">Online</h3>
+              <h3 className="mb-4 text-lg font-semibold text-foreground">{additionalCampusPerformance.polokwane.campus}</h3>
               <div className="space-y-3">
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.online.overall.passRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.polokwane.overall.passRate}%</div>
                   <div className="text-sm text-muted-foreground">Pass Rate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.online.overall.successRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.polokwane.overall.successRate}%</div>
                   <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
             </div>
 
-            {/* Extension Campus */}
             <div className="text-center p-6 bg-gradient-to-r from-muted/70 via-muted/40 to-transparent dark:from-muted/40 dark:via-muted/20 dark:to-transparent rounded-xl border border-border/60 hover:border-primary/40 hover:shadow-md transition-all duration-200">
-              <h3 className="mb-4 text-lg font-semibold text-foreground">Extension</h3>
+              <h3 className="mb-4 text-lg font-semibold text-foreground">{additionalCampusPerformance.emalahleni.campus}</h3>
               <div className="space-y-3">
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.extension.overall.passRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.emalahleni.overall.passRate}%</div>
                   <div className="text-sm text-muted-foreground">Pass Rate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.extension.overall.successRate}%</div>
+                  <div className="text-3xl font-bold text-foreground">{additionalCampusPerformance.emalahleni.overall.successRate}%</div>
                   <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
@@ -1259,23 +841,22 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-8 lg:grid-cols-3">
-            {/* Main Campus */}
             <div className="space-y-4">
               <div className="text-center">
-                <h3 className="mb-2 text-lg font-semibold text-foreground">Main Campus</h3>
+                <h3 className="mb-2 text-lg font-semibold text-foreground">{campusPerformance.soshanguveSouth.campus}</h3>
                 <div className="flex justify-center gap-6 text-sm">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{campusPerformance.mainCampus.overall.passRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.soshanguveSouth.overall.passRate}%</div>
                     <div className="text-muted-foreground">Pass Rate</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{campusPerformance.mainCampus.overall.successRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.soshanguveSouth.overall.successRate}%</div>
                     <div className="text-muted-foreground">Success Rate</div>
                   </div>
                 </div>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                {campusPerformance.mainCampus.departments.map((dept) => (
+                {campusPerformance.soshanguveSouth.departments.map((dept) => (
                   <div key={dept.name} className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
                     <span className="text-sm font-medium text-foreground">{dept.name}</span>
                     <div className="flex gap-3 text-xs text-muted-foreground">
@@ -1287,23 +868,22 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Online Campus */}
             <div className="space-y-4">
               <div className="text-center">
-                <h3 className="mb-2 text-lg font-semibold text-foreground">Online</h3>
+                <h3 className="mb-2 text-lg font-semibold text-foreground">{campusPerformance.polokwane.campus}</h3>
                 <div className="flex justify-center gap-6 text-sm">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{campusPerformance.online.overall.passRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.polokwane.overall.passRate}%</div>
                     <div className="text-muted-foreground">Pass Rate</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{campusPerformance.online.overall.successRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.polokwane.overall.successRate}%</div>
                     <div className="text-muted-foreground">Success Rate</div>
                   </div>
                 </div>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                {campusPerformance.online.departments.map((dept) => (
+                {campusPerformance.polokwane.departments.map((dept) => (
                   <div key={dept.name} className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
                     <span className="text-sm font-medium text-foreground">{dept.name}</span>
                     <div className="flex gap-3 text-xs text-muted-foreground">
@@ -1315,23 +895,22 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Extension Campus */}
             <div className="space-y-4">
               <div className="text-center">
-                <h3 className="mb-2 text-lg font-semibold text-foreground">Extension</h3>
+                <h3 className="mb-2 text-lg font-semibold text-foreground">{campusPerformance.emalahleni.campus}</h3>
                 <div className="flex justify-center gap-6 text-sm">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{schoolPerformance.extension.overall.passRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.emalahleni.overall.passRate}%</div>
                     <div className="text-muted-foreground">Pass Rate</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{schoolPerformance.extension.overall.successRate}%</div>
+                    <div className="text-2xl font-bold text-foreground">{campusPerformance.emalahleni.overall.successRate}%</div>
                     <div className="text-muted-foreground">Success Rate</div>
                   </div>
                 </div>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                {schoolPerformance.extension.departments.map((dept) => (
+                {campusPerformance.emalahleni.departments.map((dept) => (
                   <div key={dept.name} className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
                     <span className="text-sm font-medium text-foreground">{dept.name}</span>
                     <div className="flex gap-3 text-xs text-muted-foreground">
@@ -1348,13 +927,10 @@ export default function DashboardPage() {
 
 
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <ReadmittedFundingBreakdown
-          data={readmittedFunding}
-          onOpenDrilldown={() => setReadmittedDrilldownOpen(true)}
-        />
-        <ConditionalLetterWithoutProbation learners={conditionalNoProbation} />
-      </div>
+      <ReadmittedFundingBreakdown
+        data={readmittedFunding}
+        onOpenDrilldown={() => setReadmittedDrilldownOpen(true)}
+      />
       <ReadmittedFundingDrilldownDialog
         open={readmittedDrilldownOpen}
         onOpenChange={setReadmittedDrilldownOpen}
@@ -1451,11 +1027,7 @@ export default function DashboardPage() {
       />
 
       {/* New At-Risk and Readmitted Analytics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <AtRiskFundingBreakdown
-          data={atRiskFunding}
-          onOpenDrilldown={() => setAtRiskFundingDrilldownOpen(true)}
-        />
+      <div className="grid gap-4 md:grid-cols-2">
         <AtRiskResidencyBreakdown
           data={atRiskResidency}
           onOpenDrilldown={() => setAtRiskResidencyDrilldownOpen(true)}
@@ -1465,12 +1037,6 @@ export default function DashboardPage() {
           onOpenDrilldown={() => setResidencyDifferenceDrilldownOpen(true)}
         />
       </div>
-      <AtRiskFundingDrilldownDialog
-        open={atRiskFundingDrilldownOpen}
-        onOpenChange={setAtRiskFundingDrilldownOpen}
-        students={allStudents}
-        data={atRiskFunding}
-      />
       <AtRiskResidencyDrilldownDialog
         open={atRiskResidencyDrilldownOpen}
         onOpenChange={setAtRiskResidencyDrilldownOpen}

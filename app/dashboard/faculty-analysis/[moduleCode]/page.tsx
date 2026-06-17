@@ -159,14 +159,14 @@ export default function ModuleDetailsPage() {
               moduleCode: item.moduleCode,
               moduleName: item.moduleName,
               qualification: item.qualification, // Use the first qualification
-              totalStudents: acc.totalStudents + item.totalStudents,
-              validCancellations: acc.validCancellations + item.validCancellations,
-              activeStudents: acc.activeStudents + item.activeStudents,
-              failed: acc.failed + item.failed,
-              passed: acc.passed + item.passed,
-              qualifyMainStream: acc.qualifyMainStream + item.qualifyMainStream,
-              qualifyReExam: acc.qualifyReExam + item.qualifyReExam,
-              above70: acc.above70 + item.above70,
+              totalStudents: acc.totalStudents + (item.totalStudents ?? 0),
+              validCancellations: acc.validCancellations + (item.validCancellations ?? 0),
+              activeStudents: acc.activeStudents + (item.activeStudents ?? 0),
+              failed: acc.failed + (item.failedMainExam ?? item.failed ?? 0),
+              passed: acc.passed + (item.passed ?? 0),
+              qualifyMainStream: acc.qualifyMainStream + (item.qualifyMainStream ?? 0),
+              qualifyReExam: acc.qualifyReExam + (item.qualifyReExam ?? 0),
+              above70: acc.above70 + (item.above70 ?? 0),
               passRate: 0, // Will calculate below
               successRate: 0, // Will calculate below
               failRate: 0, // Will calculate below
@@ -205,8 +205,8 @@ export default function ModuleDetailsPage() {
           aggregated.successRate = aggregated.totalStudents > 0 
             ? (aggregated.passed / aggregated.totalStudents) * 100 
             : 0
-          aggregated.failRate = aggregated.activeStudents > 0 
-            ? (aggregated.failed / aggregated.activeStudents) * 100 
+          aggregated.failRate = aggregated.totalStudents > 0
+            ? (aggregated.failed / aggregated.totalStudents) * 100
             : 0
 
           // Round to 1 decimal
@@ -442,7 +442,7 @@ export default function ModuleDetailsPage() {
           </div>
           <div className="flex items-center gap-2 text-white/90">
             <CheckCircle className="h-4 w-4" />
-            <span className="text-sm">{moduleData.passed} passed, {moduleData.failed} failed in {moduleData.moduleCode}</span>
+            <span className="text-sm">{moduleData.passed} passed, {moduleData.failedMainExam ?? moduleData.failed ?? 0} failed in {moduleData.moduleCode}</span>
           </div>
         </GradientCard>
 
@@ -627,8 +627,8 @@ export default function ModuleDetailsPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium text-red-600">Failed</TableCell>
-                  <TableCell className="text-right font-medium text-red-600">{moduleData.failed}</TableCell>
-                  <TableCell className="text-right text-slate-600 dark:text-slate-400">{moduleData.failRate.toFixed(1)}%</TableCell>
+                  <TableCell className="text-right font-medium text-red-600">{moduleData.failedMainExam ?? moduleData.failed ?? 0}</TableCell>
+                  <TableCell className="text-right text-slate-600 dark:text-slate-400">{(moduleData.failRate ?? 0).toFixed(1)}%</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium text-slate-900 dark:text-white">Qualify Main Exam</TableCell>
@@ -642,10 +642,10 @@ export default function ModuleDetailsPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium text-slate-900 dark:text-white">Qualify Re-exam</TableCell>
-                  <TableCell className="text-right text-slate-600 dark:text-slate-400">{moduleData.qualifyReExam}</TableCell>
+                  <TableCell className="text-right text-slate-600 dark:text-slate-400">{moduleData.qualifyReExam ?? 0}</TableCell>
                   <TableCell className="text-right text-slate-600 dark:text-slate-400">
                     {moduleData.activeStudents > 0
-                      ? ((moduleData.qualifyReExam / moduleData.activeStudents) * 100).toFixed(1)
+                      ? (((moduleData.qualifyReExam ?? 0) / moduleData.activeStudents) * 100).toFixed(1)
                       : 0}%
                   </TableCell>
                 </TableRow>
@@ -731,7 +731,7 @@ export default function ModuleDetailsPage() {
                     </TableHeader>
                     <TableBody>
                       {campusBreakdown.map((campus, index) => {
-                        const isOverall = campus.campus.includes('MODULE OVERALL') || campus.campus.includes('INCLUDING ALL CAMPUSES')
+                        const isOverall = /module overall|including all campuses/i.test(campus.campus)
                         return (
                           <TableRow
                             key={index}

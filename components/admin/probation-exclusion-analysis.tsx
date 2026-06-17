@@ -21,6 +21,10 @@ import {
   MoreHorizontal,
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  getSasoProbationExclusionModules,
+  getSasoProbationExclusionSummary,
+} from "@/lib/saso-probation-exclusion-analysis"
 import { StudentBreakdownDrilldownDialog, type Segment } from "@/components/admin/student-breakdown-drilldown-dialog"
 
 interface ModuleData {
@@ -40,605 +44,8 @@ interface ModuleData {
   qualificationName?: string
 }
 
-// Solusi University Probation & Exclusion Analysis Data
-// Organized by Faculty: Education/Humanities/Agriculture/Sciences/Health, Business Administration, Theology/Chaplaincy
-const mockModuleData: ModuleData[] = [
-  // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
-  // Education Department
-  {
-    code: "EDU101",
-    name: "Introduction to Education",
-    department: "Education",
-    level: "First Year",
-    probationCount: 25,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 180,
-    probationRate: 13.9,
-    exclusionRate: 1.1,
-    readmissionRate: 2.8,
-  },
-  {
-    code: "EDU201",
-    name: "Educational Psychology",
-    department: "Education",
-    level: "Second Year",
-    probationCount: 18,
-    exclusionBeforeProcessing: 1,
-    readmitted: 4,
-    excluded: 2,
-    totalStudents: 150,
-    probationRate: 12.0,
-    exclusionRate: 0.7,
-    readmissionRate: 2.7,
-  },
-  {
-    code: "EDU301",
-    name: "Curriculum Development",
-    department: "Education",
-    level: "Third Year",
-    probationCount: 12,
-    exclusionBeforeProcessing: 0,
-    readmitted: 2,
-    excluded: 1,
-    totalStudents: 120,
-    probationRate: 10.0,
-    exclusionRate: 0,
-    readmissionRate: 1.7,
-  },
-  // Humanities Department
-  {
-    code: "HUM101",
-    name: "Introduction to Humanities",
-    department: "Humanities",
-    level: "First Year",
-    probationCount: 20,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 160,
-    probationRate: 12.5,
-    exclusionRate: 0.6,
-    readmissionRate: 1.9,
-  },
-  {
-    code: "HUM201",
-    name: "Cultural Studies",
-    department: "Humanities",
-    level: "Second Year",
-    probationCount: 15,
-    exclusionBeforeProcessing: 0,
-    readmitted: 2,
-    excluded: 1,
-    totalStudents: 140,
-    probationRate: 10.7,
-    exclusionRate: 0,
-    readmissionRate: 1.4,
-  },
-  // Agriculture Department
-  {
-    code: "AGR101",
-    name: "Introduction to Agriculture",
-    department: "Agriculture",
-    level: "First Year",
-    probationCount: 22,
-    exclusionBeforeProcessing: 2,
-    readmitted: 4,
-    excluded: 2,
-    totalStudents: 170,
-    probationRate: 12.9,
-    exclusionRate: 1.2,
-    readmissionRate: 2.4,
-  },
-  {
-    code: "AGR201",
-    name: "Crop Production",
-    department: "Agriculture",
-    level: "Second Year",
-    probationCount: 16,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 1,
-    totalStudents: 145,
-    probationRate: 11.0,
-    exclusionRate: 0.7,
-    readmissionRate: 2.1,
-  },
-  // Sciences Department
-  {
-    code: "SCI101",
-    name: "General Science",
-    department: "Sciences",
-    level: "First Year",
-    probationCount: 30,
-    exclusionBeforeProcessing: 3,
-    readmitted: 6,
-    excluded: 4,
-    totalStudents: 200,
-    probationRate: 15.0,
-    exclusionRate: 1.5,
-    readmissionRate: 3.0,
-  },
-  {
-    code: "SCI201",
-    name: "Environmental Science",
-    department: "Sciences",
-    level: "Second Year",
-    probationCount: 24,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 180,
-    probationRate: 13.3,
-    exclusionRate: 1.1,
-    readmissionRate: 2.8,
-  },
-  {
-    code: "SCI301",
-    name: "Advanced Environmental Science",
-    department: "Sciences",
-    level: "Third Year",
-    probationCount: 18,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 150,
-    probationRate: 12.0,
-    exclusionRate: 0.7,
-    readmissionRate: 2.0,
-  },
-  // Health Professions Department
-  {
-    code: "HLT101",
-    name: "Introduction to Health Sciences",
-    department: "Health Professions",
-    level: "First Year",
-    probationCount: 15,
-    exclusionBeforeProcessing: 1,
-    readmitted: 2,
-    excluded: 1,
-    totalStudents: 140,
-    probationRate: 10.7,
-    exclusionRate: 0.7,
-    readmissionRate: 1.4,
-  },
-  {
-    code: "NURS101",
-    name: "Nursing Fundamentals",
-    department: "Health Professions",
-    level: "First Year",
-    probationCount: 12,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 130,
-    probationRate: 9.2,
-    exclusionRate: 0,
-    readmissionRate: 0.8,
-  },
-  {
-    code: "HLT201",
-    name: "Public Health",
-    department: "Health Professions",
-    level: "Second Year",
-    probationCount: 10,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 125,
-    probationRate: 8.0,
-    exclusionRate: 0,
-    readmissionRate: 0.8,
-  },
-  // Faculty of Business Administration
-  // Management Department
-  {
-    code: "MGT101",
-    name: "Principles of Management",
-    department: "Management",
-    level: "First Year",
-    probationCount: 28,
-    exclusionBeforeProcessing: 3,
-    readmitted: 6,
-    excluded: 4,
-    totalStudents: 190,
-    probationRate: 14.7,
-    exclusionRate: 1.6,
-    readmissionRate: 3.2,
-  },
-  {
-    code: "MGT201",
-    name: "Organizational Behavior",
-    department: "Management",
-    level: "Second Year",
-    probationCount: 22,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 175,
-    probationRate: 12.6,
-    exclusionRate: 1.1,
-    readmissionRate: 2.9,
-  },
-  {
-    code: "MGT301",
-    name: "Strategic Management",
-    department: "Management",
-    level: "Third Year",
-    probationCount: 16,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 155,
-    probationRate: 10.3,
-    exclusionRate: 0.6,
-    readmissionRate: 1.9,
-  },
-  {
-    code: "MBA101",
-    name: "MBA Core Management",
-    department: "Management",
-    level: "Postgraduate",
-    probationCount: 8,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 80,
-    probationRate: 10.0,
-    exclusionRate: 0,
-    readmissionRate: 1.3,
-  },
-  // Accounting Department
-  {
-    code: "ACC101",
-    name: "Financial Accounting",
-    department: "Accounting",
-    level: "First Year",
-    probationCount: 26,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 185,
-    probationRate: 14.1,
-    exclusionRate: 1.1,
-    readmissionRate: 2.7,
-  },
-  {
-    code: "ACC201",
-    name: "Managerial Accounting",
-    department: "Accounting",
-    level: "Second Year",
-    probationCount: 20,
-    exclusionBeforeProcessing: 1,
-    readmitted: 4,
-    excluded: 2,
-    totalStudents: 170,
-    probationRate: 11.8,
-    exclusionRate: 0.6,
-    readmissionRate: 2.4,
-  },
-  {
-    code: "ACC301",
-    name: "Advanced Accounting",
-    department: "Accounting",
-    level: "Third Year",
-    probationCount: 14,
-    exclusionBeforeProcessing: 1,
-    readmitted: 2,
-    excluded: 1,
-    totalStudents: 145,
-    probationRate: 9.7,
-    exclusionRate: 0.7,
-    readmissionRate: 1.4,
-  },
-  // Marketing Department
-  {
-    code: "MKT101",
-    name: "Principles of Marketing",
-    department: "Marketing",
-    level: "First Year",
-    probationCount: 24,
-    exclusionBeforeProcessing: 2,
-    readmitted: 4,
-    excluded: 3,
-    totalStudents: 180,
-    probationRate: 13.3,
-    exclusionRate: 1.1,
-    readmissionRate: 2.2,
-  },
-  {
-    code: "MKT201",
-    name: "Consumer Behavior",
-    department: "Marketing",
-    level: "Second Year",
-    probationCount: 18,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 160,
-    probationRate: 11.3,
-    exclusionRate: 0.6,
-    readmissionRate: 1.9,
-  },
-  // Management Information Systems (MIS) Department
-  {
-    code: "MIS101",
-    name: "Information Systems Fundamentals",
-    department: "Management Information Systems (MIS)",
-    level: "First Year",
-    probationCount: 32,
-    exclusionBeforeProcessing: 4,
-    readmitted: 7,
-    excluded: 5,
-    totalStudents: 210,
-    probationRate: 15.2,
-    exclusionRate: 1.9,
-    readmissionRate: 3.3,
-  },
-  {
-    code: "MIS201",
-    name: "Database Management Systems",
-    department: "Management Information Systems (MIS)",
-    level: "Second Year",
-    probationCount: 28,
-    exclusionBeforeProcessing: 3,
-    readmitted: 6,
-    excluded: 4,
-    totalStudents: 195,
-    probationRate: 14.4,
-    exclusionRate: 1.5,
-    readmissionRate: 3.1,
-  },
-  {
-    code: "MIS301",
-    name: "Systems Analysis and Design",
-    department: "Management Information Systems (MIS)",
-    level: "Third Year",
-    probationCount: 20,
-    exclusionBeforeProcessing: 2,
-    readmitted: 4,
-    excluded: 3,
-    totalStudents: 175,
-    probationRate: 11.4,
-    exclusionRate: 1.1,
-    readmissionRate: 2.3,
-  },
-  // Faculty of Theology and Chaplaincy
-  // Theology Department
-  {
-    code: "THE101",
-    name: "Introduction to Theology",
-    department: "Theology",
-    level: "First Year",
-    probationCount: 10,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 120,
-    probationRate: 8.3,
-    exclusionRate: 0,
-    readmissionRate: 0.8,
-  },
-  {
-    code: "THE201",
-    name: "Biblical Studies",
-    department: "Theology",
-    level: "Second Year",
-    probationCount: 8,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 110,
-    probationRate: 7.3,
-    exclusionRate: 0,
-    readmissionRate: 0.9,
-  },
-  {
-    code: "THE301",
-    name: "Systematic Theology",
-    department: "Theology",
-    level: "Third Year",
-    probationCount: 6,
-    exclusionBeforeProcessing: 0,
-    readmitted: 0,
-    excluded: 0,
-    totalStudents: 100,
-    probationRate: 6.0,
-    exclusionRate: 0,
-    readmissionRate: 0,
-  },
-  // Chaplaincy / Religious Studies Department
-  {
-    code: "CHP101",
-    name: "Introduction to Chaplaincy",
-    department: "Chaplaincy / Religious Studies",
-    level: "First Year",
-    probationCount: 8,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 90,
-    probationRate: 8.9,
-    exclusionRate: 0,
-    readmissionRate: 1.1,
-  },
-  {
-    code: "CHP201",
-    name: "Pastoral Care",
-    department: "Chaplaincy / Religious Studies",
-    level: "Second Year",
-    probationCount: 6,
-    exclusionBeforeProcessing: 0,
-    readmitted: 0,
-    excluded: 0,
-    totalStudents: 85,
-    probationRate: 7.1,
-    exclusionRate: 0,
-    readmissionRate: 0,
-  },
-  // --- Same module in different departments / qualification codes ---
-  {
-    code: "RES101",
-    name: "Research Methods",
-    department: "Education",
-    level: "First Year",
-    qualificationCode: "DPRSF0",
-    qualificationName: "Diploma (Education)",
-    probationCount: 14,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 95,
-    probationRate: 14.7,
-    exclusionRate: 1.1,
-    readmissionRate: 3.2,
-  },
-  {
-    code: "RES101",
-    name: "Research Methods",
-    department: "Sciences",
-    level: "First Year",
-    qualificationCode: "DPSCF0",
-    qualificationName: "Diploma (Sciences)",
-    probationCount: 28,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 185,
-    probationRate: 15.1,
-    exclusionRate: 1.1,
-    readmissionRate: 2.7,
-  },
-  {
-    code: "RES101",
-    name: "Research Methods",
-    department: "Management",
-    level: "First Year",
-    qualificationCode: "DPBAF0",
-    qualificationName: "Diploma (Business Administration)",
-    probationCount: 22,
-    exclusionBeforeProcessing: 2,
-    readmitted: 4,
-    excluded: 3,
-    totalStudents: 165,
-    probationRate: 13.3,
-    exclusionRate: 1.2,
-    readmissionRate: 2.4,
-  },
-  {
-    code: "STAT101",
-    name: "Introductory Statistics",
-    department: "Sciences",
-    level: "First Year",
-    qualificationCode: "DPSCF0",
-    qualificationName: "Diploma (Sciences)",
-    probationCount: 32,
-    exclusionBeforeProcessing: 3,
-    readmitted: 6,
-    excluded: 4,
-    totalStudents: 195,
-    probationRate: 16.4,
-    exclusionRate: 1.5,
-    readmissionRate: 3.1,
-  },
-  {
-    code: "STAT101",
-    name: "Introductory Statistics",
-    department: "Accounting",
-    level: "First Year",
-    qualificationCode: "DPACF0",
-    qualificationName: "Diploma (Accounting)",
-    probationCount: 24,
-    exclusionBeforeProcessing: 2,
-    readmitted: 5,
-    excluded: 3,
-    totalStudents: 172,
-    probationRate: 14.0,
-    exclusionRate: 1.2,
-    readmissionRate: 2.9,
-  },
-  {
-    code: "STAT101",
-    name: "Introductory Statistics",
-    department: "Health Professions",
-    level: "First Year",
-    qualificationCode: "DPHLF0",
-    qualificationName: "Diploma (Health Sciences)",
-    probationCount: 18,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 135,
-    probationRate: 13.3,
-    exclusionRate: 0.7,
-    readmissionRate: 2.2,
-  },
-  {
-    code: "COM101",
-    name: "Communication Skills",
-    department: "Humanities",
-    level: "First Year",
-    qualificationCode: "DPHSF0",
-    qualificationName: "Diploma (Humanities)",
-    probationCount: 12,
-    exclusionBeforeProcessing: 1,
-    readmitted: 2,
-    excluded: 1,
-    totalStudents: 145,
-    probationRate: 8.3,
-    exclusionRate: 0.7,
-    readmissionRate: 1.4,
-  },
-  {
-    code: "COM101",
-    name: "Communication Skills",
-    department: "Management",
-    level: "First Year",
-    qualificationCode: "DPBAF0",
-    qualificationName: "Diploma (Business Administration)",
-    probationCount: 20,
-    exclusionBeforeProcessing: 2,
-    readmitted: 4,
-    excluded: 2,
-    totalStudents: 168,
-    probationRate: 11.9,
-    exclusionRate: 1.2,
-    readmissionRate: 2.4,
-  },
-  {
-    code: "ETH201",
-    name: "Professional Ethics",
-    department: "Theology",
-    level: "Second Year",
-    qualificationCode: "DPTF0",
-    qualificationName: "Diploma (Theology)",
-    probationCount: 5,
-    exclusionBeforeProcessing: 0,
-    readmitted: 1,
-    excluded: 0,
-    totalStudents: 88,
-    probationRate: 5.7,
-    exclusionRate: 0,
-    readmissionRate: 1.1,
-  },
-  {
-    code: "ETH201",
-    name: "Professional Ethics",
-    department: "Management",
-    level: "Second Year",
-    qualificationCode: "DPBAF0",
-    qualificationName: "Diploma (Business Administration)",
-    probationCount: 16,
-    exclusionBeforeProcessing: 1,
-    readmitted: 3,
-    excluded: 2,
-    totalStudents: 158,
-    probationRate: 10.1,
-    exclusionRate: 0.6,
-    readmissionRate: 1.9,
-  },
-]
+const moduleData: ModuleData[] = getSasoProbationExclusionModules()
+const sasoSummary = getSasoProbationExclusionSummary()
 
 type MetricKey =
   | "probationCount"
@@ -653,23 +60,6 @@ const metricLabels: Record<MetricKey, string> = {
   readmitted: "Readmitted Count",
   excluded: "Excluded Count",
   totalStudents: "Total Students",
-}
-
-const qualificationByDepartment: Record<string, { code: string; name: string }> = {
-  Education: { code: "DPRSF0", name: "Diploma (Education)" },
-  Humanities: { code: "DPHSF0", name: "Diploma (Humanities)" },
-  Agriculture: { code: "DPAGF0", name: "Diploma (Agriculture)" },
-  Sciences: { code: "DPSCF0", name: "Diploma (Sciences)" },
-  "Health Professions": { code: "DPHLF0", name: "Diploma (Health Sciences)" },
-  Management: { code: "DPBAF0", name: "Diploma (Business Administration)" },
-  Accounting: { code: "DPACF0", name: "Diploma (Accounting)" },
-  Marketing: { code: "DPMKF0", name: "Diploma (Marketing)" },
-  "Management Information Systems (MIS)": {
-    code: "DPMIF0",
-    name: "Diploma (Management Information Systems)",
-  },
-  Theology: { code: "DPTF0", name: "Diploma (Theology)" },
-  "Chaplaincy / Religious Studies": { code: "DPCF0", name: "Diploma (Chaplaincy)" },
 }
 
 type DrilldownMetricKey =
@@ -688,12 +78,12 @@ const drilldownMetricLabels: Record<DrilldownMetricKey, string> = {
 }
 
 function balanceCounts(module: ModuleData) {
-  const totalStudents = Math.max(0, Math.floor(module.totalStudents))
-  const excluded = Math.min(Math.max(0, Math.floor(module.excluded)), totalStudents)
-  const readmitted = Math.min(Math.max(0, Math.floor(module.readmitted)), totalStudents - excluded)
+  const totalStudents = toCount(module.totalStudents)
+  const excluded = Math.min(toCount(module.excluded), totalStudents)
+  const readmitted = Math.min(toCount(module.readmitted), totalStudents - excluded)
   const exclusionBeforeProcessing = Math.min(
-    Math.max(0, Math.floor(module.exclusionBeforeProcessing)),
-    totalStudents - excluded - readmitted
+    toCount(module.exclusionBeforeProcessing),
+    totalStudents - excluded - readmitted,
   )
   const probationCount = Math.max(0, totalStudents - excluded - readmitted - exclusionBeforeProcessing)
 
@@ -704,6 +94,11 @@ function balanceCounts(module: ModuleData) {
     readmitted,
     excluded,
   }
+}
+
+function toCount(value: unknown): number {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : 0
 }
 
 function hashString(input: string): number {
@@ -789,13 +184,16 @@ export function ProbationExclusionAnalysis() {
 
   const allStudents = useMemo(() => getStudents(), [])
 
-  const departments = useMemo(() => Array.from(new Set(mockModuleData.map((m) => m.department))), [])
-  const levels = useMemo(() => Array.from(new Set(mockModuleData.map((m) => m.level))), [])
+  const departments = useMemo(() => Array.from(new Set(moduleData.map((m) => m.department))).sort(), [])
+  const levels = useMemo(() => Array.from(new Set(moduleData.map((m) => m.level))).sort(), [])
+
+  const isUnfiltered =
+    searchTerm.trim().length === 0 && selectedDepartment === "all" && selectedLevel === "all"
 
   const filteredData = useMemo(() => {
     const term = searchTerm.trim().toLowerCase()
 
-    return mockModuleData
+    return moduleData
       .filter((m) => {
         const matchesSearch =
           term.length === 0 || m.code.toLowerCase().includes(term) || m.name.toLowerCase().includes(term)
@@ -811,23 +209,29 @@ export function ProbationExclusionAnalysis() {
   }, [metric, searchTerm, selectedDepartment, selectedLevel])
 
   const totalStats = useMemo(() => {
+    if (isUnfiltered) {
+      return {
+        totalProbation: sasoSummary.totalProbation,
+        totalExclusion: sasoSummary.totalExclusion,
+        totalReadmitted: sasoSummary.totalReadmitted,
+        totalStudents: sasoSummary.totalStudents,
+      }
+    }
+
     return {
       totalProbation: filteredData.reduce((sum, m) => sum + balanceCounts(m).probationCount, 0),
       totalExclusion: filteredData.reduce((sum, m) => sum + balanceCounts(m).exclusionBeforeProcessing, 0),
       totalReadmitted: filteredData.reduce((sum, m) => sum + balanceCounts(m).readmitted, 0),
       totalStudents: filteredData.reduce((sum, m) => sum + balanceCounts(m).totalStudents, 0),
     }
-  }, [filteredData])
+  }, [filteredData, isUnfiltered])
 
   const safePct = (num: number, denom: number) => (denom > 0 ? (num / denom) * 100 : 0)
   const excludedPct = (excluded: number, total: number) => (total > 0 ? (excluded / total) * 100 : 0)
-  const getQualification = (module: ModuleData) => {
-    const mapped = qualificationByDepartment[module.department]
-    return {
-      code: module.qualificationCode ?? mapped?.code ?? "—",
-      name: module.qualificationName ?? mapped?.name ?? "—",
-    }
-  }
+  const getQualification = (module: ModuleData) => ({
+    code: module.qualificationCode ?? "—",
+    name: module.qualificationName ?? "—",
+  })
 
   const openDrilldown = (module: ModuleData, metricKey: DrilldownMetricKey) => {
     setDrilldownModule(module)

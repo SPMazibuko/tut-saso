@@ -57,11 +57,13 @@ interface FacultyAnalytics {
   inactiveStudents: number
   passed: number
   qualifyMainStream: number
+  qualifyReExam?: number
   reExam: number
   absentMainExam: number
   above70: number
   passRate: number
   successRate: number
+  finalSuccessRate: number
   failRate: number
   failedMainExam?: number
   marksBetween50And59?: number
@@ -76,21 +78,37 @@ interface FacultyAnalytics {
 
 const ITEMS_PER_PAGE = 10
 
+function toCount(value: unknown): number {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : 0
+}
+
+function formatRate(value: unknown): string {
+  const n = Number(value)
+  return Number.isFinite(n) ? `${n.toFixed(1)}%` : "0.0%"
+}
+
+function computeFinalSuccessRate(
+  qualifyMainStream: unknown,
+  qualifyReExam: unknown,
+  totalStudents: unknown,
+): number {
+  const total = toCount(totalStudents)
+  if (total <= 0) return 0
+  return ((toCount(qualifyMainStream) + toCount(qualifyReExam)) / total) * 100
+}
+
 const QUALIFICATION_NAME_MAP: Record<string, string> = {
-  "BSC-CS": "BSc (Computer Science)",
-  "BSC-IT": "BSc (Information Technology)",
-  BINF: "Bachelor of Informatics",
-  "BENG-EE": "BEng (Electrical Engineering)",
-  "BENG-CE": "BEng (Civil Engineering)",
-  "BSC-APH": "BSc (Applied Physics)",
-  BACC: "Bachelor of Accounting",
-  BBA: "Bachelor of Business Administration",
-  LLB: "Bachelor of Laws",
-  BJC: "Bachelor of Criminal Justice",
-  BNUR: "Bachelor of Nursing Science",
-  BDPH: "Bachelor of Public Health",
-  "BED-SEC": "Bachelor of Education (Secondary)",
-  "BED-PRI": "Bachelor of Education (Primary)",
+  DPRS20: "Dip (Computer Science)",
+  DPRSF0: "Dip (Computer Science Extended)",
+  DPIF20: "Dip (Informatics)",
+  DPIFF0: "Dip (Informatics Extended)",
+  DPIT20: "Dip (Information Technology)",
+  DPITF0: "Dip (Information Technology Extended)",
+  DPMC20: "Dip (Multimedia Computing)",
+  DPMCF0: "Dip (Multimedia Computing Extended)",
+  DPYEF0: "Dip (Computer Systems Engineering Extended)",
+  DPYE20_NP6602: "Dip (Computer Systems Engineering)",
 }
 
 const normalizeQualificationCode = (code?: string | null) => (code ? code.replace(/\s+/g, "").toUpperCase() : "")
@@ -173,18 +191,26 @@ export default function FacultyAnalysisPage() {
               (item.qualificationName && item.qualificationName.trim()) || mappedQualificationName
 
             // Calculate pass rate and success rate for this individual item BEFORE grouping
-            const studentsThatWrote = item.totalStudents - (item.absentMainExam || 0)
-            const passRate = studentsThatWrote > 0
-              ? (item.passed / studentsThatWrote) * 100
-              : 0
-            const successRate = item.totalStudents > 0
-              ? (item.passed / item.totalStudents) * 100
-              : 0
+            const studentsThatWrote = toCount(item.totalStudents) - toCount(item.absentMainExam)
+            const passed = toCount(item.passed)
+            const totalStudents = toCount(item.totalStudents)
+            const passRate = studentsThatWrote > 0 ? (passed / studentsThatWrote) * 100 : 0
+            const successRate = totalStudents > 0 ? (passed / totalStudents) * 100 : 0
+            const failRate = totalStudents > 0 ? (toCount(item.failedMainExam) / totalStudents) * 100 : 0
+            const finalSuccessRate = computeFinalSuccessRate(
+              item.qualifyMainStream,
+              item.qualifyReExam,
+              totalStudents,
+            )
 
             return {
               ...item,
-              passRate, // Use calculated pass rate
-              successRate, // Use calculated success rate
+              totalStudents,
+              passed,
+              passRate,
+              successRate,
+              finalSuccessRate,
+              failRate,
               successRateStatus: getSuccessRateStatus(successRate),
               qualificationCode: normalizedCode || undefined,
               qualificationName: normalizedQualificationName,
@@ -225,14 +251,16 @@ export default function FacultyAnalysisPage() {
     
     const campus = offeringTypeName.split("-")[0]?.trim().toLowerCase() || ""
     
-    // Normalize campus names
-    if (campus.includes("windhoek")) return "windhoek"
-    if (campus.includes("ongwediva")) return "ongwediva"
-    if (campus.includes("rundu")) return "rundu"
-    if (campus.includes("oshakati")) return "oshakati"
-    if (campus.includes("katima")) return "katima-mulilo"
-    
-    return campus
+    if (campus.includes("soshanguve") && campus.includes("south")) return "soshanguve-south"
+    if (campus.includes("soshanguve") && campus.includes("north")) return "soshanguve-north"
+    if (campus.includes("soshanguve")) return "soshanguve-south"
+    if (campus.includes("pretoria") && campus.includes("west")) return "pretoria-west"
+    if (campus.includes("emalahleni")) return "emalahleni"
+    if (campus.includes("polokwane")) return "polokwane"
+    if (campus.includes("mbombela")) return "mbombela"
+    if (campus.includes("arts")) return "arts"
+
+    return campus.replace(/\s+/g, "-")
   }
 
   // Helper function to normalize offering type for grouping
@@ -288,21 +316,22 @@ export default function FacultyAnalysisPage() {
       // Sum all numeric fields
       const aggregatedItem: FacultyAnalytics = {
         ...baseItem,
-        totalStudents: items.reduce((sum, item) => sum + item.totalStudents, 0),
-        totalCancellations: items.reduce((sum, item) => sum + item.totalCancellations, 0),
-        validCancellations: items.reduce((sum, item) => sum + item.validCancellations, 0),
-        invalidCancellations: items.reduce((sum, item) => sum + item.invalidCancellations, 0),
-        activeStudents: items.reduce((sum, item) => sum + item.activeStudents, 0),
-        inactiveStudents: items.reduce((sum, item) => sum + (item.inactiveStudents || 0), 0),
-        passed: items.reduce((sum, item) => sum + item.passed, 0),
-        qualifyMainStream: items.reduce((sum, item) => sum + item.qualifyMainStream, 0),
-        reExam: items.reduce((sum, item) => sum + item.reExam, 0),
-        absentMainExam: items.reduce((sum, item) => sum + (item.absentMainExam || 0), 0),
-        above70: items.reduce((sum, item) => sum + item.above70, 0),
-        failedMainExam: items.reduce((sum, item) => sum + (item.failedMainExam || 0), 0),
-        marksBetween50And59: items.reduce((sum, item) => sum + (item.marksBetween50And59 || 0), 0),
-        marksBetween60And74: items.reduce((sum, item) => sum + (item.marksBetween60And74 || 0), 0),
-        marksAbove74: items.reduce((sum, item) => sum + (item.marksAbove74 || 0), 0),
+        totalStudents: items.reduce((sum, item) => sum + toCount(item.totalStudents), 0),
+        totalCancellations: items.reduce((sum, item) => sum + toCount(item.totalCancellations), 0),
+        validCancellations: items.reduce((sum, item) => sum + toCount(item.validCancellations), 0),
+        invalidCancellations: items.reduce((sum, item) => sum + toCount(item.invalidCancellations), 0),
+        activeStudents: items.reduce((sum, item) => sum + toCount(item.activeStudents), 0),
+        inactiveStudents: items.reduce((sum, item) => sum + toCount(item.inactiveStudents), 0),
+        passed: items.reduce((sum, item) => sum + toCount(item.passed), 0),
+        qualifyMainStream: items.reduce((sum, item) => sum + toCount(item.qualifyMainStream), 0),
+        qualifyReExam: items.reduce((sum, item) => sum + toCount(item.qualifyReExam), 0),
+        reExam: items.reduce((sum, item) => sum + toCount(item.reExam), 0),
+        absentMainExam: items.reduce((sum, item) => sum + toCount(item.absentMainExam), 0),
+        above70: items.reduce((sum, item) => sum + toCount(item.above70), 0),
+        failedMainExam: items.reduce((sum, item) => sum + toCount(item.failedMainExam), 0),
+        marksBetween50And59: items.reduce((sum, item) => sum + toCount(item.marksBetween50And59), 0),
+        marksBetween60And74: items.reduce((sum, item) => sum + toCount(item.marksBetween60And74), 0),
+        marksAbove74: items.reduce((sum, item) => sum + toCount(item.marksAbove74), 0),
         groupedQualifications: Array.from(uniqueQualificationCodes),
         groupedQualificationNames: Array.from(uniqueQualificationNames),
         groupedItems: items, // Store original items for breakdown
@@ -310,7 +339,7 @@ export default function FacultyAnalysisPage() {
 
       // Recalculate rates based on aggregated totals
       // Pass rate = passed / students that wrote (totalStudents - absentMainExam)
-      const studentsThatWrote = aggregatedItem.totalStudents - (aggregatedItem.absentMainExam || 0)
+      const studentsThatWrote = aggregatedItem.totalStudents - toCount(aggregatedItem.absentMainExam)
       aggregatedItem.passRate = studentsThatWrote > 0
         ? (aggregatedItem.passed / studentsThatWrote) * 100
         : 0
@@ -320,8 +349,14 @@ export default function FacultyAnalysisPage() {
         ? (aggregatedItem.passed / aggregatedItem.totalStudents) * 100
         : 0
 
+      aggregatedItem.finalSuccessRate = computeFinalSuccessRate(
+        aggregatedItem.qualifyMainStream,
+        aggregatedItem.qualifyReExam,
+        aggregatedItem.totalStudents,
+      )
+
       aggregatedItem.failRate = aggregatedItem.totalStudents > 0
-        ? ((aggregatedItem.failedMainExam || 0) / aggregatedItem.totalStudents) * 100
+        ? (toCount(aggregatedItem.failedMainExam) / aggregatedItem.totalStudents) * 100
         : 0
 
       // Recalculate success rate status
@@ -466,9 +501,9 @@ export default function FacultyAnalysisPage() {
       const qualificationCode = normalizeQualificationCode(firstItem.qualificationCode || firstItem.qualification)
       const qualificationName = firstItem.qualificationName || firstItem.qualification || key
 
-      const totalStudents = items.reduce((sum, item) => sum + item.totalStudents, 0)
-      const passed = items.reduce((sum, item) => sum + item.passed, 0)
-      const absentMainExam = items.reduce((sum, item) => sum + (item.absentMainExam || 0), 0)
+      const totalStudents = items.reduce((sum, item) => sum + toCount(item.totalStudents), 0)
+      const passed = items.reduce((sum, item) => sum + toCount(item.passed), 0)
+      const absentMainExam = items.reduce((sum, item) => sum + toCount(item.absentMainExam), 0)
 
       const studentsThatWrote = totalStudents - absentMainExam
       const passRate = studentsThatWrote > 0 ? (passed / studentsThatWrote) * 100 : 0
@@ -546,15 +581,15 @@ export default function FacultyAnalysisPage() {
 
   const totalStats = filteredData.reduce(
     (acc, item) => ({
-      totalStudents: acc.totalStudents + item.totalStudents,
-      totalPassed: acc.totalPassed + item.passed,
-      totalAbove70: acc.totalAbove70 + item.above70,
-      totalMarks50To59: acc.totalMarks50To59 + (item.marksBetween50And59 || 0),
-      totalMarks60To74: acc.totalMarks60To74 + (item.marksBetween60And74 || 0),
-      totalMarksAbove74: acc.totalMarksAbove74 + (item.marksAbove74 || 0),
-      totalFailedMainExam: acc.totalFailedMainExam + (item.failedMainExam || 0),
-      totalQualifyMain: acc.totalQualifyMain + item.qualifyMainStream,
-      totalAbsentMainExam: acc.totalAbsentMainExam + (item.absentMainExam || 0),
+      totalStudents: acc.totalStudents + toCount(item.totalStudents),
+      totalPassed: acc.totalPassed + toCount(item.passed),
+      totalAbove70: acc.totalAbove70 + toCount(item.above70),
+      totalMarks50To59: acc.totalMarks50To59 + toCount(item.marksBetween50And59),
+      totalMarks60To74: acc.totalMarks60To74 + toCount(item.marksBetween60And74),
+      totalMarksAbove74: acc.totalMarksAbove74 + toCount(item.marksAbove74),
+      totalFailedMainExam: acc.totalFailedMainExam + toCount(item.failedMainExam),
+      totalQualifyMain: acc.totalQualifyMain + toCount(item.qualifyMainStream),
+      totalAbsentMainExam: acc.totalAbsentMainExam + toCount(item.absentMainExam),
     }),
     { totalStudents: 0, totalPassed: 0, totalAbove70: 0, totalMarks50To59: 0, totalMarks60To74: 0, totalMarksAbove74: 0, totalFailedMainExam: 0, totalQualifyMain: 0, totalAbsentMainExam: 0 },
   )
@@ -592,6 +627,7 @@ export default function FacultyAnalysisPage() {
       "Absent Main Exam",
       "Pass Rate",
       "Success Rate",
+      "Final Success Rate",
       "Success Rate Status",
     ]
 
@@ -622,6 +658,7 @@ export default function FacultyAnalysisPage() {
           item.absentMainExam ?? 0,
           `${(item.passRate ?? 0).toFixed(1)}%`,
           `${(item.successRate ?? 0).toFixed(1)}%`,
+          `${(item.finalSuccessRate ?? 0).toFixed(1)}%`,
           item.successRateStatus ?? "",
         ].join(","),
       ),
@@ -677,6 +714,7 @@ export default function FacultyAnalysisPage() {
                 <th>Absent Main Exam</th>
                 <th>Pass Rate</th>
                 <th>Success Rate</th>
+                <th>Final Success Rate</th>
                 <th>Success Rate Status</th>
               </tr>
             </thead>
@@ -708,6 +746,7 @@ export default function FacultyAnalysisPage() {
                   <td>${item.absentMainExam ?? 0}</td>
                   <td>${(item.passRate ?? 0).toFixed(1)}%</td>
                   <td>${(item.successRate ?? 0).toFixed(1)}%</td>
+                  <td>${(item.finalSuccessRate ?? 0).toFixed(1)}%</td>
                   <td>${item.successRateStatus ?? ""}</td>
                 </tr>
               `,
@@ -769,6 +808,7 @@ export default function FacultyAnalysisPage() {
                 <th>Failed</th>
                 <th>Pass Rate</th>
                 <th>Success Rate</th>
+                <th>Final Success Rate</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -786,6 +826,7 @@ export default function FacultyAnalysisPage() {
                   <td>${item.failedMainExam ?? 0}</td>
                   <td>${(item.passRate ?? 0).toFixed(1)}%</td>
                   <td>${(item.successRate ?? 0).toFixed(1)}%</td>
+                  <td>${(item.finalSuccessRate ?? 0).toFixed(1)}%</td>
                   <td>${item.successRateStatus ?? ""}</td>
                 </tr>
               `,
@@ -818,6 +859,7 @@ export default function FacultyAnalysisPage() {
       "Failed",
       "Pass Rate",
       "Success Rate",
+      "Final Success Rate",
       "Status",
     ]
 
@@ -835,6 +877,7 @@ export default function FacultyAnalysisPage() {
           item.failedMainExam ?? 0,
           `${(item.passRate ?? 0).toFixed(1)}%`,
           `${(item.successRate ?? 0).toFixed(1)}%`,
+          `${(item.finalSuccessRate ?? 0).toFixed(1)}%`,
           item.successRateStatus ?? "",
         ].join("\t"),
       ),
@@ -870,9 +913,9 @@ export default function FacultyAnalysisPage() {
     const itemsForModule = facultyData.filter((item) => item.moduleCode === selectedAssessmentModule)
     if (itemsForModule.length === 0) return null
 
-    const classlist = itemsForModule.reduce((sum, item) => sum + item.totalStudents, 0)
-    const active = itemsForModule.reduce((sum, item) => sum + item.activeStudents, 0)
-    const inactive = itemsForModule.reduce((sum, item) => sum + (item.inactiveStudents || 0), 0)
+    const classlist = itemsForModule.reduce((sum, item) => sum + toCount(item.totalStudents), 0)
+    const active = itemsForModule.reduce((sum, item) => sum + toCount(item.activeStudents), 0)
+    const inactive = itemsForModule.reduce((sum, item) => sum + toCount(item.inactiveStudents), 0)
 
     return {
       classlist,
@@ -908,7 +951,8 @@ export default function FacultyAnalysisPage() {
     const rowFactor = 0.6 + rowIndex * 0.05
 
     const base = total * rowFactor * bandWeights[band]
-    return Math.max(0, Math.round(base))
+    const value = Math.max(0, Math.round(base))
+    return Number.isFinite(value) ? value : 0
   }
 
   return (
@@ -986,14 +1030,14 @@ export default function FacultyAnalysisPage() {
         <GradientCard gradient="emerald" className="relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <TrendingUp className="h-6 w-6 " />
+              <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <div className="text-right">
-              <div className="text-sm font-medium  uppercase tracking-wide">Pass Rate</div>
-              <div className="text-3xl font-bold ">{overallPassRate.toFixed(1)}%</div>
+              <div className="text-sm font-medium text-white/80 uppercase tracking-wide">Pass Rate</div>
+              <div className="text-3xl font-bold text-white">{overallPassRate.toFixed(1)}%</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2 text-white/90">
             <CheckCircle className="h-4 w-4" />
             <span className="text-sm">{totalStats.totalPassed} passed</span>
           </div>
@@ -1022,14 +1066,14 @@ export default function FacultyAnalysisPage() {
         <GradientCard gradient="amber" className="relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <Star className="h-6 w-6" />
+              <Star className="h-6 w-6 text-white" />
             </div>
             <div className="text-right">
-              <div className="text-sm font-medium  uppercase tracking-wide">60% - 74%</div>
-              <div className="text-3xl font-bold ">{totalStats.totalMarks60To74}</div>
+              <div className="text-sm font-medium text-white/80 uppercase tracking-wide">60% - 74%</div>
+              <div className="text-3xl font-bold text-white">{totalStats.totalMarks60To74}</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2 text-white/90">
             <TrendingUp className="h-4 w-4" />
             <span className="text-sm">
               {totalStats.totalStudents > 0
@@ -1042,14 +1086,14 @@ export default function FacultyAnalysisPage() {
         <GradientCard gradient="rose" className="relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <Star className="h-6 w-6 " />
+              <Star className="h-6 w-6 text-white" />
             </div>
             <div className="text-right">
-              <div className="text-sm font-medium  uppercase tracking-wide">&gt;74%</div>
-              <div className="text-3xl font-bold ">{totalStats.totalMarksAbove74}</div>
+              <div className="text-sm font-medium text-white/80 uppercase tracking-wide">&gt;74%</div>
+              <div className="text-3xl font-bold text-white">{totalStats.totalMarksAbove74}</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2 text-white/90">
             <TrendingUp className="h-4 w-4" />
             <span className="text-sm">
               {totalStats.totalStudents > 0
@@ -1167,11 +1211,13 @@ export default function FacultyAnalysisPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Campus</SelectItem>
-                      <SelectItem value="windhoek">Windhoek</SelectItem>
-                      <SelectItem value="ongwediva">Ongwediva</SelectItem>
-                      <SelectItem value="rundu">Rundu</SelectItem>
-                      <SelectItem value="oshakati">Oshakati</SelectItem>
-                      <SelectItem value="katima-mulilo">Katima Mulilo</SelectItem>
+                      <SelectItem value="soshanguve-south">Soshanguve (South)</SelectItem>
+                      <SelectItem value="soshanguve-north">Soshanguve (North)</SelectItem>
+                      <SelectItem value="emalahleni">eMalahleni</SelectItem>
+                      <SelectItem value="polokwane">Polokwane</SelectItem>
+                      <SelectItem value="mbombela">Mbombela</SelectItem>
+                      <SelectItem value="arts">Arts Campus</SelectItem>
+                      <SelectItem value="pretoria-west">Pretoria West</SelectItem>
                     </SelectContent>
                   </Select>
                   <Select value={qualificationFilter} onValueChange={setQualificationFilter}>
@@ -1262,6 +1308,7 @@ export default function FacultyAnalysisPage() {
                         <TableHead className="text-right whitespace-normal break-words">Re-exam</TableHead>
                         <TableHead className="text-right whitespace-normal break-words">Pass Rate</TableHead>
                         <TableHead className="text-right whitespace-normal break-words">Success Rate</TableHead>
+                        <TableHead className="text-right whitespace-normal break-words">Final Success Rate</TableHead>
                         <TableHead className="w-12"></TableHead>
                       </TableRow>
                     </TableHeader>
@@ -1316,7 +1363,7 @@ export default function FacultyAnalysisPage() {
                             </TableCell>
                             <TableCell className="text-sm text-slate-600">{item.campus || 'N/A'}</TableCell>
                             <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.totalStudents}
+                              {toCount(item.totalStudents)}
                             </TableCell>
                             <TableCell
                               className="text-right font-medium text-slate-900 dark:text-white cursor-pointer hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
@@ -1325,44 +1372,52 @@ export default function FacultyAnalysisPage() {
                                 setShowCancellationDialog(true)
                               }}
                             >
-                              {item.totalCancellations}
+                              {toCount(item.totalCancellations)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.activeStudents}
+                              {toCount(item.activeStudents)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-slate-600">
-                              {item.inactiveStudents ?? 0}
+                              {toCount(item.inactiveStudents)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.qualifyMainStream}
+                              {toCount(item.qualifyMainStream)}
                             </TableCell>
-                            <TableCell className="text-right text-emerald-600 font-medium">{item.passed}</TableCell>
+                            <TableCell className="text-right text-emerald-600 font-medium">{toCount(item.passed)}</TableCell>
                             <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.marksBetween50And59 ?? 0}
-                            </TableCell>
-                            <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.marksBetween60And74 ?? 0}
+                              {toCount(item.marksBetween50And59)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                              {item.marksAbove74 ?? 0}
+                              {toCount(item.marksBetween60And74)}
+                            </TableCell>
+                            <TableCell className="text-right font-medium text-slate-900 dark:text-white">
+                              {toCount(item.marksAbove74)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-red-600">
-                              {item.failedMainExam ?? 0}
+                              {toCount(item.failedMainExam)}
                             </TableCell>
                             <TableCell className="text-right font-medium text-orange-600">
-                              {item.reExam ?? 0}
+                              {toCount(item.reExam)}
                             </TableCell>
                             <TableCell className="text-right">
                               <span className="font-medium text-slate-900 dark:text-white">
-                                {item.passRate.toFixed(1)}%
+                                {formatRate(item.passRate)}
                               </span>
                             </TableCell>
                             <TableCell className="text-right">
                               <div className="flex items-center justify-end gap-2">
                                 <span className="font-medium text-slate-900 dark:text-white">
-                                  {item.successRate.toFixed(1)}%
+                                  {formatRate(item.successRate)}
                                 </span>
-                                {getSuccessRateBadge(item.successRate)}
+                                {getSuccessRateBadge(toCount(item.successRate))}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <span className="font-medium text-slate-900 dark:text-white">
+                                  {formatRate(item.finalSuccessRate)}
+                                </span>
+                                {getSuccessRateBadge(toCount(item.finalSuccessRate))}
                               </div>
                             </TableCell>
                             <TableCell>
@@ -1529,25 +1584,34 @@ export default function FacultyAnalysisPage() {
                         </div>
 
                         <div className="mt-4 pt-4 border-t border-slate-100">
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div className="space-y-2">
                               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Pass Rate</p>
                               <span className="text-lg font-semibold text-slate-900">
-                                {item.passRate.toFixed(1)}%
+                                {formatRate(item.passRate)}
                               </span>
                             </div>
                             <div className="space-y-2">
                               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Success Rate</p>
                               <div className="flex items-center gap-2">
                                 <span className="text-lg font-semibold text-slate-900">
-                                  {item.successRate.toFixed(1)}%
+                                  {formatRate(item.successRate)}
                                 </span>
-                                {getSuccessRateBadge(item.successRate)}
+                                {getSuccessRateBadge(toCount(item.successRate))}
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Final Success Rate</p>
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg font-semibold text-slate-900">
+                                  {formatRate(item.finalSuccessRate)}
+                                </span>
+                                {getSuccessRateBadge(toCount(item.finalSuccessRate))}
                               </div>
                             </div>
                             <div className="space-y-2">
                               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Fail Rate</p>
-                              <p className="text-lg font-semibold text-slate-600">{item.failRate.toFixed(1)}%</p>
+                              <p className="text-lg font-semibold text-slate-600">{formatRate(item.failRate)}</p>
                             </div>
                           </div>
                         </div>
@@ -1960,22 +2024,22 @@ export default function FacultyAnalysisPage() {
                             {item.qualificationName}
                           </TableCell>
                           <TableCell className="text-right font-medium text-slate-900 dark:text-white">
-                            {item.totalStudents}
+                            {toCount(item.totalStudents)}
                           </TableCell>
                           <TableCell className="text-right font-medium text-emerald-600 dark:text-emerald-400">
-                            {item.passed}
+                            {toCount(item.passed)}
                           </TableCell>
                           <TableCell className="text-right">
                             <span className="font-medium text-slate-900 dark:text-white">
-                              {item.passRate.toFixed(1)}%
+                              {formatRate(item.passRate)}
                             </span>
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
                               <span className="font-medium text-slate-900 dark:text-white">
-                                {item.successRate.toFixed(1)}%
+                                {formatRate(item.successRate)}
                               </span>
-                              {getSuccessRateBadge(item.successRate)}
+                              {getSuccessRateBadge(toCount(item.successRate))}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -1990,8 +2054,11 @@ export default function FacultyAnalysisPage() {
                 <p className="mb-1">
                   <strong>Pass Rate</strong> = Passed / (Total Students - Absent Main Exam)
                 </p>
-                <p>
+                <p className="mb-1">
                   <strong>Success Rate</strong> = Passed / Total Students
+                </p>
+                <p>
+                  <strong>Final Success Rate</strong> = (Qualify Main + Qualify Re-exam) / Total Students
                 </p>
               </div>
             </div>

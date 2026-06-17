@@ -536,9 +536,13 @@ export default function FailedStudentsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Campus</SelectItem>
-                  <SelectItem value="capetown">Capetown</SelectItem>
-                  <SelectItem value="stellenbosch">Stellenbosch</SelectItem>
-                  <SelectItem value="durban">Durban</SelectItem>
+                  <SelectItem value="soshanguve-south">Soshanguve (South)</SelectItem>
+                  <SelectItem value="soshanguve-north">Soshanguve (North)</SelectItem>
+                  <SelectItem value="emalahleni">eMalahleni</SelectItem>
+                  <SelectItem value="polokwane">Polokwane</SelectItem>
+                  <SelectItem value="mbombela">Mbombela</SelectItem>
+                  <SelectItem value="arts">Arts Campus</SelectItem>
+                  <SelectItem value="pretoria-west">Pretoria West</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={qualificationFilter} onValueChange={setQualificationFilter}>

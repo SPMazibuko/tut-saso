@@ -9,9 +9,9 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "iPASS - Integrated Participation and Academic Success System",
+  title: "SASO System - Tshwane University of Technology",
   description:
-    "Empowering Academic Success Through Predictive Analytics. Intelligent platform for early risk detection and coordinated academic support.",
+    "Student Academic Support Office system for TUT. Comprehensive academic support, analytics, and institutional management.",
   generator: "v0.app",
 }
 

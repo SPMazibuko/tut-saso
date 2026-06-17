@@ -259,7 +259,7 @@ export function logInterventionCase(caseData: Omit<InterventionCase, "id" | "tim
       description: caseData.aiSummary,
       type: "academic-support",
       status: "planned",
-      assignedTo: "teacher@ipass.edu", // Default assignment
+      assignedTo: "teacher@tut.ac.za", // Default assignment
       createdBy: "ai-system",
       createdAt: new Date(),
       startDate: new Date(),
@@ -297,7 +297,7 @@ export function escalateInterventionCase(
     description: interventionCase.aiSummary,
     type: rolePlayerType === "counselor" || rolePlayerType === "psychologist" ? "counseling" : "mentoring",
     status: "planned",
-    assignedTo: assignedTo || "admin@ipass.edu",
+    assignedTo: assignedTo || "admin@tut.ac.za",
     createdBy: "ai-system",
     createdAt: new Date(),
     startDate: new Date(),

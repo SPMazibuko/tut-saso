@@ -37,60 +37,66 @@ import {
 
 import type { Schedule } from "@/lib/types"
 import { PageHeader } from "@/components/page-header"
+import {
+  SCHEDULE_ACADEMIC_YEAR,
+  getScheduleModuleLabel,
+  getScheduleModuleOptions,
+} from "@/lib/schedule-modules"
 
 // Demo data - replace with actual API calls
 const demoSchedules: Schedule[] = [
   {
     id: 1,
     title: "Semester 1 Schedule",
-    grade: "SCI",
+    grade: "PPA115D",
     term: 1,
-    year: 2025,
+    year: SCHEDULE_ACADEMIC_YEAR,
     createdAt: new Date(),
     updatedAt: new Date(),
     events: [],
   },
   {
     id: 2,
-    title: "Semester 2 Schedule",
-    grade: "ENG",
-    term: 2,
-    year: 2025,
+    title: "Semester 1 Schedule",
+    grade: "SYA216D",
+    term: 1,
+    year: SCHEDULE_ACADEMIC_YEAR,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    events: [],
+  },
+  {
+    id: 3,
+    title: "Semester 1 Schedule",
+    grade: "16E105X",
+    term: 1,
+    year: SCHEDULE_ACADEMIC_YEAR,
     createdAt: new Date(),
     updatedAt: new Date(),
     events: [],
   },
 ]
 
-const FACULTY_OPTIONS = [
-  { value: "SCI", label: "Faculty of Science" },
-  { value: "ENG", label: "Faculty of Engineering and the Built Environment" },
-  { value: "BUS", label: "Faculty of Commerce, Management and Law" },
-  { value: "EDU", label: "Faculty of Education and Human Sciences" },
-  { value: "HSC", label: "Faculty of Health Sciences" },
-] as const
-
-const getFacultyLabel = (code: string) =>
-  FACULTY_OPTIONS.find((f) => f.value === code)?.label ?? code
+const MODULE_OPTIONS = getScheduleModuleOptions()
 
 export default function ScheduleList() {
   const router = useRouter()
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("all")
+  const [selectedModule, setSelectedModule] = useState<string>("all")
   const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; schedule: Schedule | null }>({
     isOpen: false,
     schedule: null,
   })
 
-  const filteredSchedules = selectedFaculty === "all"
+  const filteredSchedules = selectedModule === "all"
     ? demoSchedules
-    : demoSchedules.filter((schedule) => schedule.grade === selectedFaculty)
+    : demoSchedules.filter((schedule) => schedule.grade === selectedModule)
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background via-background to-muted/40 dark:bg-sidebar">
       <div className="mx-auto flex w-full flex-1 flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-10 xl:px-16">
         <PageHeader 
           title="Schedule Management"
-          description="Create and manage semester schedules for different faculties."
+          description="Create and manage semester schedules for ICT modules."
         >
           <Link href="/dashboard/schedule/create" passHref>
             <Button>
@@ -105,23 +111,23 @@ export default function ScheduleList() {
           <CardHeader>
             <CardTitle>Schedules</CardTitle>
             <CardDescription>
-              View and manage all faculty schedules
+              View and manage module semester schedules
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="mb-4">
               <Select
-                value={selectedFaculty}
-                onValueChange={setSelectedFaculty}
+                value={selectedModule}
+                onValueChange={setSelectedModule}
               >
-                <SelectTrigger className="w-[240px]">
-                  <SelectValue placeholder="Filter by course" />
+                <SelectTrigger className="w-[320px]">
+                  <SelectValue placeholder="Filter by module" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Faculties</SelectItem>
-                  {FACULTY_OPTIONS.map((faculty) => (
-                    <SelectItem key={faculty.value} value={faculty.value}>
-                      {faculty.label}
+                  <SelectItem value="all">All Modules</SelectItem>
+                  {MODULE_OPTIONS.map((module) => (
+                    <SelectItem key={module.value} value={module.value}>
+                      {module.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -132,7 +138,7 @@ export default function ScheduleList() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
-                  <TableHead>Faculty</TableHead>
+                  <TableHead>Module</TableHead>
                   <TableHead>Semester</TableHead>
                   <TableHead>Year</TableHead>
                   <TableHead>Last Updated</TableHead>
@@ -143,7 +149,7 @@ export default function ScheduleList() {
                 {filteredSchedules.map((schedule) => (
                   <TableRow key={schedule.id}>
                     <TableCell className="font-medium">{schedule.title}</TableCell>
-                    <TableCell>{getFacultyLabel(schedule.grade)}</TableCell>
+                    <TableCell>{getScheduleModuleLabel(schedule.grade)}</TableCell>
                     <TableCell>Semester {schedule.term}</TableCell>
                     <TableCell>{schedule.year}</TableCell>
                     <TableCell>{schedule.updatedAt.toLocaleDateString()}</TableCell>

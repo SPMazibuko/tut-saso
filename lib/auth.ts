@@ -8,14 +8,14 @@ const AUTH_STORAGE_KEY = "ipass_auth_user"
 
 /** Per-user credentials for mock authentication */
 const USER_PASSWORDS: Record<string, string> = {
-  "admin@ipass.edu": "Test@123",
-  "teacher@ipass.edu": "Test@123",
-  "student@ipass.edu": "Test@123",
-  "parent@ipass.edu": "Test@123",
-  "district@ipass.edu": "Test@123",
-  "province@ipass.edu": "Test@123",
+  "admin@tut.ac.za": "Test@123",
+  "teacher@tut.ac.za": "Test@123",
+  "student@tut.ac.za": "Test@123",
+  "parent@tut.ac.za": "Test@123",
+  "district@tut.ac.za": "Test@123",
+  "province@tut.ac.za": "Test@123",
   "mashilom1@tut.ac.za": "admin@123",
-  "spmazibuko07@gmail.com": "pretoria@TT123",
+  "spmazibuko07@gmail.com": "polokwane@TT123",
 }
 
 function findUserByEmail(email: string): User | undefined {
