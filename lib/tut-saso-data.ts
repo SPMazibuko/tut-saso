@@ -2,6 +2,13 @@
  * TUT / SASO institutional data sourced from saso-system.vercel.app (2026 ICT uploads).
  */
 
+import {
+  getIdentifiedModulesTotals,
+  getModuleBreakdownByDepartment,
+  getModulesPerDepartment,
+  getSupportedModulesPerDepartment,
+} from "@/lib/mock/module-identification"
+
 export const TUT_CAMPUSES = [
   { id: "soshanguve-south", name: "SOSHANGUVE (SOUTH)", slug: "soshanguve-south" },
   { id: "soshanguve-north", name: "SOSHANGUVE (NORTH)", slug: "soshanguve-north" },
@@ -87,11 +94,7 @@ export const SASO_DASHBOARD_STATS = {
   moduleTutors: 14,
   creditsExclusion: 287,
   creditsProbation: 308,
-  identifiedModules: {
-    departmentModules: 101,
-    supportedModules: 59,
-    sasoModules: 36,
-  },
+  identifiedModules: getIdentifiedModulesTotals(),
   totalStudents: 4599,
   pendingImports: 11,
   conditionalLetters: {
@@ -102,29 +105,8 @@ export const SASO_DASHBOARD_STATS = {
     lettersSigned: 418,
     lettersNotSigned: 115,
   },
-  modulesPerDepartment: [
-    { name: "Computer Systems Engineering", count: 27 },
-    { name: "Computer Science", count: 24 },
-    { name: "Information Technology", count: 18 },
-    { name: "Informatics", count: 15 },
-    { name: "FYU", count: 9 },
-    { name: "Unknown", count: 3 },
-    { name: "End User Computing Unit", count: 2 },
-    { name: "Library", count: 1 },
-    { name: "Mathematics And Statistics", count: 1 },
-    { name: "SDS", count: 1 },
-  ],
-  supportedModulesPerDepartment: [
-    { name: "Computer Systems Engineering", count: 16 },
-    { name: "Computer Science", count: 14 },
-    { name: "Information Technology", count: 11 },
-    { name: "Informatics", count: 9 },
-    { name: "FYU", count: 5 },
-    { name: "End User Computing Unit", count: 1 },
-    { name: "Library", count: 1 },
-    { name: "Mathematics And Statistics", count: 1 },
-    { name: "SDS", count: 1 },
-  ],
+  modulesPerDepartment: getModulesPerDepartment(),
+  supportedModulesPerDepartment: getSupportedModulesPerDepartment(),
   exclusionPerDepartment: [
     { name: "Computer Science", count: 133 },
     { name: "Informatics", count: 101 },
@@ -158,25 +140,8 @@ export const SASO_DASHBOARD_STATS = {
   },
 }
 
-/** Module support split per TUT ICT department (SASO + department + unsupported). */
-export const SASO_MODULE_SUPPORT_BREAKDOWN: Record<
-  string,
-  { supportedBySOLUSI: number; supportedByDepartment: number; notSupported: number }
-> = {
-  "Computer Systems Engineering": { supportedBySOLUSI: 9, supportedByDepartment: 7, notSupported: 11 },
-  "Computer Science": { supportedBySOLUSI: 8, supportedByDepartment: 6, notSupported: 10 },
-  "Information Technology": { supportedBySOLUSI: 6, supportedByDepartment: 5, notSupported: 7 },
-  Informatics: { supportedBySOLUSI: 5, supportedByDepartment: 4, notSupported: 6 },
-  FYU: { supportedBySOLUSI: 3, supportedByDepartment: 2, notSupported: 4 },
-  "End User Computing Unit": { supportedBySOLUSI: 1, supportedByDepartment: 0, notSupported: 1 },
-  Library: { supportedBySOLUSI: 0, supportedByDepartment: 1, notSupported: 0 },
-  "Mathematics And Statistics": { supportedBySOLUSI: 1, supportedByDepartment: 0, notSupported: 0 },
-  SDS: { supportedBySOLUSI: 0, supportedByDepartment: 1, notSupported: 0 },
-  Unknown: { supportedBySOLUSI: 0, supportedByDepartment: 0, notSupported: 3 },
-}
-
 export function getSasoModuleBreakdownByDepartment(department: string) {
-  return SASO_MODULE_SUPPORT_BREAKDOWN[department]
+  return getModuleBreakdownByDepartment(department)
 }
 
 /** Campus pass/success rates for dashboard performance cards. */
