@@ -32,10 +32,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { PageHeader } from "@/components/page-header"
+import {
+  SCHEDULE_ACADEMIC_YEAR,
+  getScheduleModuleOptions,
+} from "@/lib/schedule-modules"
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  grade: z.string().min(1, "Faculty is required"),
+  grade: z.string().min(1, "Module is required"),
   term: z.string().min(1, "Semester is required"),
   year: z.string().min(4, "Year is required"),
   events: z.array(z.object({
@@ -49,13 +53,7 @@ const formSchema = z.object({
   }))
 })
 
-const FACULTY_OPTIONS = [
-  { value: "SCI", label: "Faculty of Science" },
-  { value: "ENG", label: "Faculty of Engineering and the Built Environment" },
-  { value: "BUS", label: "Faculty of Commerce, Management and Law" },
-  { value: "EDU", label: "Faculty of Education and Human Sciences" },
-  { value: "HSC", label: "Faculty of Health Sciences" },
-] as const
+const MODULE_OPTIONS = getScheduleModuleOptions()
 
 export default function CreateSchedule() {
   const router = useRouter()
@@ -69,7 +67,7 @@ export default function CreateSchedule() {
       title: "",
       grade: "",
       term: "",
-      year: new Date().getFullYear().toString(),
+      year: SCHEDULE_ACADEMIC_YEAR.toString(),
       events: events
     }
   })
@@ -123,7 +121,7 @@ export default function CreateSchedule() {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Semester 1 2025" {...field} />
+                        <Input placeholder={`e.g. Semester 1 ${SCHEDULE_ACADEMIC_YEAR}`} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,20 +133,20 @@ export default function CreateSchedule() {
                   name="grade"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Faculty</FormLabel>
+                      <FormLabel>Module</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a faculty" />
+                            <SelectValue placeholder="Select a module" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {FACULTY_OPTIONS.map((faculty) => (
-                            <SelectItem key={faculty.value} value={faculty.value}>
-                              {faculty.label}
+                          {MODULE_OPTIONS.map((module) => (
+                            <SelectItem key={module.value} value={module.value}>
+                              {module.label}
                             </SelectItem>
                           ))}
                         </SelectContent>

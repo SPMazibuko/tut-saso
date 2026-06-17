@@ -559,95 +559,85 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Filter, Search } from "lucide-react"
 import ViewMessageDialog from "@/components/admin/view-message-dialog"
-import type { Learner } from "@/lib/types"
+import { CLASSLIST_MODULES, mockStudents } from "@/lib/mock/classlist-data"
 
-// Mock data for student details
-const mockCommunicationHistory = [
-  {
-    id: "156",
-    role: "TUTOR",
-    name: "Mr. Mazibuko",
-    threadCondition: "ENG101 - Engineering Fundamentals Assignment",
-    readStatus: "Unread",
-    dateSent: "2025-03-12 16:45:12",
-    dateRead: "-",
-  },
-  {
-    id: "262",
-    role: "TUTOR",
-    name: "Ms Nkosi",
-    threadCondition: "ENG101 - Engineering Fundamentals Assignment",
-    readStatus: "Read",
-    dateSent: "2025-03-12 18:04:36",
-    dateRead: "2025-04-02 07:11:21",
-  },
-  {
-    id: "567",
-    role: "TUTOR",
-    name: "Mr SEKHITLA",
-    threadCondition: "ENG101 - Tutorial Session",
-    readStatus: "Read",
-    dateSent: "2025-03-28 14:37:20",
-    dateRead: "2025-04-02 07:11:21",
-  },
-  {
-    id: "606",
-    role: "TUTOR",
-    name: "Mr SEKHITLA",
-    threadCondition: "ENG101 - Recess Catch-up Plan",
-    readStatus: "Read",
-    dateSent: "2025-03-31 06:12:50",
-    dateRead: "2025-04-02 07:11:21",
-  },
-  {
-    id: "791",
-    role: "TUTOR",
-    name: "Mr SEKHITLA",
-    threadCondition: "ENG101 - Tutorial Session",
-    readStatus: "Unread",
-    dateSent: "2025-04-09 11:52:47",
-    dateRead: "-",
-  },
-  {
-    id: "812",
-    role: "AEO",
-    name: "Ms M Mashile",
-    threadCondition: "IMPORTANT SECOND TERM INFORMATION AND SCHEDULE",
-    readStatus: "Unread",
-    dateSent: "2025-04-10 09:15:30",
-    dateRead: "-",
-  },
-]
+function getModuleLabel(code: string): string {
+  const mod = CLASSLIST_MODULES.find((m) => m.code === code)
+  return mod ? `${mod.code} - ${mod.name}` : code
+}
 
-// Mock student data - in a real app, this would come from an API
-const mockStudent: Learner = {
-  id: 1,
-  studentNumber: "ST2024001",
-  name: "John",
-  surname: "Smith",
-  email: "john.smith@student.edu",
-  academicStatus: "First-time",
-    subjectCode: "ENG101",
-    assessments: { AS: 75, CT: 80, WR: 85, PP: 73 },
-  attendance: { attended: 28, total: 32, percentage: 87.5 },
-  riskLevel: "Good",
-  enrollmentYear: 2024,
-  semester: 1,
-  teacherId: 1,
-  previousSubjects: ["ENG101"],
+function buildCommunicationHistory(moduleCode: string) {
+  const label = getModuleLabel(moduleCode)
+  return [
+    {
+      id: "156",
+      role: "TUTOR",
+      name: "Mr. Mazibuko",
+      threadCondition: `${label} - Assignment`,
+      readStatus: "Unread",
+      dateSent: "2025-03-12 16:45:12",
+      dateRead: "-",
+    },
+    {
+      id: "262",
+      role: "TUTOR",
+      name: "Ms Nkosi",
+      threadCondition: `${label} - Assignment`,
+      readStatus: "Read",
+      dateSent: "2025-03-12 18:04:36",
+      dateRead: "2025-04-02 07:11:21",
+    },
+    {
+      id: "567",
+      role: "TUTOR",
+      name: "Mr SEKHITLA",
+      threadCondition: `${label} - Tutorial Session`,
+      readStatus: "Read",
+      dateSent: "2025-03-28 14:37:20",
+      dateRead: "2025-04-02 07:11:21",
+    },
+    {
+      id: "606",
+      role: "TUTOR",
+      name: "Mr SEKHITLA",
+      threadCondition: `${label} - Recess Catch-up Plan`,
+      readStatus: "Read",
+      dateSent: "2025-03-31 06:12:50",
+      dateRead: "2025-04-02 07:11:21",
+    },
+    {
+      id: "791",
+      role: "TUTOR",
+      name: "Mr SEKHITLA",
+      threadCondition: `${label} - Tutorial Session`,
+      readStatus: "Unread",
+      dateSent: "2025-04-09 11:52:47",
+      dateRead: "-",
+    },
+    {
+      id: "812",
+      role: "AEO",
+      name: "Ms M Mashile",
+      threadCondition: "IMPORTANT SECOND TERM INFORMATION AND SCHEDULE",
+      readStatus: "Unread",
+      dateSent: "2025-04-10 09:15:30",
+      dateRead: "-",
+    },
+  ]
 }
 
 export default function StudentReportPage() {
   const params = useParams()
   const studentId = parseInt(params.id as string)
   const [activeTab, setActiveTab] = useState("details")
-  const [selectedMessage, setSelectedMessage] = useState<typeof mockCommunicationHistory[0] | null>(null)
+  const [selectedMessage, setSelectedMessage] = useState<ReturnType<typeof buildCommunicationHistory>[0] | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
-  const student = mockStudent // In real app, this would come from params.id
+  const student = mockStudents.find((s) => s.id === studentId) ?? mockStudents[0]
+  const communicationHistory = buildCommunicationHistory(student.moduleCode)
 
   // Filter communications based on search query and status
-  const filteredCommunications = mockCommunicationHistory.filter((comm) => {
+  const filteredCommunications = communicationHistory.filter((comm) => {
     const matchesSearch = 
       comm.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       comm.role.toLowerCase().includes(searchQuery.toLowerCase()) ||

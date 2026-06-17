@@ -215,11 +215,11 @@ export default function StudentCategoriesPage() {
                   </div>
 
                   <div className="rounded-xl border overflow-hidden">
-                    <div className="overflow-x-auto max-h-[70vh]">
+                    <div className="overflow-auto max-h-[70vh] [&_[data-slot=table-container]]:overflow-visible">
                       <Table>
                         <TableHeader>
                           <TableRow className={cfg.headerBg}>
-                            <TableHead className="w-10 sticky left-0 z-10 bg-inherit">
+                            <TableHead className={`w-10 sticky left-0 top-0 z-30 ${cfg.headerBg}`}>
                               <Checkbox
                                 checked={allPageSelected}
                                 onCheckedChange={(checked) => toggleSelectAll(!!checked)}
@@ -227,30 +227,30 @@ export default function StudentCategoriesPage() {
                                 {...(somePageSelected && !allPageSelected ? { "data-state": "indeterminate" } : {})}
                               />
                             </TableHead>
-                            <TableHead className="font-semibold min-w-[180px]">Registered Student</TableHead>
-                            <TableHead className="font-semibold min-w-[120px]">Student No.</TableHead>
-                            <TableHead className="font-semibold min-w-[220px]">Student Email</TableHead>
-                            <TableHead className="font-semibold min-w-[220px]">Academic Status / SODS</TableHead>
-                            <TableHead className="font-semibold min-w-[280px]">Academic Progress</TableHead>
-                            <TableHead className="font-semibold min-w-[80px] text-center">Lect. Att. %</TableHead>
-                            <TableHead className="font-semibold min-w-[80px] text-center">Ind. Assign.</TableHead>
-                            <TableHead className="font-semibold min-w-[80px] text-center">Group Work</TableHead>
-                            <TableHead className="font-semibold min-w-[60px] text-center">S1</TableHead>
+                            <TableHead className={`font-semibold min-w-[180px] sticky top-0 z-20 ${cfg.headerBg}`}>Registered Student</TableHead>
+                            <TableHead className={`font-semibold min-w-[120px] sticky top-0 z-20 ${cfg.headerBg}`}>Student No.</TableHead>
+                            <TableHead className={`font-semibold min-w-[220px] sticky top-0 z-20 ${cfg.headerBg}`}>Student Email</TableHead>
+                            <TableHead className={`font-semibold min-w-[220px] sticky top-0 z-20 ${cfg.headerBg}`}>Academic Status / SODS</TableHead>
+                            <TableHead className={`font-semibold min-w-[280px] sticky top-0 z-20 ${cfg.headerBg}`}>Academic Progress</TableHead>
+                            <TableHead className={`font-semibold min-w-[80px] text-center sticky top-0 z-20 ${cfg.headerBg}`}>Lect. Att. %</TableHead>
+                            <TableHead className={`font-semibold min-w-[80px] text-center sticky top-0 z-20 ${cfg.headerBg}`}>Ind. Assign.</TableHead>
+                            <TableHead className={`font-semibold min-w-[80px] text-center sticky top-0 z-20 ${cfg.headerBg}`}>Group Work</TableHead>
+                            <TableHead className={`font-semibold min-w-[60px] text-center sticky top-0 z-20 ${cfg.headerBg}`}>S1</TableHead>
                             {TUTORIAL_DATES.map((td, i) => (
-                              <TableHead key={i} className="font-semibold min-w-[130px] text-center">
+                              <TableHead key={i} className={`font-semibold min-w-[130px] text-center sticky top-0 z-20 ${cfg.headerBg}`}>
                                 <div className="text-xs leading-tight">Tutorial {i + 1}</div>
                                 <div className="text-[10px] text-muted-foreground leading-tight">{td.date}</div>
                                 <div className="text-[10px] text-muted-foreground leading-tight">{td.time}</div>
                               </TableHead>
                             ))}
-                            <TableHead className="font-semibold min-w-[140px] text-center bg-orange-100 dark:bg-orange-900/40">
-                              <div className="text-xs leading-tight">Online Study/Tutor</div>
+                            <TableHead className="font-semibold min-w-[140px] text-center sticky top-0 z-20 bg-orange-100 dark:bg-orange-900/40">
+                              <div className="text-xs leading-tight">Online Studython</div>
                             </TableHead>
-                            <TableHead className="font-semibold min-w-[140px] text-center bg-orange-100 dark:bg-orange-900/40">
-                              <div className="text-xs leading-tight">Contact Smartphone</div>
+                            <TableHead className="font-semibold min-w-[140px] text-center sticky top-0 z-20 bg-orange-100 dark:bg-orange-900/40">
+                              <div className="text-xs leading-tight">Contact Studython</div>
                             </TableHead>
-                            <TableHead className="font-semibold min-w-[160px] text-center bg-sky-100 dark:bg-sky-900/40">
-                              <div className="text-xs leading-tight">Usage Study Style</div>
+                            <TableHead className="font-semibold min-w-[160px] text-center sticky top-0 z-20 bg-sky-100 dark:bg-sky-900/40">
+                              <div className="text-xs leading-tight">Online Recess Studython</div>
                             </TableHead>
                           </TableRow>
                         </TableHeader>

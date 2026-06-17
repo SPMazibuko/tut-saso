@@ -17,14 +17,18 @@ import { Badge } from "@/components/ui/badge"
 import { ScheduleInfoDialog } from "@/components/schedule/schedule-info-dialog"
 import type { Schedule, ScheduleEvent } from "@/lib/types"
 import { PageHeader } from "@/components/page-header"
+import {
+  SCHEDULE_ACADEMIC_YEAR,
+  getScheduleModuleLabel,
+} from "@/lib/schedule-modules"
 
 // Demo data - replace with actual API calls
 const demoSchedule: Schedule = {
   id: 1,
   title: "Semester 1 Schedule",
-  grade: "SCI",
+  grade: "PPA115D",
   term: 1,
-  year: 2025,
+  year: SCHEDULE_ACADEMIC_YEAR,
   createdAt: new Date(),
   updatedAt: new Date(),
   events: [
@@ -32,8 +36,8 @@ const demoSchedule: Schedule = {
       id: 1,
       scheduleId: 1,
       week: 1,
-      startDate: new Date("2025-01-20"),
-      endDate: new Date("2025-01-24"),
+      startDate: new Date("2026-01-20"),
+      endDate: new Date("2026-01-24"),
       type: "Orientation",
       highlights: "Welcome week, course registration, orientation activities",
       extendedInfo: "Orientation week for new and returning students"
@@ -42,8 +46,8 @@ const demoSchedule: Schedule = {
       id: 2,
       scheduleId: 1,
       week: 2,
-      startDate: new Date("2025-01-27"),
-      endDate: new Date("2025-01-31"),
+      startDate: new Date("2026-01-27"),
+      endDate: new Date("2026-01-31"),
       type: "Classes",
       extendedInfo: "Regular classes begin"
     },
@@ -51,8 +55,8 @@ const demoSchedule: Schedule = {
       id: 3,
       scheduleId: 1,
       week: 3,
-      startDate: new Date("2025-02-03"),
-      endDate: new Date("2025-02-07"),
+      startDate: new Date("2026-02-03"),
+      endDate: new Date("2026-02-07"),
       type: "Classes",
       extendedInfo: "Regular classes"
     },
@@ -60,8 +64,8 @@ const demoSchedule: Schedule = {
       id: 4,
       scheduleId: 1,
       week: 4,
-      startDate: new Date("2025-02-10"),
-      endDate: new Date("2025-02-14"),
+      startDate: new Date("2026-02-10"),
+      endDate: new Date("2026-02-14"),
       type: "Classes",
       highlights: "First assessments and assignments due",
       extendedInfo: "Regular classes"
@@ -70,8 +74,8 @@ const demoSchedule: Schedule = {
       id: 5,
       scheduleId: 1,
       week: 5,
-      startDate: new Date("2025-02-17"),
-      endDate: new Date("2025-02-21"),
+      startDate: new Date("2026-02-17"),
+      endDate: new Date("2026-02-21"),
       type: "Classes",
       extendedInfo: "Regular classes"
     },
@@ -79,8 +83,8 @@ const demoSchedule: Schedule = {
       id: 6,
       scheduleId: 1,
       week: 6,
-      startDate: new Date("2025-02-24"),
-      endDate: new Date("2025-02-28"),
+      startDate: new Date("2026-02-24"),
+      endDate: new Date("2026-02-28"),
       type: "Midterms",
       extendedInfo: "Midterm examinations"
     },
@@ -88,8 +92,8 @@ const demoSchedule: Schedule = {
       id: 7,
       scheduleId: 1,
       week: 7,
-      startDate: new Date("2025-03-03"),
-      endDate: new Date("2025-03-07"),
+      startDate: new Date("2026-03-03"),
+      endDate: new Date("2026-03-07"),
       type: "Midterms",
       highlights: "Midterm examinations continue, results feedback",
       extendedInfo: "Midterm examinations"
@@ -98,8 +102,8 @@ const demoSchedule: Schedule = {
       id: 8,
       scheduleId: 1,
       week: 8,
-      startDate: new Date("2025-03-10"),
-      endDate: new Date("2025-03-14"),
+      startDate: new Date("2026-03-10"),
+      endDate: new Date("2026-03-14"),
       type: "Classes",
       extendedInfo: "Regular classes resume"
     },
@@ -107,8 +111,8 @@ const demoSchedule: Schedule = {
       id: 9,
       scheduleId: 1,
       week: 9,
-      startDate: new Date("2025-03-17"),
-      endDate: new Date("2025-03-21"),
+      startDate: new Date("2026-03-17"),
+      endDate: new Date("2026-03-21"),
       type: "Parent-Teacher Conference",
       highlights: "Parent-Teacher Conference - discuss student progress",
       extendedInfo: "Scheduled meetings with parents and teachers"
@@ -117,8 +121,8 @@ const demoSchedule: Schedule = {
       id: 10,
       scheduleId: 1,
       week: 10,
-      startDate: new Date("2025-03-24"),
-      endDate: new Date("2025-03-28"),
+      startDate: new Date("2026-03-24"),
+      endDate: new Date("2026-03-28"),
       type: "Classes",
       highlights: "End of semester assessments",
       extendedInfo: "Regular classes"
@@ -127,8 +131,8 @@ const demoSchedule: Schedule = {
       id: 11,
       scheduleId: 1,
       week: 11,
-      startDate: new Date("2025-03-31"),
-      endDate: new Date("2025-04-04"),
+      startDate: new Date("2026-03-31"),
+      endDate: new Date("2026-04-04"),
       type: "Holiday",
       extendedInfo: "School holiday break"
     },
@@ -136,8 +140,8 @@ const demoSchedule: Schedule = {
       id: 12,
       scheduleId: 1,
       week: 12,
-      startDate: new Date("2025-04-07"),
-      endDate: new Date("2025-04-11"),
+      startDate: new Date("2026-04-07"),
+      endDate: new Date("2026-04-11"),
       type: "Sports Day",
       highlights: "Annual Sports Day - all faculties participate",
       extendedInfo: "School sports events and competitions"
@@ -146,8 +150,8 @@ const demoSchedule: Schedule = {
       id: 13,
       scheduleId: 1,
       week: 13,
-      startDate: new Date("2025-04-14"),
-      endDate: new Date("2025-04-18"),
+      startDate: new Date("2026-04-14"),
+      endDate: new Date("2026-04-18"),
       type: "Classes",
       highlights: "Final semester assessments preparation",
       extendedInfo: "Regular classes"
@@ -156,8 +160,8 @@ const demoSchedule: Schedule = {
       id: 14,
       scheduleId: 1,
       week: 14,
-      startDate: new Date("2025-04-21"),
-      endDate: new Date("2025-04-25"),
+      startDate: new Date("2026-04-21"),
+      endDate: new Date("2026-04-25"),
       type: "Finals",
       highlights: "Final examinations begin",
       extendedInfo: "Semester final examinations"
@@ -166,8 +170,8 @@ const demoSchedule: Schedule = {
       id: 15,
       scheduleId: 1,
       week: 15,
-      startDate: new Date("2025-04-28"),
-      endDate: new Date("2025-05-02"),
+      startDate: new Date("2026-04-28"),
+      endDate: new Date("2026-05-02"),
       type: "Finals",
       extendedInfo: "Final examinations continue"
     },
@@ -175,25 +179,14 @@ const demoSchedule: Schedule = {
       id: 16,
       scheduleId: 1,
       week: 16,
-      startDate: new Date("2025-05-05"),
-      endDate: new Date("2025-05-09"),
+      startDate: new Date("2026-05-05"),
+      endDate: new Date("2026-05-09"),
       type: "Finals",
       highlights: "Final examinations conclude, report cards issued",
       extendedInfo: "Final examinations and semester closure"
     }
   ]
 }
-
-const FACULTY_OPTIONS = [
-  { value: "SCI", label: "Faculty of Science" },
-  { value: "ENG", label: "Faculty of Engineering and the Built Environment" },
-  { value: "BUS", label: "Faculty of Commerce, Management and Law" },
-  { value: "EDU", label: "Faculty of Education and Human Sciences" },
-  { value: "HSC", label: "Faculty of Health Sciences" },
-] as const
-
-const getFacultyLabel = (code: string) =>
-  FACULTY_OPTIONS.find((f) => f.value === code)?.label ?? code
 
 // Helper function to get background color based on event type
 function getEventTypeColor(type: string): string {
@@ -260,7 +253,7 @@ export default function ViewSchedule() {
     <div className="flex-1 space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-8 pt-4 sm:pt-6">
       <PageHeader
         title={schedule.title}
-        description={`${getFacultyLabel(schedule.grade)} - Semester ${schedule.term} ${schedule.year}`}
+        description={`${getScheduleModuleLabel(schedule.grade)} - Semester ${schedule.term} ${schedule.year}`}
       >
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
           <Link href="/dashboard/schedule" passHref className="w-full sm:w-auto">

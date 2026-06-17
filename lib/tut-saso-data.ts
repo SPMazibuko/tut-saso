@@ -288,9 +288,8 @@ function scaleRecord(record: SasofacultyRecord, factor: number, campus: TutCampu
 /** Faculty analysis dataset across TUT campuses (Soshanguve South = live SASO data). */
 export function getSasoFacultyAnalysisData(): SasofacultyRecord[] {
   const extraCampuses: Array<{ campus: TutCampus; factor: number }> = [
-    { campus: TUT_CAMPUSES[1], factor: 0.72 },
-    { campus: TUT_CAMPUSES[3], factor: 0.85 },
-    { campus: TUT_CAMPUSES[2], factor: 0.55 },
+    { campus: TUT_CAMPUSES[3], factor: 0.85 }, // Polokwane
+    { campus: TUT_CAMPUSES[2], factor: 0.55 }, // eMalahleni
   ]
 
   const expanded: SasofacultyRecord[] = [...SASO_FACULTY_BASE]
@@ -379,4 +378,105 @@ export function getSasoDepartmentPerformance(): Array<{
     successRate: d.successRate,
     trend: d.passRate >= 80 ? ("up" as const) : d.passRate < 75 ? ("down" as const) : ("stable" as const),
   }))
+}
+
+export interface CampusBreakdownRecord {
+  campus: string
+  passRate: number
+  successRate: number
+  totalStudents: number
+  activeStudents: number
+  passed: number
+  failed: number
+}
+
+const CAMPUS_DISPLAY_NAMES: Record<string, string> = {
+  "SOSHANGUVE (SOUTH)": "Soshanguve (South)",
+  "SOSHANGUVE (NORTH)": "Soshanguve (North)",
+  eMALAHLENI: "eMalahleni",
+  POLOKWANE: "Polokwane",
+  MBOMBELA: "Mbombela",
+  "ARTS CAMPUS": "Arts Campus",
+  "PRETORIA WEST": "Pretoria West",
+}
+
+function formatCampusDisplayName(campus: string): string {
+  return CAMPUS_DISPLAY_NAMES[campus] ?? campus
+}
+
+const normalizeModuleCode = (value: string) => value.replace(/\s+/g, "").toUpperCase()
+
+/** Campus-level pass/success breakdown for a single module across TUT campuses. */
+export function getModuleCampusBreakdown(moduleCode: string): CampusBreakdownRecord[] {
+  const filterCode = normalizeModuleCode(moduleCode.trim())
+  const records = getSasoFacultyAnalysisData().filter(
+    (item) => normalizeModuleCode(item.moduleCode) === filterCode,
+  )
+
+  if (records.length === 0) return []
+
+  const byCampus = new Map<string, SasofacultyRecord[]>()
+  for (const record of records) {
+    const campus = record.campus || "Unknown"
+    const group = byCampus.get(campus) ?? []
+    group.push(record)
+    byCampus.set(campus, group)
+  }
+
+  const campusRows: CampusBreakdownRecord[] = []
+  let overallTotal = 0
+  let overallActive = 0
+  let overallPassed = 0
+  let overallFailed = 0
+  let overallQualify = 0
+
+  for (const [campus, items] of byCampus.entries()) {
+    const totals = items.reduce(
+      (acc, item) => ({
+        totalStudents: acc.totalStudents + item.totalStudents,
+        activeStudents: acc.activeStudents + item.activeStudents,
+        passed: acc.passed + item.passed,
+        failed: acc.failed + item.failedMainExam,
+        qualifyMainStream: acc.qualifyMainStream + item.qualifyMainStream,
+      }),
+      { totalStudents: 0, activeStudents: 0, passed: 0, failed: 0, qualifyMainStream: 0 },
+    )
+
+    const passRate = totals.totalStudents > 0 ? (totals.passed / totals.totalStudents) * 100 : 0
+    const successRate =
+      totals.totalStudents > 0 ? (totals.qualifyMainStream / totals.totalStudents) * 100 : 0
+
+    campusRows.push({
+      campus: formatCampusDisplayName(campus),
+      passRate: Math.round(passRate * 10) / 10,
+      successRate: Math.round(successRate * 10) / 10,
+      totalStudents: totals.totalStudents,
+      activeStudents: totals.activeStudents,
+      passed: totals.passed,
+      failed: totals.failed,
+    })
+
+    overallTotal += totals.totalStudents
+    overallActive += totals.activeStudents
+    overallPassed += totals.passed
+    overallFailed += totals.failed
+    overallQualify += totals.qualifyMainStream
+  }
+
+  campusRows.sort((a, b) => a.campus.localeCompare(b.campus))
+
+  const overallPassRate = overallTotal > 0 ? (overallPassed / overallTotal) * 100 : 0
+  const overallSuccessRate = overallTotal > 0 ? (overallQualify / overallTotal) * 100 : 0
+
+  campusRows.push({
+    campus: "Module Overall - All Campuses",
+    passRate: Math.round(overallPassRate * 10) / 10,
+    successRate: Math.round(overallSuccessRate * 10) / 10,
+    totalStudents: overallTotal,
+    activeStudents: overallActive,
+    passed: overallPassed,
+    failed: overallFailed,
+  })
+
+  return campusRows
 }
