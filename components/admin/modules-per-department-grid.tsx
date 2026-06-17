@@ -28,155 +28,114 @@ const yearRows: Array<{ key: "year1" | "year2"; label: string }> = [
   { key: "year2", label: "2nd Year" },
 ]
 
-// Mock data aligned to University of Namibia offerings
+// Mock data aligned to TUT SASO ICT offerings (saso-system.vercel.app)
 const departmentsData: DepartmentData[] = [
   {
     name: "Computer Science",
-    totalModules: 18,
+    totalModules: 33,
     byYear: {
       year1: {
-        total: 9,
-        yearCount: 2,
-        yearModules: [
-          { code: "UNAM101" },
-          { code: "ACS101S" },
+        total: 6,
+        semester1: [{ code: "CFA115D", name: "COMPUTING FUNDAMENTALS A" }],
+        semester2: [
+          { code: "CFB115D", name: "COMPUTING FUNDAMENTALS B" },
+          { code: "DCT115D", name: "DISCRETE STRUCTURES" },
+          { code: "WEB115D", name: "WEB COMPUTING" },
         ],
-        semester1: [{ code: "COS111S" }, { code: "MAT111S" }, { code: "NIS111S" }, { code: "ENG101S" }],
-        semester2: [{ code: "COS121S" }, { code: "DAT121S" }, { code: "STA121S" }],
+        bothSemesters: [{ code: "PPA115D", name: "PRINCIPLES OF PROGRAMMING A" }],
       },
       year2: {
-        total: 9,
-        yearCount: 2,
-        yearModules: [{ code: "COS201S" }, { code: "CMP202S" }],
-        semester1: [{ code: "DSA211S" }, { code: "DBS211S" }, { code: "SEN211S" }],
-        semester2: [{ code: "OOP221S" }, { code: "WEB221S" }, { code: "NWT221S" }],
+        total: 10,
+        semester1: [
+          { code: "CAO216D", name: "COMPUTER ARCHITECTURE AND ORGANISATION" },
+          { code: "DTP216D", name: "DATABASE PRINCIPLES" },
+          { code: "MTE216D", name: "MULTIMEDIA TECHNOLOGY" },
+        ],
+        semester2: [
+          { code: "AOP216D", name: "ADVANCED OBJECT-ORIENTED PROGRAMMING" },
+          { code: "ISC216D", name: "INFORMATION SECURITY" },
+          { code: "ORS216D", name: "OPERATING SYSTEMS" },
+        ],
+        bothSemesters: [{ code: "PPBF15D", name: "PRINCIPLES OF PROGRAMMING B" }],
       },
     },
   },
   {
     name: "Informatics",
-    totalModules: 16,
-    byYear: {
-      year1: {
-        total: 8,
-        yearCount: 1,
-        yearModules: [{ code: "INF100Y" }],
-        semester1: [{ code: "INF111S" }, { code: "BIS111S" }, { code: "ACC111S" }],
-        semester2: [{ code: "INF121S" }, { code: "BIS121S" }, { code: "ECO121S" }],
-      },
-      year2: {
-        total: 8,
-        semester1: [{ code: "INF211S" }, { code: "BIS211S" }, { code: "PMT211S" }],
-        semester2: [{ code: "INF221S" }, { code: "ERP221S" }, { code: "SYS221S" }],
-        bothSemesters: [{ code: "WIL200Y" }, { code: "RES200Y" }],
-      },
-    },
-  },
-  {
-    name: "Electrical and Computer Engineering",
-    totalModules: 14,
-    byYear: {
-      year1: {
-        total: 7,
-        semester1: [{ code: "ECE111S" }, { code: "PHY111S" }, { code: "MAT111S" }],
-        semester2: [{ code: "ECE121S" }, { code: "CIR121S" }, { code: "PRG121S" }],
-        bothSemesters: [{ code: "ENG100Y" }],
-      },
-      year2: {
-        total: 7,
-        semester1: [{ code: "ECE211S" }, { code: "DIG211S" }, { code: "MAT211S" }],
-        semester2: [{ code: "ECE221S" }, { code: "MIC221S" }, { code: "SIG221S" }],
-        bothSemesters: [{ code: "LAB200Y" }],
-      },
-    },
-  },
-  {
-    name: "Accounting and Finance",
-    totalModules: 12,
+    totalModules: 22,
     byYear: {
       year1: {
         total: 6,
-        yearCount: 2,
-        yearModules: [{ code: "ACC100Y" }, { code: "ECO100Y" }],
-        semester1: [{ code: "ACC111S" }, { code: "BUS111S" }],
-        semester2: [{ code: "ACC121S" }, { code: "FIN121S" }],
-        bothSemesters: [],
-      },
-      year2: {
-        total: 6,
-        semester1: [{ code: "ACC211S" }, { code: "FIN211S" }, { code: "TAX211S" }],
-        semester2: [{ code: "ACC221S" }, { code: "FIN221S" }, { code: "AUD221S" }],
-      },
-    },
-  },
-  {
-    name: "Nursing Science",
-    totalModules: 11,
-    byYear: {
-      year1: {
-        total: 6,
-        yearCount: 1,
-        yearModules: [
-          { code: "NUR100Y" },
+        semester1: [{ code: "COH115D", name: "COMPUTATIONAL MATHEMATICS" }],
+        semester2: [
+          { code: "BCM115D", name: "BUSINESS COST MANAGEMENT" },
+          { code: "BFS115D", name: "BUSINESS FUNDAMENTALS" },
+          { code: "CGB115D", name: "COMPUTING FUNDAMENTALS B" },
         ],
-        semester1: [{ code: "ANA111S" }, { code: "NUR111S" }, { code: "COM111S" }],
-        semester2: [{ code: "NUR121S" }, { code: "HSC121S" }],
+        bothSemesters: [{ code: "PPB115D", name: "PRINCIPLES OF PROGRAMMING B" }],
       },
       year2: {
         total: 5,
-        semester1: [{ code: "NUR211S" }, { code: "PHM211S" }],
-        semester2: [{ code: "NUR221S" }, { code: "CHN221S" }],
-        bothSemesters: [{ code: "CLN200Y" }],
+        semester1: [
+          { code: "BUA216D", name: "BUSINESS ANALYSIS A" },
+          { code: "SYA216D", name: "SYSTEM ANALYSIS A" },
+        ],
+        semester2: [
+          { code: "BCMF15D", name: "BUSINESS COST MANAGEMENT" },
+          { code: "BFSF15D", name: "BUSINESS FUNDAMENTALS" },
+        ],
       },
     },
   },
   {
-    name: "Education",
-    totalModules: 10,
+    name: "Computer Systems Engineering",
+    totalModules: 41,
     byYear: {
       year1: {
-        total: 5,
-        semester1: [{ code: "EDU111S" }, { code: "PSY111S" }],
-        semester2: [{ code: "CUR121S" }, { code: "ICT121S" }],
-        bothSemesters: [{ code: "PRC100Y" }],
+        total: 15,
+        semester1: [
+          { code: "DE1115D", name: "DIGITAL ELECTRONICS 115" },
+          { code: "EIP115D", name: "ELECTRICAL PRINCIPLES 115" },
+          { code: "EL1115D", name: "ELECTRONICS 115" },
+          { code: "PG1115D", name: "PROGRAMMING 115" },
+        ],
+        semester2: [
+          { code: "DE2116D", name: "DIGITAL ELECTRONICS 126" },
+          { code: "NWS115D", name: "NETWORK SYSTEMS 125" },
+          { code: "PG2116D", name: "PROGRAMMING 126" },
+        ],
       },
       year2: {
-        total: 5,
-        semester1: [{ code: "EDU211S" }, { code: "ASM211S" }],
-        semester2: [{ code: "INC221S" }, { code: "CUR221S" }],
-        bothSemesters: [{ code: "PRC200Y" }],
+        total: 9,
+        semester1: [{ code: "DAB215D", name: "DATABASES 215" }],
+        semester2: [{ code: "LOD216D", name: "LOGIC DESIGN 226" }],
+        bothSemesters: [
+          { code: "DE2F06D", name: "DIGITAL ELECTRONICS 126" },
+          { code: "PG2F06D", name: "PROGRAMMING 126" },
+        ],
       },
     },
   },
   {
-    name: "Law",
-    totalModules: 8,
+    name: "Information Technology",
+    totalModules: 22,
     byYear: {
       year1: {
-        total: 4,
-        semester1: [{ code: "LAW111S" }, { code: "PBL111S" }],
-        semester2: [{ code: "LAW121S" }, { code: "LTC121S" }],
+        total: 5,
+        semester1: [
+          { code: "CHO115D", name: "COMPUTATIONAL MATHEMATICS" },
+          { code: "CN1115D", name: "COMPUTER NETWORKS 115R" },
+        ],
+        bothSemesters: [{ code: "TRO115D", name: "INTRODUCTION TO PROGRAMMING 115R" }],
       },
       year2: {
-        total: 4,
-        semester1: [{ code: "LAW211S" }, { code: "LAW212S" }],
-        semester2: [{ code: "LAW221S" }, { code: "LAW222S" }],
-      },
-    },
-  },
-  {
-    name: "Humanities and Social Sciences",
-    totalModules: 8,
-    byYear: {
-      year1: {
-        total: 4,
-        semester1: [{ code: "SOC111S" }, { code: "HIS111S" }],
-        semester2: [{ code: "SOC121S" }, { code: "HIS121S" }],
-      },
-      year2: {
-        total: 4,
-        semester1: [{ code: "SOC211S" }, { code: "PSY211S" }],
-        semester2: [{ code: "SOC221S" }, { code: "HIS221S" }],
+        total: 6,
+        semester1: [{ code: "DSMF16D", name: "DISCRETE MATHEMATICS 115R" }],
+        semester2: [
+          { code: "CN2115D", name: "COMPUTER NETWORKS 125R" },
+          { code: "VMA216D", name: "VISUAL MULTIMEDIA APPLICATIONS" },
+        ],
+        bothSemesters: [{ code: "PPGF15D", name: "PRINCIPLES OF PROGRAMMING 125R" }],
       },
     },
   },

@@ -342,7 +342,7 @@ export default function AIOverviewPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">AI Overview</h1>
           <p className="text-muted-foreground">
-            Ask questions about UNAM student data and generate comprehensive analytics dashboards with insights
+            Ask questions about TUT SASO student data and generate comprehensive analytics dashboards with insights
           </p>
         </div>
         {results && (

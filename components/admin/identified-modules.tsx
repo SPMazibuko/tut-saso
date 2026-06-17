@@ -6,7 +6,7 @@ import { BookOpen, BookOpenCheck } from "lucide-react"
 interface IdentifiedModulesData {
   departmentModules: number
   supportedModules: number
-  solusiModules: number
+  sasoModules: number
 }
 
 interface IdentifiedModulesProps {
@@ -42,7 +42,7 @@ export function IdentifiedModules({ data }: IdentifiedModulesProps) {
               </div>
               <div>
                 <p className="font-semibold text-slate-900 dark:text-white">Supported modules</p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">SOLUSI-IPASS Modules: {data.solusiModules}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">SASO Modules: {data.solusiModules}</p>
               </div>
             </div>
             <div className="text-right">

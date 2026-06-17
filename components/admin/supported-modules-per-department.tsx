@@ -56,8 +56,8 @@ export function SupportedModulesPerDepartment({ data, selectedDepartment, breakd
                     <Shield className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Supported by SOLUSI-IPASS</p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">SOLUSI-IPASS-funded support</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">Supported by SASO</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">SASO-funded support</p>
                   </div>
                 </div>
                 <div className="text-right">

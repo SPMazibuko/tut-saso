@@ -77,20 +77,16 @@ interface FacultyAnalytics {
 const ITEMS_PER_PAGE = 10
 
 const QUALIFICATION_NAME_MAP: Record<string, string> = {
-  "BSC-CS": "BSc (Computer Science)",
-  "BSC-IT": "BSc (Information Technology)",
-  BINF: "Bachelor of Informatics",
-  "BENG-EE": "BEng (Electrical Engineering)",
-  "BENG-CE": "BEng (Civil Engineering)",
-  "BSC-APH": "BSc (Applied Physics)",
-  BACC: "Bachelor of Accounting",
-  BBA: "Bachelor of Business Administration",
-  LLB: "Bachelor of Laws",
-  BJC: "Bachelor of Criminal Justice",
-  BNUR: "Bachelor of Nursing Science",
-  BDPH: "Bachelor of Public Health",
-  "BED-SEC": "Bachelor of Education (Secondary)",
-  "BED-PRI": "Bachelor of Education (Primary)",
+  DPRS20: "Dip (Computer Science)",
+  DPRSF0: "Dip (Computer Science Extended)",
+  DPIF20: "Dip (Informatics)",
+  DPIFF0: "Dip (Informatics Extended)",
+  DPIT20: "Dip (Information Technology)",
+  DPITF0: "Dip (Information Technology Extended)",
+  DPMC20: "Dip (Multimedia Computing)",
+  DPMCF0: "Dip (Multimedia Computing Extended)",
+  DPYEF0: "Dip (Computer Systems Engineering Extended)",
+  DPYE20_NP6602: "Dip (Computer Systems Engineering)",
 }
 
 const normalizeQualificationCode = (code?: string | null) => (code ? code.replace(/\s+/g, "").toUpperCase() : "")
@@ -225,14 +221,16 @@ export default function FacultyAnalysisPage() {
     
     const campus = offeringTypeName.split("-")[0]?.trim().toLowerCase() || ""
     
-    // Normalize campus names
-    if (campus.includes("windhoek")) return "windhoek"
-    if (campus.includes("ongwediva")) return "ongwediva"
-    if (campus.includes("rundu")) return "rundu"
-    if (campus.includes("oshakati")) return "oshakati"
-    if (campus.includes("katima")) return "katima-mulilo"
-    
-    return campus
+    if (campus.includes("soshanguve") && campus.includes("south")) return "soshanguve-south"
+    if (campus.includes("soshanguve") && campus.includes("north")) return "soshanguve-north"
+    if (campus.includes("soshanguve")) return "soshanguve-south"
+    if (campus.includes("pretoria") && campus.includes("west")) return "pretoria-west"
+    if (campus.includes("emalahleni")) return "emalahleni"
+    if (campus.includes("polokwane")) return "polokwane"
+    if (campus.includes("mbombela")) return "mbombela"
+    if (campus.includes("arts")) return "arts"
+
+    return campus.replace(/\s+/g, "-")
   }
 
   // Helper function to normalize offering type for grouping
@@ -1167,11 +1165,13 @@ export default function FacultyAnalysisPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Campus</SelectItem>
-                      <SelectItem value="windhoek">Windhoek</SelectItem>
-                      <SelectItem value="ongwediva">Ongwediva</SelectItem>
-                      <SelectItem value="rundu">Rundu</SelectItem>
-                      <SelectItem value="oshakati">Oshakati</SelectItem>
-                      <SelectItem value="katima-mulilo">Katima Mulilo</SelectItem>
+                      <SelectItem value="soshanguve-south">Soshanguve (South)</SelectItem>
+                      <SelectItem value="soshanguve-north">Soshanguve (North)</SelectItem>
+                      <SelectItem value="emalahleni">eMalahleni</SelectItem>
+                      <SelectItem value="polokwane">Polokwane</SelectItem>
+                      <SelectItem value="mbombela">Mbombela</SelectItem>
+                      <SelectItem value="arts">Arts Campus</SelectItem>
+                      <SelectItem value="pretoria-west">Pretoria West</SelectItem>
                     </SelectContent>
                   </Select>
                   <Select value={qualificationFilter} onValueChange={setQualificationFilter}>

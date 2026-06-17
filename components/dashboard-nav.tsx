@@ -142,7 +142,7 @@ export function DashboardNav() {
         <div className="flex h-full max-h-screen flex-col overflow-hidden">
           {/* Logo */}
           <div className="flex h-14 items-center px-5 flex-shrink-0 border-b border-border/50">
-            <span className="text-lg font-semibold tracking-tight text-foreground">iPASS</span>
+            <span className="text-lg font-semibold tracking-tight text-foreground">SASO</span>
           </div>
 
           {/* User info */}

@@ -21,6 +21,7 @@ import type {
   SciBonoImprovements,
 } from "./types"
 import { SOUTH_AFRICAN_PROVINCES } from "./sa-provinces-data"
+import { SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
 
 // -----------------------------
 // Generators & random utilities
@@ -173,7 +174,7 @@ const householdLanguages = ["en", "af", "xh", "zu", "st", "tn", "ts", "nr", "ss"
 
 function buildEmail(first: string, last: string): string {
   const base = `${first}.${last}`.toLowerCase().replace(/[^a-z]+/g, ".")
-  return `${base}@school.edu`
+  return `${base}@tut.ac.za`
 }
 
 function generateStudents(count: number): Learner[] {
@@ -181,7 +182,7 @@ function generateStudents(count: number): Learner[] {
   
   // Available subjects and groups (these will be defined later in the file, but we reference them here)
   const subjectCodes = ["MATH", "ENG", "PHY", "LIF", "GEO", "HIS", "ECO", "ACC", "BUS", "LO"]
-  const moduleCodes = ["ENG101", "ENG102", "ENG201", "BUS101", "BUS102", "HRM101", "HRM102", "MED101", "MED102", "LEG101", "LEG102", "AGR101", "EDU101", "MEC101", "WRT101"]
+  const moduleCodes = [...SASO_MODULE_CODES]
   const groups = ["8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B", "12A", "12B"]
   
   for (let i = 0; i < count; i++) {
@@ -223,7 +224,8 @@ function generateStudents(count: number): Learner[] {
     // Assign governance hierarchy
     const province = pickOne(SOUTH_AFRICAN_PROVINCES)
     const district = pickOne(province.districts)
-    const schoolIndex = Math.floor(Math.random() * 5) + 1 // 1..5 per district
+    const campus = pickOne(TUT_CAMPUSES)
+    const schoolIndex = Math.floor(Math.random() * 5) + 1
 
     // Determine number of previous subjects (affects academicStatus)
     const previousSubjectsCount = pickWeighted([
@@ -442,9 +444,9 @@ function generateStudents(count: number): Learner[] {
       lastAssessment,
       householdLanguage: pickOne(householdLanguages),
       householdIncomeBracket,
-      provinceId: province.id, // e.g., "prov-gp"
-      districtId: district.id, // e.g., "dist-gp-1"
-      schoolId: `school-${district.id}-${schoolIndex}`, // e.g., "school-dist-gp-1-1"
+      provinceId: province.id,
+      districtId: district.id,
+      schoolId: `campus-${campus.id}`,
       // Legacy studentId for backward compatibility
       studentId: `STU${(i + 1).toString().padStart(3, "0")}`,
       gender,
@@ -485,18 +487,17 @@ function generateStudents(count: number): Learner[] {
     out[2].riskScore = clamp(out[2].riskScore, 40, 55)
   }
 
-  // Pin student 1 as Sifiso Mazibuko in Gauteng → City of Johannesburg → City of Johannesburg High School 5
+  // Pin student 1 as Sibusiso Mazibuko at TUT Soshanguve (South)
   if (out[0]) {
     out[0].id = 1
-    out[0].name = "Sifiso"
+    out[0].name = "Sibusiso"
     out[0].surname = "Mazibuko"
-    out[0].email = "student@ipass.edu"
-    out[0].studentNumber = "ST2024001"
+    out[0].email = "spmazibuko07@gmail.com"
+    out[0].studentNumber = "221234567"
     out[0].studentId = "STU001"
     out[0].provinceId = "prov-gp"
-    out[0].districtId = "dist-gp-1"
-    out[0].schoolId = "school-dist-gp-1-5"
-    // Set consistent values for pinned student
+    out[0].districtId = "dist-gp-2"
+    out[0].schoolId = "campus-soshanguve-south"
     out[0].fundingType = "nsfas"
     out[0].residency = "onCampus"
     out[0].isReadmitted = false
@@ -509,7 +510,7 @@ function generateStudents(count: number): Learner[] {
     out[0].droppedOutAt = undefined
     out[0].readmittedAt = undefined
     out[0].enrollmentYear = 2024
-    out[0].moduleCode = "ENG101"
+    out[0].moduleCode = "SYA216D"
     out[0].isOnProbation = false
     out[0].probationReason = undefined
     out[0].registeredCredits = 144
@@ -685,8 +686,8 @@ function generateInterventions(students: Learner[], risk: RiskFactor[]): Interve
       description: "Program initiated based on risk indicators",
       type,
       status,
-      assignedTo: "teacher@ipass.edu",
-      createdBy: "admin@ipass.edu",
+      assignedTo: "teacher@tut.ac.za",
+      createdBy: "admin@tut.ac.za",
       createdAt: recentDate(30),
       startDate: recentDate(25),
       notes: "Auto-generated intervention for mock data",
@@ -748,42 +749,42 @@ function generateAlerts(students: Learner[], risk: RiskFactor[]): Alert[] {
 export const mockUsers: User[] = [
   {
     id: "1",
-    email: "admin@ipass.edu",
+    email: "admin@tut.ac.za",
     name: "Molebogeng Mashilo",
     role: "admin",
     createdAt: new Date("2024-01-01"),
   },
   {
     id: "2",
-    email: "teacher@ipass.edu",
+    email: "teacher@tut.ac.za",
     name: "Tshepo Moshabane",
     role: "teacher",
     createdAt: new Date("2024-01-01"),
   },
   {
     id: "s1",
-    email: "student@ipass.edu",
-    name: "Sifiso Mazibuko",
+    email: "student@tut.ac.za",
+    name: "Sibusiso Mazibuko",
     role: "student",
     createdAt: new Date("2024-01-01"),
   },
   {
     id: "p1",
-    email: "parent@ipass.edu",
+    email: "parent@tut.ac.za",
     name: "Nomfundo Mazibuko",
     role: "parent",
     createdAt: new Date("2024-01-01"),
   },
   {
     id: "d1",
-    email: "district@ipass.edu",
+    email: "district@tut.ac.za",
     name: "District Admin",
     role: "district-admin",
     createdAt: new Date("2024-01-01"),
   },
   {
     id: "pr1",
-    email: "province@ipass.edu",
+    email: "province@tut.ac.za",
     name: "Provincial Admin",
     role: "provincial-admin",
     createdAt: new Date("2024-01-01"),
@@ -1213,12 +1214,12 @@ function generateInterventionCases(students: Learner[]): InterventionCase[] {
         { question: "How long have you been experiencing this?", response: "Past few weeks" },
       ] : undefined,
       escalated,
-      escalatedTo: escalated ? pickOne(["counselor@ipass.edu", "academic-advisor@ipass.edu", "mentor@ipass.edu"]) : undefined,
+      escalatedTo: escalated ? pickOne(["counselor@tut.ac.za", "academic-advisor@tut.ac.za", "mentor@tut.ac.za"]) : undefined,
       escalatedAt,
       closed,
       closedBy: closed ? (Math.random() > 0.5 ? "human" : "ai") : undefined,
       closedAt,
-      humanRolePlayerAssigned: escalated ? pickOne(["counselor@ipass.edu", "academic-advisor@ipass.edu"]) : undefined,
+      humanRolePlayerAssigned: escalated ? pickOne(["counselor@tut.ac.za", "academic-advisor@tut.ac.za"]) : undefined,
       assignedRolePlayerType: escalated ? pickOne(rolePlayerTypes) : undefined,
     }
 

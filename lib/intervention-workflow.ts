@@ -33,11 +33,11 @@ export function autoCreateIntervention(alertId: string, studentId: string): Inte
   const priority = alert.severity === "critical" ? "high" : alert.severity === "high" ? "medium" : "low"
 
   // Determine assigned person based on intervention type
-  let assignedTo = "teacher@ipass.edu" // Default
+  let assignedTo = "teacher@tut.ac.za" // Default
   if (interventionType === "counseling") {
-    assignedTo = "counselor@ipass.edu"
+    assignedTo = "counselor@tut.ac.za"
   } else if (interventionType === "mentoring") {
-    assignedTo = "mentor@ipass.edu"
+    assignedTo = "mentor@tut.ac.za"
   }
 
   const intervention = createIntervention({
@@ -195,13 +195,13 @@ export function assignIntervention(
   }
 
   // Determine assigned person based on type and priority
-  let assignedTo = "teacher@ipass.edu" // Default
+  let assignedTo = "teacher@tut.ac.za" // Default
   if (type === "counseling") {
-    assignedTo = priority === "high" ? "counselor@ipass.edu" : "teacher@ipass.edu"
+    assignedTo = priority === "high" ? "counselor@tut.ac.za" : "teacher@tut.ac.za"
   } else if (type === "mentoring") {
-    assignedTo = "mentor@ipass.edu"
+    assignedTo = "mentor@tut.ac.za"
   } else if (type === "tutoring") {
-    assignedTo = priority === "high" ? "tutor@ipass.edu" : "teacher@ipass.edu"
+    assignedTo = priority === "high" ? "tutor@tut.ac.za" : "teacher@tut.ac.za"
   }
 
   const intervention = createIntervention({
