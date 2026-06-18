@@ -154,7 +154,7 @@ export default function SettingsPage() {
             <Database className="h-5 w-5" />
             <CardTitle>System Information</CardTitle>
           </div>
-          <CardDescription>SASO system details</CardDescription>
+          <CardDescription>SASO System details</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between">

@@ -32,7 +32,7 @@ export default function AttendanceCheckInPage() {
             <div className="space-y-1">
               <h1 className="text-3xl font-bold tracking-tight">Class Attendance Check-in</h1>
               <p className="text-sm text-muted-foreground">
-                For online/hybrid classes: enter the join code your teacher provides.
+                For online/hybrid classes: enter the join code your Lecturer provides.
               </p>
             </div>
 
@@ -110,7 +110,7 @@ function AttendanceCheckInInner() {
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 pb-10 pt-10">
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Class Attendance Check-in</h1>
-          <p className="text-sm text-muted-foreground">For online/hybrid classes: enter the join code your teacher provides.</p>
+          <p className="text-sm text-muted-foreground">For online/hybrid classes: enter the join code your Lecturer provides.</p>
         </div>
 
         <Card>

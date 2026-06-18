@@ -42,6 +42,7 @@ import { SOUTH_AFRICAN_PROVINCES } from "@/lib/sa-provinces-data"
 import { getStudentHierarchy } from "@/lib/hierarchy-analysis"
 import type { Learner, SubjectCode, AcademicStatus, AssessmentScore, AttendanceSummary, RiskLevel } from "@/lib/types"
 import { mockGroups, mockModules, mockStudents } from "@/lib/mock/classlist-data"
+import { formatStudentEmail } from "@/lib/student-numbers"
 
 // Get data from data service
 const mockSubjects = getSubjects()
@@ -132,7 +133,7 @@ export default function ClassListPage() {
       studentNumber: "202410001",
       name: "Sifiso",
       surname: "Mazibuko",
-      email: "sifiso.mazibuko@student.edu",
+      email: formatStudentEmail("202410001"),
       academicStatus: "Academic Warning",
       subjectCode: "MATH",
       assessments: { AS: 65, CT: 70, WR: 68, PP: 67 },
@@ -183,7 +184,7 @@ export default function ClassListPage() {
       studentNumber: "202410002",
       name: "Hannah",
       surname: "Martinez",
-      email: "hannah.martinez@student.edu",
+      email: formatStudentEmail("202410002"),
       academicStatus: "First-time",
       subjectCode: "MATH",
       assessments: { AS: 45, CT: 48, WR: 42, PP: 45 }, // Average < 50%

@@ -23,7 +23,7 @@ import type {
 import { SOUTH_AFRICAN_PROVINCES } from "./sa-provinces-data"
 import { getQualificationCodeFromModule, SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
 import { getCourseCodeFromModule } from "./sa-courses"
-import { formatStudentNumber } from "./student-numbers"
+import { formatStudentNumber, formatStudentEmail } from "./student-numbers"
 
 // -----------------------------
 // Generators & random utilities
@@ -174,9 +174,8 @@ const lastNames = [
 
 const householdLanguages = ["en", "af", "xh", "zu", "st", "tn", "ts", "nr", "ss", "ve", "nso"] as const
 
-function buildEmail(first: string, last: string): string {
-  const base = `${first}.${last}`.toLowerCase().replace(/[^a-z]+/g, ".")
-  return `${base}@tut.ac.za`
+function buildStudentEmail(sequence: number, enrollmentYear: number): string {
+  return formatStudentEmail(formatStudentNumber(sequence, enrollmentYear))
 }
 
 function generateStudents(count: number): Learner[] {
@@ -415,7 +414,7 @@ function generateStudents(count: number): Learner[] {
       studentNumber: formatStudentNumber(i + 1, enrollmentYear),
       name: first,
       surname: last,
-      email: buildEmail(first, last),
+      email: buildStudentEmail(i + 1, enrollmentYear),
       academicStatus,
       subjectCode,
       moduleCode,
@@ -690,7 +689,7 @@ function generateInterventions(students: Learner[], risk: RiskFactor[]): Interve
       description: "Program initiated based on risk indicators",
       type,
       status,
-      assignedTo: "teacher@tut.ac.za",
+      assignedTo: "lecturer@tut.ac.za",
       createdBy: "admin@tut.ac.za",
       createdAt: recentDate(30),
       startDate: recentDate(25),
@@ -760,9 +759,9 @@ export const mockUsers: User[] = [
   },
   {
     id: "2",
-    email: "teacher@tut.ac.za",
+    email: "lecturer@tut.ac.za",
     name: "Tshepo Moshabane",
-    role: "teacher",
+    role: "lecturer",
     createdAt: new Date("2024-01-01"),
   },
   {

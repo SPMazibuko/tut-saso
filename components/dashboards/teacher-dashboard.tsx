@@ -34,7 +34,7 @@ export function TeacherDashboard() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Teacher Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Lecturer Dashboard</h1>
         <p className="text-muted-foreground">Overview of your assigned students</p>
       </div>
 

@@ -10,3 +10,9 @@ export function studentNumberFromId(id: number, enrollmentYear = 2026): string {
 }
 
 export const STUDENT_NUMBER_PLACEHOLDER = "202600001"
+
+export const STUDENT_EMAIL_DOMAIN = "tut4life.ac.za"
+
+export function formatStudentEmail(studentNumber: string): string {
+  return `${studentNumber}@${STUDENT_EMAIL_DOMAIN}`
+}

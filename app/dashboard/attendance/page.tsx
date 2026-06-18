@@ -396,11 +396,11 @@ export default function AttendanceCapturePage() {
   if (user.role === "student") {
     return (
       <div className="p-6 space-y-4">
-        <PageHeader title="Attendance" description="Students should use the join link/code provided by the teacher." />
+        <PageHeader title="Attendance" description="Students should use the join link/code provided by the Lecturer." />
         <Card>
           <CardHeader>
             <CardTitle>Student check-in</CardTitle>
-            <CardDescription>Use the join code your teacher provides.</CardDescription>
+            <CardDescription>Use the join code your Lecturer provides.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild>

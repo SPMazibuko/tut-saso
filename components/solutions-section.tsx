@@ -30,7 +30,7 @@ export function SolutionsSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">●</span>
-                  <span>Coordinate parent-teacher-counselor communication</span>
+                  <span>Coordinate parent-Lecturer-counselor communication</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">●</span>
