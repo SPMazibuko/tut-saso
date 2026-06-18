@@ -11,7 +11,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Users, Mail, Inbox, CheckCircle2 } from "lucide-react"
 import { GradientCard } from "@/components/ui/gradient-card"
-import type { Conversation, ReadMethod, ReadStatus, ReadStats } from "@/lib/types"
+import type { Conversation, ReadMethod, ReadStats } from "@/lib/types"
+import { formatStudentEmail, studentNumberFromId } from "@/lib/student-numbers"
+
+const studentEmail = (id: number) => formatStudentEmail(studentNumberFromId(id))
 
 // Mock data - in a real app, this would be fetched from your backend
 const mockConversations: Conversation[] = [
@@ -22,7 +25,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "1", 
-        email: "john.smith@orbitCollege.co.za", 
+        email: studentEmail(1), 
         firstName: "John", 
         lastName: "Smith", 
         role: "student" as const,
@@ -34,7 +37,7 @@ const mockConversations: Conversation[] = [
       },
       { 
         id: "2", 
-        email: "jane.doe@orbitCollege.co.za", 
+        email: studentEmail(2), 
         firstName: "Jane", 
         lastName: "Doe", 
         role: "student" as const,
@@ -74,7 +77,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "4", 
-        email: "emma.davis@orbitCollege.co.za", 
+        email: studentEmail(4), 
         firstName: "Emma", 
         lastName: "Davis", 
         role: "student" as const,
@@ -86,7 +89,7 @@ const mockConversations: Conversation[] = [
       },
       { 
         id: "5", 
-        email: "mike.brown@orbitCollege.co.za", 
+        email: studentEmail(5), 
         firstName: "Mike", 
         lastName: "Brown", 
         role: "student" as const,
@@ -127,7 +130,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "7", 
-        email: "david.lee@orbitCollege.co.za", 
+        email: studentEmail(7), 
         firstName: "David", 
         lastName: "Lee", 
         role: "student" as const,
@@ -139,7 +142,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "lecturer",
-        email: "sarah.johnson@orbitCollege.co.za",
+        email: "sarah.johnson@tut.ac.za",
         firstName: "Sarah",
         lastName: "Johnson",
         role: "lecturer" as const,
@@ -178,7 +181,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "8", 
-        email: "admin@orbitCollege.co.za", 
+        email: "admin@tut.ac.za", 
         firstName: "System", 
         lastName: "Admin", 
         role: "admin" as const,
@@ -190,7 +193,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "lecturer",
-        email: "sarah.johnson@orbitCollege.co.za",
+        email: "sarah.johnson@tut.ac.za",
         firstName: "Sarah",
         lastName: "Johnson",
         role: "lecturer" as const,
@@ -229,7 +232,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "9", 
-        email: "mary.johnson@orbitCollege.co.za", 
+        email: "mary.johnson@tut.ac.za", 
         firstName: "Mary", 
         lastName: "Johnson", 
         role: "tutor" as const,
@@ -241,7 +244,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "lecturer",
-        email: "sarah.johnson@orbitCollege.co.za",
+        email: "sarah.johnson@tut.ac.za",
         firstName: "Sarah",
         lastName: "Johnson",
         role: "lecturer" as const,
@@ -280,7 +283,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "10", 
-        email: "alex.thompson@orbitCollege.co.za", 
+        email: studentEmail(10), 
         firstName: "Alex", 
         lastName: "Thompson", 
         role: "student" as const,
@@ -292,7 +295,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "lecturer",
-        email: "sarah.johnson@orbitCollege.co.za",
+        email: "sarah.johnson@tut.ac.za",
         firstName: "Sarah",
         lastName: "Johnson",
         role: "lecturer" as const,
@@ -332,7 +335,7 @@ const mockConversations: Conversation[] = [
     participants: [
       { 
         id: "14", 
-        email: "it.support@orbitCollege.co.za", 
+        email: "it.support@tut.ac.za", 
         firstName: "IT", 
         lastName: "Support", 
         role: "admin" as const,
@@ -344,7 +347,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "lecturer",
-        email: "sarah.johnson@orbitCollege.co.za",
+        email: "sarah.johnson@tut.ac.za",
         firstName: "Sarah",
         lastName: "Johnson",
         role: "lecturer" as const,

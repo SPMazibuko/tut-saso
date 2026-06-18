@@ -22,7 +22,7 @@ export function HeroSection() {
             </h1>
 
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-pretty leading-relaxed">
-              iPASS is an intelligent platform designed to strengthen student success in schools and higher education
+              SASO System is an intelligent platform designed to strengthen student success in schools and higher education
               through early risk detection, predictive analytics, and coordinated academic support.
             </p>
 

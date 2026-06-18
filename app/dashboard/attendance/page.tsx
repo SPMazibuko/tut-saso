@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
 import { getCurrentUser } from "@/lib/auth"
 import { getGroups, getStudents, getSubjects } from "@/lib/data-service"
+import { STUDENT_NUMBER_PLACEHOLDER } from "@/lib/student-numbers"
 import type { Learner } from "@/lib/types"
 import type { AttendanceMark, AttendanceSession, AttendanceSessionSettings, ClassDeliveryMode, ClassType } from "@/lib/attendance/types"
 
@@ -103,7 +104,7 @@ function DemoCaptureTable() {
       id: "demo-1",
       sessionId: demoSession.id,
       studentId: 1,
-      studentNumber: "ST2024001",
+      studentNumber: "202400001",
       studentName: "Sifiso Mazibuko",
       capturedAt: new Date(scheduled.getTime() - 5 * 60 * 1000).toISOString(),
       method: "fingerprint",
@@ -114,7 +115,7 @@ function DemoCaptureTable() {
       id: "demo-2",
       sessionId: demoSession.id,
       studentId: 2,
-      studentNumber: "ST2024002",
+      studentNumber: "202400002",
       studentName: "Michael Chen",
       capturedAt: new Date(scheduled.getTime() + 10 * 60 * 1000).toISOString(),
       method: "manual",
@@ -125,7 +126,7 @@ function DemoCaptureTable() {
       id: "demo-3",
       sessionId: demoSession.id,
       studentId: 3,
-      studentNumber: "ST2024003",
+      studentNumber: "202400003",
       studentName: "Sophia Martinez",
       capturedAt: new Date(scheduled.getTime() + 22 * 60 * 1000).toISOString(),
       method: "fingerprint",
@@ -395,11 +396,11 @@ export default function AttendanceCapturePage() {
   if (user.role === "student") {
     return (
       <div className="p-6 space-y-4">
-        <PageHeader title="Attendance" description="Students should use the join link/code provided by the teacher." />
+        <PageHeader title="Attendance" description="Students should use the join link/code provided by the Lecturer." />
         <Card>
           <CardHeader>
             <CardTitle>Student check-in</CardTitle>
-            <CardDescription>Use the join code your teacher provides.</CardDescription>
+            <CardDescription>Use the join code your Lecturer provides.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild>
@@ -691,7 +692,7 @@ export default function AttendanceCapturePage() {
                           <Input
                             value={scanValue}
                             onChange={(e) => setScanValue(e.target.value)}
-                            placeholder="e.g. ST2024001"
+                            placeholder={`e.g. ${STUDENT_NUMBER_PLACEHOLDER}`}
                             disabled={!isStarter}
                           />
                           <Button type="submit" disabled={!isStarter}>
@@ -722,7 +723,7 @@ export default function AttendanceCapturePage() {
                           <Input
                             value={scanValue}
                             onChange={(e) => setScanValue(e.target.value)}
-                            placeholder="e.g. ST2024001"
+                            placeholder={`e.g. ${STUDENT_NUMBER_PLACEHOLDER}`}
                             disabled={!isStarter}
                           />
                           <Button type="submit" variant="outline" disabled={!isStarter}>

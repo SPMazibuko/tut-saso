@@ -2,7 +2,7 @@
 
 ## Overview
 
-The iPASS system supports multiple user roles with different permissions and access levels. This document describes each role and their capabilities.
+The SASO system supports multiple user roles with different permissions and access levels. This document describes each role and their capabilities.
 
 ## Role Definitions
 

@@ -9,7 +9,6 @@ import { getCurrentUser, logout } from "@/lib/auth"
 import {
   LayoutDashboard,
   Users,
-  AlertTriangle,
   ClipboardList,
   BarChart3,
   UserCheck,
@@ -43,7 +42,7 @@ const adminTeacherNavigation = [
   { name: "Faculty Analysis", href: "/dashboard/faculty-analysis", icon: UsersRound },
   { name: "AI Overview", href: "/dashboard/ai-overview", icon: Search },
   { name: "Classlist", href: "/dashboard/students", icon: Users },
-  { name: "Risk Detection", href: "/dashboard/risk", icon: AlertTriangle },
+  // { name: "Risk Detection", href: "/dashboard/risk", icon: AlertTriangle },
   { name: "Interventions", href: "/dashboard/interventions", icon: ClipboardList },
   // { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   // { name: "School Analysis", href: "/dashboard/school-analysis", icon: Building2 },

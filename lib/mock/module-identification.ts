@@ -7,7 +7,7 @@ import {
   normalizeSasoDepartmentName,
 } from "@/lib/saso-modules-per-department"
 
-export type ModuleSupport = "solusi" | "department" | "none"
+export type ModuleSupport = "saso" | "department" | "none"
 
 export interface MockStaff {
   id: string
@@ -42,10 +42,10 @@ const TUTORS = [
 ] as const
 
 function assignSupport(index: number, total: number): ModuleSupport {
-  const solusiCount = Math.round(total * 0.36)
+  const sasoCount = Math.round(total * 0.36)
   const departmentCount = Math.round(total * 0.27)
-  if (index < solusiCount) return "solusi"
-  if (index < solusiCount + departmentCount) return "department"
+  if (index < sasoCount) return "saso"
+  if (index < sasoCount + departmentCount) return "department"
   return "none"
 }
 
@@ -114,7 +114,7 @@ export interface ModulesPerDepartmentItem {
 }
 
 export interface ModuleBreakdownItem {
-  supportedBySOLUSI: number
+  supportedBySASO: number
   supportedByDepartment: number
   notSupported: number
 }
@@ -138,7 +138,7 @@ export function getSupportedModulesPerDepartment(): ModulesPerDepartmentItem[] {
   return DEPARTMENTS.map((name) => ({
     name,
     count: mockIdentifiedModules.filter(
-      (m) => m.department === name && (m.support === "solusi" || m.support === "department")
+      (m) => m.department === name && (m.support === "saso" || m.support === "department")
     ).length,
   })).filter((item) => item.count > 0)
 }
@@ -148,7 +148,7 @@ export function getModuleBreakdownByDepartment(department: string): ModuleBreakd
   const mods = mockIdentifiedModules.filter((m) => m.department === department)
   if (mods.length === 0) return undefined
   return {
-    supportedBySOLUSI: mods.filter((m) => m.support === "solusi").length,
+    supportedBySASO: mods.filter((m) => m.support === "saso").length,
     supportedByDepartment: mods.filter((m) => m.support === "department").length,
     notSupported: mods.filter((m) => m.support === "none").length,
   }
@@ -158,9 +158,9 @@ export function getModuleBreakdownByDepartment(department: string): ModuleBreakd
 export function getIdentifiedModulesTotals(): IdentifiedModulesTotals {
   const departmentModules = mockIdentifiedModules.length
   const supportedModules = mockIdentifiedModules.filter(
-    (m) => m.support === "solusi" || m.support === "department"
+    (m) => m.support === "saso" || m.support === "department"
   ).length
-  const sasoModules = mockIdentifiedModules.filter((m) => m.support === "solusi").length
+  const sasoModules = mockIdentifiedModules.filter((m) => m.support === "saso").length
   return { departmentModules, supportedModules, sasoModules }
 }
 

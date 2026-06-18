@@ -19,14 +19,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { Search, X } from "lucide-react"
+import { formatStudentEmail, studentNumberFromId } from "@/lib/student-numbers"
 
 // Mock users data
+const studentEmail = (id: number) => formatStudentEmail(studentNumberFromId(id))
+
 const mockUsers = [
   {
     id: "1",
     firstName: "John",
     lastName: "Smith",
-    email: "john.smith@student.edu",
+    email: studentEmail(1),
     role: "student" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -34,7 +37,7 @@ const mockUsers = [
     id: "2",
     firstName: "Emma",
     lastName: "Davis",
-    email: "emma.davis@student.edu",
+    email: studentEmail(2),
     role: "student" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -42,7 +45,7 @@ const mockUsers = [
     id: "3",
     firstName: "Mike",
     lastName: "Brown",
-    email: "mike.brown@student.edu",
+    email: studentEmail(3),
     role: "student" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -50,7 +53,7 @@ const mockUsers = [
     id: "4",
     firstName: "Mary",
     lastName: "Johnson",
-    email: "mary.johnson@university.edu",
+    email: "mary.johnson@tut.ac.za",
     role: "tutor" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },

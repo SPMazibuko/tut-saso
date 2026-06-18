@@ -21,7 +21,9 @@ import type {
   SciBonoImprovements,
 } from "./types"
 import { SOUTH_AFRICAN_PROVINCES } from "./sa-provinces-data"
-import { SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
+import { getQualificationCodeFromModule, SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
+import { getCourseCodeFromModule } from "./sa-courses"
+import { formatStudentNumber, formatStudentEmail } from "./student-numbers"
 
 // -----------------------------
 // Generators & random utilities
@@ -172,9 +174,8 @@ const lastNames = [
 
 const householdLanguages = ["en", "af", "xh", "zu", "st", "tn", "ts", "nr", "ss", "ve", "nso"] as const
 
-function buildEmail(first: string, last: string): string {
-  const base = `${first}.${last}`.toLowerCase().replace(/[^a-z]+/g, ".")
-  return `${base}@tut.ac.za`
+function buildStudentEmail(sequence: number, enrollmentYear: number): string {
+  return formatStudentEmail(formatStudentNumber(sequence, enrollmentYear))
 }
 
 function generateStudents(count: number): Learner[] {
@@ -271,7 +272,8 @@ function generateStudents(count: number): Learner[] {
     // Assign subject, module, and group (course derived from module)
     const subjectCode = pickOne(subjectCodes)
     const moduleCode = pickOne(moduleCodes)
-    const courseCode = (moduleCode.match(/^([A-Za-z]+)/)?.[1] ?? "").toUpperCase() || "Other"
+    const qualificationCode = getQualificationCodeFromModule(moduleCode)
+    const courseCode = getCourseCodeFromModule(moduleCode)
     const group = pickOne(groups)
     
     // Assign teacher (1-3)
@@ -409,14 +411,15 @@ function generateStudents(count: number): Learner[] {
     const student: Learner = {
       // Required fields matching type definition
       id: i + 1, // Numeric ID
-      studentNumber: `ST${enrollmentYear}${(i + 1).toString().padStart(3, "0")}`,
+      studentNumber: formatStudentNumber(i + 1, enrollmentYear),
       name: first,
       surname: last,
-      email: buildEmail(first, last),
+      email: buildStudentEmail(i + 1, enrollmentYear),
       academicStatus,
       subjectCode,
       moduleCode,
       courseCode,
+      qualificationCode,
       assessments: {
         AS,
         CT,
@@ -448,7 +451,7 @@ function generateStudents(count: number): Learner[] {
       districtId: district.id,
       schoolId: `campus-${campus.id}`,
       // Legacy studentId for backward compatibility
-      studentId: `STU${(i + 1).toString().padStart(3, "0")}`,
+      studentId: formatStudentNumber(i + 1, enrollmentYear),
       gender,
       // Funding and residency fields
       fundingType,
@@ -494,7 +497,7 @@ function generateStudents(count: number): Learner[] {
     out[0].surname = "Mazibuko"
     out[0].email = "spmazibuko07@gmail.com"
     out[0].studentNumber = "221234567"
-    out[0].studentId = "STU001"
+    out[0].studentId = "221234567"
     out[0].provinceId = "prov-gp"
     out[0].districtId = "dist-gp-2"
     out[0].schoolId = "campus-soshanguve-south"
@@ -686,7 +689,7 @@ function generateInterventions(students: Learner[], risk: RiskFactor[]): Interve
       description: "Program initiated based on risk indicators",
       type,
       status,
-      assignedTo: "teacher@tut.ac.za",
+      assignedTo: "lecturer@tut.ac.za",
       createdBy: "admin@tut.ac.za",
       createdAt: recentDate(30),
       startDate: recentDate(25),
@@ -756,9 +759,9 @@ export const mockUsers: User[] = [
   },
   {
     id: "2",
-    email: "teacher@tut.ac.za",
+    email: "lecturer@tut.ac.za",
     name: "Tshepo Moshabane",
-    role: "teacher",
+    role: "lecturer",
     createdAt: new Date("2024-01-01"),
   },
   {

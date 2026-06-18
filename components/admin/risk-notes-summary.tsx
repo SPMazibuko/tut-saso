@@ -13,6 +13,7 @@ import { Search, Filter, Download, Eye, AlertTriangle, TrendingUp, TrendingDown,
 import type { RiskNote, RiskNoteSummary } from "@/lib/types"
 import { generateRiskNoteSummary, calculateWorkingDays, addWorkingDays, shouldEscalate, getNextEscalationLevel, getStatusFromEscalationLevel } from "@/lib/utils/risk-notes"
 import { format } from "date-fns"
+import { formatStudentNumber, formatStudentEmail } from "@/lib/student-numbers"
 
 interface RiskNotesSummaryProps {
   riskNotes: RiskNote[]
@@ -58,19 +59,18 @@ export function generateMockRiskNotes(): RiskNote[] {
   ]
   
   const modules = [
-    { code: "CSC101", name: "Introduction to Computer Science", dept: "Management" as const },
-    { code: "ENG205", name: "Engineering Principles", dept: "Sciences" as const },
-    { code: "BUS301", name: "Business Management", dept: "Management" as const },
-    { code: "SCI401", name: "Advanced Science", dept: "Sciences" as const },
-    { code: "EDU201", name: "Education Theory", dept: "Education" as const },
-    { code: "ACC101", name: "Accounting Fundamentals", dept: "Accounting" as const },
-    { code: "MKT201", name: "Marketing Principles", dept: "Marketing" as const },
-    { code: "MIS301", name: "Management Information Systems", dept: "Management Information Systems (MIS)" as const },
-    { code: "HUM101", name: "Humanities Introduction", dept: "Humanities" as const },
-    { code: "AGR201", name: "Agricultural Science", dept: "Agriculture" as const },
-    { code: "HLT301", name: "Health Professions", dept: "Health Professions" as const },
-    { code: "THE101", name: "Theology Basics", dept: "Theology" as const },
-    { code: "CHP201", name: "Chaplaincy Studies", dept: "Chaplaincy / Religious Studies" as const },
+    { code: "PPA115D", name: "Principles of Programming A", dept: "Sciences" as const },
+    { code: "ADS216D", name: "Advanced Discrete Structures", dept: "Sciences" as const },
+    { code: "BUA216D", name: "Business Analysis A", dept: "Management Information Systems (MIS)" as const },
+    { code: "CN1115D", name: "Computer Networks 115R", dept: "Management Information Systems (MIS)" as const },
+    { code: "SYA216D", name: "System Analysis A", dept: "Management Information Systems (MIS)" as const },
+    { code: "DTP216D", name: "Database Principles", dept: "Sciences" as const },
+    { code: "ITP316D", name: "IT Project Management B", dept: "Management Information Systems (MIS)" as const },
+    { code: "EL1115D", name: "Electronics 115", dept: "Sciences" as const },
+    { code: "CFA115D", name: "Computing Fundamentals A", dept: "Sciences" as const },
+    { code: "TMO216D", name: "3D Modelling", dept: "Sciences" as const },
+    { code: "CHOF05D", name: "Computational Mathematics", dept: "Sciences" as const },
+    { code: "16E105X", name: "Communication for Academic Purpose", dept: "Humanities" as const },
   ]
   
   const statuses: RiskNote['status'][] = ['new', 'aeo_review', 'hod_review', 'assistant_dean_review', 'improved', 'resolved', 'disengaged']
@@ -80,7 +80,7 @@ export function generateMockRiskNotes(): RiskNote[] {
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
     const module = modules[Math.floor(Math.random() * modules.length)]
-    const studentNumber = `2020${String(1000000 + i).padStart(6, '0')}`
+    const studentNumber = formatStudentNumber(i + 1, 2020)
     const studentId = String(i + 1)
     
     // Generate random creation date (within last 30 days)
@@ -149,7 +149,7 @@ export function generateMockRiskNotes(): RiskNote[] {
       studentId: studentId,
       studentNumber: studentNumber,
       studentName: `${firstName} ${lastName}`,
-      studentEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@student.edu`,
+      studentEmail: formatStudentEmail(studentNumber),
       moduleCode: module.code,
       moduleName: module.name,
       department: module.dept,

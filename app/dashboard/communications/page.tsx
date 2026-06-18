@@ -17,18 +17,21 @@ import { CreateConversationDialog } from "@/components/communications/create-con
 import { CreateGroupDialog } from "@/components/communications/create-group-dialog"
 
 import type { Conversation, Message } from "@/lib/types"
+import { formatStudentEmail, studentNumberFromId } from "@/lib/student-numbers"
 import { generateMockRiskNotes, RiskNotesSummary } from "@/components/admin/risk-notes-summary"
 import { MonthlyReports } from "@/components/admin/monthly-reports"
 import { RiskNotesSummarySheet } from "@/components/admin/risk-notes-summary-sheet"
 import { UploadRecordsSummary } from "@/components/admin/upload-records-summary"
+
+const studentEmail = (id: number) => formatStudentEmail(studentNumberFromId(id))
 
 // Mock student data
 const mockStudents = [
   {
     id: "1",
     name: "John Smith",
-    studentNumber: "2020123456",
-    moduleCode: "CSC101",
+    studentNumber: "202001234",
+    moduleCode: "PPA115D",
     status: "probation",
     department: "Computer Science",
     lastUpdated: new Date(2025, 8, 1),
@@ -36,8 +39,8 @@ const mockStudents = [
   {
     id: "2",
     name: "Mary Johnson",
-    studentNumber: "2020123457",
-    moduleCode: "CSC101",
+    studentNumber: "202001235",
+    moduleCode: "ADS216D",
     status: "readmitted",
     department: "Computer Science",
     lastUpdated: new Date(2025, 8, 1),
@@ -45,28 +48,28 @@ const mockStudents = [
   {
     id: "3",
     name: "James Brown",
-    studentNumber: "2020123458",
-    moduleCode: "ENG205",
+    studentNumber: "202001236",
+    moduleCode: "EL1115D",
     status: "other",
-    department: "Engineering",
+    department: "Computer Systems Engineering",
     lastUpdated: new Date(2025, 8, 8),
   },
   {
     id: "4",
     name: "Sarah Davis",
-    studentNumber: "2020123459",
-    moduleCode: "BUS301",
+    studentNumber: "202001237",
+    moduleCode: "BUA216D",
     status: "probation",
-    department: "Business",
+    department: "Informatics",
     lastUpdated: new Date(2025, 8, 15),
   },
   {
     id: "5",
     name: "Michael Wilson",
-    studentNumber: "2020123460",
-    moduleCode: "SCI401",
+    studentNumber: "202001238",
+    moduleCode: "CN1115D",
     status: "other",
-    department: "Science",
+    department: "Information Technology",
     lastUpdated: new Date(2025, 8, 15),
   },
 ]
@@ -79,7 +82,7 @@ const mockConversations: Conversation[] = [
     isViewOnly: true,
     participants: [
       {
-        id: "1", email: "john.smith@student.edu", firstName: "John", lastName: "Smith", role: "student", readStatus: {
+        id: "1", email: studentEmail(1), firstName: "John", lastName: "Smith", role: "student", readStatus: {
           hasRead: true,
           readMethod: "portal",
           readAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
@@ -162,7 +165,7 @@ const mockConversations: Conversation[] = [
     participants: [
       {
         id: "3",
-        email: "thabo.mthembu@student.edu",
+        email: studentEmail(3),
         firstName: "Thabo",
         lastName: "Mthembu",
         role: "student",
@@ -227,7 +230,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "s1",
-        email: "nomsa.khumalo@student.edu",
+        email: studentEmail(11),
         firstName: "Nomsa",
         lastName: "Khumalo",
         role: "student",
@@ -239,7 +242,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "s2",
-        email: "peter.ngwenya@student.edu",
+        email: studentEmail(12),
         firstName: "Peter",
         lastName: "Ngwenya",
         role: "student",
@@ -254,7 +257,7 @@ const mockConversations: Conversation[] = [
       id: "1",
       conversationId: "4",
       senderId: "admin",
-      content: "Welcome to Solusi! Please read the orientation guide and confirm your attendance at the faculty briefing.",
+      content: "Welcome to SASO! Please read the orientation guide and confirm your attendance at the faculty briefing.",
       sentAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
       readBy: ["admin", "s1"],
     },
@@ -304,7 +307,7 @@ const mockConversations: Conversation[] = [
       id: "1",
       conversationId: "5",
       senderId: "4",
-      content: "Several students in CSC101 have missed the last two tutorials. Can we trigger early support?",
+      content: "Several students in PPA115D have missed the last two tutorials. Can we trigger early support?",
       sentAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
       readBy: ["admin"],
     },
@@ -328,7 +331,7 @@ const mockConversations: Conversation[] = [
     participants: [
       {
         id: "5",
-        email: "lerato.molefe@student.edu",
+        email: studentEmail(5),
         firstName: "Lerato",
         lastName: "Molefe",
         role: "student",
@@ -393,7 +396,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "s6",
-        email: "kagiso.sithole@student.edu",
+        email: studentEmail(16),
         firstName: "Kagiso",
         lastName: "Sithole",
         role: "student",
@@ -405,7 +408,7 @@ const mockConversations: Conversation[] = [
       },
       {
         id: "s7",
-        email: "andi.mkhize@student.edu",
+        email: studentEmail(17),
         firstName: "Andiswa",
         lastName: "Mkhize",
         role: "student",
@@ -551,7 +554,7 @@ const mockMessages: Record<string, Message[]> = {
       id: "1",
       conversationId: "4",
       senderId: "admin",
-      content: "Welcome to Solusi! Please read the orientation guide and confirm your attendance at the faculty briefing.",
+      content: "Welcome to SASO! Please read the orientation guide and confirm your attendance at the faculty briefing.",
       sentAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
       readBy: ["admin", "s1"],
     },
@@ -561,7 +564,7 @@ const mockMessages: Record<string, Message[]> = {
       id: "1",
       conversationId: "5",
       senderId: "4",
-      content: "Several students in CSC101 have missed the last two tutorials. Can we trigger early support?",
+      content: "Several students in PPA115D have missed the last two tutorials. Can we trigger early support?",
       sentAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
       readBy: ["admin"],
     },
@@ -603,10 +606,10 @@ const riskNotesSummary = {
   total: 156,
   byDepartment: [
     { department: "Computer Science", count: 45 },
-    { department: "Engineering", count: 38 },
-    { department: "Business", count: 35 },
-    { department: "Arts", count: 28 },
-    { department: "Science", count: 10 },
+    { department: "Computer Systems Engineering", count: 38 },
+    { department: "Informatics", count: 35 },
+    { department: "Information Technology", count: 28 },
+    { department: "ICT 1st Year & Foundation Unit", count: 10 },
   ],
   byRiskLevel: [
     { level: "High", count: 32 },
@@ -624,11 +627,11 @@ const riskNotesSummary = {
 const uploadedRecords = {
   total: 2845,
   byModule: [
-    { module: "CSC101", count: 450 },
-    { module: "ENG205", count: 380 },
-    { module: "BUS301", count: 350 },
-    { module: "ART102", count: 280 },
-    { module: "SCI401", count: 100 },
+    { module: "PPA115D", count: 450 },
+    { module: "ADS216D", count: 380 },
+    { module: "BUA216D", count: 350 },
+    { module: "SYA216D", count: 280 },
+    { module: "CN1115D", count: 100 },
   ],
   byStatus: [
     { status: "Processed", count: 2500 },

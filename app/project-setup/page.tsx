@@ -34,9 +34,9 @@ import image1 from "../../public/project-setup/image1.webp";
 import image2 from "../../public/project-setup/image2.png";
 
 export const metadata: Metadata = {
-  title: "Project Setup – iPASS Data Security Plan",
+  title: "Project Setup – SASO System Data Security Plan",
   description:
-    "Single-page overview of the iPASS project setup and comprehensive data security plan across AWS, Next.js, Hasura, Cognito, IAM and RDS.",
+    "Single-page overview of the SASO System project setup and comprehensive data security plan across AWS, Next.js, Hasura, Cognito, IAM and RDS.",
 };
 
 export default function ProjectSetupPage() {
@@ -44,7 +44,7 @@ export default function ProjectSetupPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card/30">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <h1 className="text-lg font-semibold">iPASS Project Setup</h1>
+          <h1 className="text-lg font-semibold">SASO System Project Setup</h1>
           <Link href="/" className="text-sm text-primary hover:underline">
             Back to Home
           </Link>
@@ -57,7 +57,7 @@ export default function ProjectSetupPage() {
         <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/10 via-background to-background p-8 md:p-12">
           <div className="max-w-3xl">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Building iPASS: secure, serverless and analysis‑ready
+              Building SASO System: secure, serverless and analysis‑ready
             </h2>
             <p className="mt-3 text-muted-foreground">
               A modern stack on AWS with Next.js SSR, Hasura GraphQL and
@@ -300,7 +300,7 @@ export default function ProjectSetupPage() {
             </CardHeader>
             <CardContent className="space-y-4 text-sm leading-6 text-muted-foreground">
               <p>
-                iPASS turns raw education data into timely insight. Users
+                SASO System turns raw education data into timely insight. Users
                 authenticate securely, the app renders server-side for speed and
                 privacy, and our GraphQL API serves the right data to the right
                 role. The same platform powers dashboards, reports and automated
@@ -800,7 +800,7 @@ export default function ProjectSetupPage() {
 
       <footer className="border-t py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} iPASS Project. All rights reserved.
+          © {new Date().getFullYear()} SASO System. All rights reserved.
         </div>
       </footer>
     </div>

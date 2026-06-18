@@ -70,7 +70,7 @@ function LoginPageContent() {
           </div>
           <div className="space-y-1.5">
             <CardTitle className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              iPASS Login
+              SASO Login
             </CardTitle>
             <CardDescription className="text-muted-foreground text-sm sm:text-base">
               Enter your credentials to access the system

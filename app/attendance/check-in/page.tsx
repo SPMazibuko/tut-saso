@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { getStudents } from "@/lib/data-service"
+import { STUDENT_NUMBER_PLACEHOLDER } from "@/lib/student-numbers"
 import type { Learner } from "@/lib/types"
 import type { AttendanceMark } from "@/lib/attendance/types"
 
@@ -31,7 +32,7 @@ export default function AttendanceCheckInPage() {
             <div className="space-y-1">
               <h1 className="text-3xl font-bold tracking-tight">Class Attendance Check-in</h1>
               <p className="text-sm text-muted-foreground">
-                For online/hybrid classes: enter the join code your teacher provides.
+                For online/hybrid classes: enter the join code your Lecturer provides.
               </p>
             </div>
 
@@ -109,7 +110,7 @@ function AttendanceCheckInInner() {
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 pb-10 pt-10">
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Class Attendance Check-in</h1>
-          <p className="text-sm text-muted-foreground">For online/hybrid classes: enter the join code your teacher provides.</p>
+          <p className="text-sm text-muted-foreground">For online/hybrid classes: enter the join code your Lecturer provides.</p>
         </div>
 
         <Card>
@@ -147,7 +148,7 @@ function AttendanceCheckInInner() {
                 </div>
                 <div className="space-y-1">
                   <div className="text-xs text-muted-foreground">Student number</div>
-                  <Input value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} placeholder="e.g. ST2024001" />
+                  <Input value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} placeholder={`e.g. ${STUDENT_NUMBER_PLACEHOLDER}`} />
                 </div>
                 {error && <div className="text-sm text-red-600">{error}</div>}
                 <Button type="submit" disabled={status === "submitting"}>

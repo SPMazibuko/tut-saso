@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the automated workflows that connect risk assessment, alert generation, and intervention creation in the iPASS system.
+This document describes the automated workflows that connect risk assessment, alert generation, and intervention creation in the SASO system.
 
 ## Workflow: Risk → Alert → Intervention
 

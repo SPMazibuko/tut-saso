@@ -96,7 +96,7 @@ interface ModuleSupportDrilldownDialogProps {
 }
 
 const CATEGORY_LABELS: Record<ModuleSupport, string> = {
-  solusi: "Supported by SOLUSI",
+  saso: "Supported by SASO",
   department: "Supported by Department",
   none: "Not Supported",
 }

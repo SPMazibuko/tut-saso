@@ -11,7 +11,7 @@ export function ResourcesSection() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Resources</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Everything you need to understand how iPASS can transform your institution.
+              Everything you need to understand how SASO System can transform your institution.
             </p>
           </div>
 
@@ -22,7 +22,7 @@ export function ResourcesSection() {
               </div>
               <h3 className="text-xl font-semibold mb-3">Proposal Document</h3>
               <p className="text-muted-foreground mb-6">
-                Comprehensive overview of iPASS features, implementation, and pricing.
+                Comprehensive overview of SASO System features, implementation, and pricing.
               </p>
               <Button variant="outline" className="w-full bg-transparent">
                 Download PDF
@@ -34,7 +34,7 @@ export function ResourcesSection() {
                 <FileText className="h-8 w-8 text-secondary" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Case Studies</h3>
-              <p className="text-muted-foreground mb-6">Real-world success stories from institutions using iPASS.</p>
+              <p className="text-muted-foreground mb-6">Real-world success stories from institutions using SASO System.</p>
               <Button variant="outline" className="w-full bg-transparent">
                 View Case Studies
               </Button>
@@ -45,7 +45,7 @@ export function ResourcesSection() {
                 <BookOpen className="h-8 w-8 text-accent" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Implementation Guide</h3>
-              <p className="text-muted-foreground mb-6">Step-by-step guide to integrating iPASS with your systems.</p>
+              <p className="text-muted-foreground mb-6">Step-by-step guide to integrating SASO System with your systems.</p>
               <Button variant="outline" className="w-full bg-transparent">
                 Download Guide
               </Button>
@@ -62,9 +62,9 @@ export function ResourcesSection() {
 
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
-                <AccordionTrigger>How does iPASS integrate with existing student information systems?</AccordionTrigger>
+                <AccordionTrigger>How does SASO System integrate with existing student information systems?</AccordionTrigger>
                 <AccordionContent>
-                  iPASS offers flexible integration options including REST APIs, CSV imports, and direct database
+                  SASO System offers flexible integration options including REST APIs, CSV imports, and direct database
                   connections. Our implementation team works with your IT department to ensure seamless data flow from
                   your existing systems while maintaining data security and privacy standards.
                 </AccordionContent>
@@ -91,16 +91,16 @@ export function ResourcesSection() {
               <AccordionItem value="item-4">
                 <AccordionTrigger>What data security measures are in place?</AccordionTrigger>
                 <AccordionContent>
-                  iPASS employs enterprise-grade security including end-to-end encryption, role-based access controls,
+                  SASO System employs enterprise-grade security including end-to-end encryption, role-based access controls,
                   regular security audits, and compliance with FERPA, GDPR, and other relevant data protection
                   regulations. All data is stored in secure, redundant cloud infrastructure with regular backups.
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-5">
-                <AccordionTrigger>Can iPASS be customized for our institution's specific needs?</AccordionTrigger>
+              <AccordionItem value="item-5">  
+                <AccordionTrigger>Can SASO System be customized for our institution's specific needs?</AccordionTrigger>
                 <AccordionContent>
-                  Yes, iPASS is highly configurable. You can customize dashboards, reports, risk indicators,
+                  Yes, SASO System is highly configurable. You can customize dashboards, reports, risk indicators,
                   intervention workflows, and notification settings to match your institution's policies and procedures.
                   Our team works with you to configure the system to your specific requirements.
                 </AccordionContent>

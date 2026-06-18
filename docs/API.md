@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the APIs available in the iPASS system for alert management, intervention workflows, MEL metrics, and user context.
+This document describes the APIs available in the SASO system for alert management, intervention workflows, MEL metrics, and user context.
 
 ---
 

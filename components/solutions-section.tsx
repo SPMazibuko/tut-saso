@@ -9,7 +9,7 @@ export function SolutionsSection() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Solutions for Every Level</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              iPASS adapts to your institution's unique needs, whether you're managing a school, college, or university.
+              SASO System adapts to your institution's unique needs, whether you're managing a school, college, or university.
             </p>
           </div>
 
@@ -17,7 +17,7 @@ export function SolutionsSection() {
             <Card className="p-8 lg:p-10">
               <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 mb-6">
                 <School className="h-8 w-8 text-primary" />
-              </div>
+              </div>      
               <h3 className="text-2xl font-bold mb-4">For Schools</h3>
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-3">
@@ -30,7 +30,7 @@ export function SolutionsSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">●</span>
-                  <span>Coordinate parent-teacher-counselor communication</span>
+                  <span>Coordinate parent-Lecturer-counselor communication</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">●</span>
@@ -73,7 +73,7 @@ export function SolutionsSection() {
               <div>
                 <h3 className="text-2xl font-bold mb-3">Cross-Departmental Insights</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  iPASS breaks down silos by providing a unified view of student success across all departments. Student
+                  SASO System breaks down silos by providing a unified view of student success across all departments. Student
                   Affairs, Academic Departments, Residence Life, and Support Services all work from the same data,
                   ensuring coordinated and effective interventions that truly support student success.
                 </p>

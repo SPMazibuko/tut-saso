@@ -121,7 +121,7 @@ export default function SettingsPage() {
             <Sun className="h-5 w-5" />
             <CardTitle>Appearance</CardTitle>
           </div>
-          <CardDescription>Choose how iPASS looks to you</CardDescription>
+          <CardDescription>Choose how SASO System looks to you</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -130,15 +130,6 @@ export default function SettingsPage() {
               variant={resolvedTheme === "light" ? "default" : "outline"}
               className="justify-start"
               onClick={() => setTheme("light")}
-            >
-              <Sun className="h-4 w-4" />
-              <span className="ml-2">Light</span>
-            </Button>
-            <Button
-              type="button"
-              variant={resolvedTheme === "dark" ? "default" : "outline"}
-              className="justify-start"
-              onClick={() => setTheme("dark")}
             >
               <Moon className="h-4 w-4" />
               <span className="ml-2">Dark</span>
@@ -163,7 +154,7 @@ export default function SettingsPage() {
             <Database className="h-5 w-5" />
             <CardTitle>System Information</CardTitle>
           </div>
-          <CardDescription>iPASS system details</CardDescription>
+          <CardDescription>SASO System details</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between">

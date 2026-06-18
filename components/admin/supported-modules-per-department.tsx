@@ -9,12 +9,12 @@ interface SupportedDepartmentModuleData {
 }
 
 interface ModuleBreakdown {
-  supportedBySOLUSI: number
+  supportedBySASO: number
   supportedByDepartment: number
   notSupported: number
 }
 
-export type BreakdownCategory = "solusi" | "department" | "none"
+export type BreakdownCategory = "saso" | "department" | "none"
 
 interface SupportedModulesPerDepartmentProps {
   data: SupportedDepartmentModuleData[]
@@ -40,15 +40,15 @@ export function SupportedModulesPerDepartment({ data, selectedDepartment, breakd
                 Module Breakdown for {selectedDepartment}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Total modules: {breakdown.supportedBySOLUSI + breakdown.supportedByDepartment + breakdown.notSupported}
+                Total modules: {breakdown.supportedBySASO + breakdown.supportedByDepartment + breakdown.notSupported}
               </p>
             </div>
             
             <div className="space-y-3">
-              {/* Supported by SOLUSI-IPASS */}
+              {/* Supported by SASO */}
               <div
                 className={`${breakdownRowBase} bg-gradient-to-r from-blue-50 to-indigo-50/30 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-100 dark:border-blue-800`}
-                onClick={() => onBreakdownSelect?.("solusi")}
+                onClick={() => onBreakdownSelect?.("saso")}
                 role={onBreakdownSelect ? "button" : undefined}
               >
                 <div className="flex items-center gap-3">
@@ -61,7 +61,7 @@ export function SupportedModulesPerDepartment({ data, selectedDepartment, breakd
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{breakdown.supportedBySOLUSI}</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{breakdown.supportedBySASO}</div>
                 </div>
               </div>
 

@@ -313,7 +313,7 @@ Please answer these so I can tailor my explanation to your level.`
         responseJson.workflowState = "escalated"
         responseJson.reply += `\n\n⚠️ Based on your academic profile, I've also created a support plan that has been shared with an Academic Advisor for follow-up.`
       } else if (riskLevel === "moderate") {
-        responseJson.reply += `\n\n💡 If you'd like additional support, consider reaching out to your teacher or academic advisor.`
+        responseJson.reply += `\n\n💡 If you'd like additional support, consider reaching out to your lecturer or academic advisor.`
       }
       // Low risk: AI can handle, case logged but not escalated
     }

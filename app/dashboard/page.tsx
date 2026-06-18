@@ -97,7 +97,7 @@ const departmentPerformanceByYear: Record<string, typeof mockFacultyOverview> = 
   "2026": mockFacultyOverview,
 }
 
-// Solusi University Campus Performance - Detailed Breakdown
+// TUT campus performance - detailed breakdown
 const campusPerformance = {
   soshanguveSouth: {
     campus: "Soshanguve (South)",

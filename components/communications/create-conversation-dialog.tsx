@@ -2,6 +2,7 @@
 
 import type React from "react"
 import type { SubjectMatter } from "@/lib/types"
+import { formatStudentEmail, studentNumberFromId } from "@/lib/student-numbers"
 
 import { useState } from "react"
 import {
@@ -21,12 +22,14 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Search } from "lucide-react"
 
 // Mock users data
+const studentEmail = (id: number) => formatStudentEmail(studentNumberFromId(id))
+
 const mockUsers = [
   {
     id: "1",
     firstName: "John",
     lastName: "Smith",
-    email: "john.smith@student.edu",
+    email: studentEmail(1),
     role: "student" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -34,7 +37,7 @@ const mockUsers = [
     id: "2",
     firstName: "Emma",
     lastName: "Davis",
-    email: "emma.davis@student.edu",
+    email: studentEmail(2),
     role: "student" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -42,7 +45,7 @@ const mockUsers = [
     id: "3",
     firstName: "Mary",
     lastName: "Johnson",
-    email: "mary.johnson@university.edu",
+    email: "mary.johnson@tut.ac.za",
     role: "tutor" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },
@@ -50,7 +53,7 @@ const mockUsers = [
     id: "4",
     firstName: "System",
     lastName: "Admin",
-    email: "admin@university.edu",
+    email: "admin@tut.ac.za",
     role: "admin" as const,
     avatar: "/placeholder.svg?height=32&width=32",
   },

@@ -38,11 +38,11 @@ export function UploadRecordsSummary({ records, onFilter, onExport, onUpload }: 
   const summary = {
     total: 2845,
     byModule: [
-      { module: "CSC101", count: 450 },
-      { module: "ENG205", count: 380 },
-      { module: "BUS301", count: 350 },
-      { module: "ART102", count: 280 },
-      { module: "SCI401", count: 100 },
+      { module: "PPA115D", count: 450 },
+      { module: "ADS216D", count: 380 },
+      { module: "BUA216D", count: 350 },
+      { module: "SYA216D", count: 280 },
+      { module: "CN1115D", count: 100 },
     ],
     byStatus: [
       { status: "Processed", count: 2500 },
@@ -50,11 +50,11 @@ export function UploadRecordsSummary({ records, onFilter, onExport, onUpload }: 
       { status: "Failed", count: 100 },
     ],
     recentUploads: [
-      { id: "1", module: "CSC101", status: "Processed", count: 150, date: "2024-09-15" },
-      { id: "2", module: "ENG205", status: "Pending", count: 80, date: "2024-09-14" },
-      { id: "3", module: "BUS301", status: "Failed", count: 45, date: "2024-09-14" },
-      { id: "4", module: "ART102", status: "Processed", count: 120, date: "2024-09-13" },
-      { id: "5", module: "SCI401", status: "Processed", count: 90, date: "2024-09-13" },
+      { id: "1", module: "PPA115D", status: "Processed", count: 150, date: "2024-09-15" },
+      { id: "2", module: "ADS216D", status: "Pending", count: 80, date: "2024-09-14" },
+      { id: "3", module: "BUA216D", status: "Failed", count: 45, date: "2024-09-14" },
+      { id: "4", module: "SYA216D", status: "Processed", count: 120, date: "2024-09-13" },
+      { id: "5", module: "CN1115D", status: "Processed", count: 90, date: "2024-09-13" },
     ],
   }
 

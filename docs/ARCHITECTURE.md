@@ -2,7 +2,7 @@
 
 ## Overview
 
-The iPASS (Integrated Predictive Analytics and Learner Support) system is a comprehensive education management platform that combines predictive analytics, student management, early intervention, real-time alerts, progress tracking, and risk assessment.
+The SASO (Integrated Predictive Analytics and Learner Support) system is a comprehensive education management platform that combines predictive analytics, student management, early intervention, real-time alerts, progress tracking, and risk assessment.
 
 ## Architecture Components
 
