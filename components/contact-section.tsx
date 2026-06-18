@@ -27,8 +27,8 @@ export function ContactSection() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-sm text-muted-foreground">info@ipass-edu.com</p>
-                    <p className="text-sm text-muted-foreground">support@ipass-edu.com</p>
+                    <p className="text-sm text-muted-foreground">info@saso.tut.ac.za</p>
+                    <p className="text-sm text-muted-foreground">support@saso.tut.ac.za</p>
                   </div>
                 </div>
               </Card>

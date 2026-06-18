@@ -206,12 +206,12 @@ export default function SelectRolePage() {
               <School className="h-6 w-6" strokeWidth={2} />
             </div>
             <div>
-              <div className="text-lg font-semibold tracking-tight text-white sm:text-xl">iPASS</div>
-              <div className="text-xs text-zinc-400">Academic Success System</div>
+              <div className="text-lg font-semibold tracking-tight text-white sm:text-xl">SASO System</div>
+              <div className="text-xs text-zinc-400">Information and Communication Technology</div>
             </div>
           </Link>
           <Link
-            href="/"
+            href="/"  
             className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
           >
             Back to home

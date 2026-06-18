@@ -8,7 +8,7 @@ import { TrendLineChart, TrendBarChart, TrendAreaChart } from "@/components/anal
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { getStudents } from "@/lib/data-service"
 import { getAvailableCohortYears, getAvailableCourseCodes, getLearnerCourseCode } from "@/lib/cohort-summary"
-import { getCourseName } from "@/lib/sa-courses"
+import { getQualificationName } from "@/lib/tut-saso-data"
 
 const mockExclusionReasons = [
   { reason: "Academic Performance", count: 142, percentage: 52.2 },
@@ -266,14 +266,14 @@ export default function StopStartPage() {
               </SelectContent>
             </Select>
             <Select value={courseFilter} onValueChange={setCourseFilter}>
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="All courses" />
+              <SelectTrigger className="w-[220px]">
+                <SelectValue placeholder="All qualifications" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All courses</SelectItem>
+                <SelectItem value="all">All qualifications</SelectItem>
                 {availableCourses.map((code) => (
                   <SelectItem key={code} value={code}>
-                    {getCourseName(code)} ({code})
+                    {code} — {getQualificationName(code)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -384,7 +384,7 @@ export default function StopStartPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Year excluded</TableHead>
-                  <TableHead>Course</TableHead>
+                  <TableHead>Qualification</TableHead>
                   <TableHead className="text-right">Count</TableHead>
                 </TableRow>
               </TableHeader>
@@ -392,7 +392,7 @@ export default function StopStartPage() {
                 {exclusionsByYearAndCourseData.map((row, idx) => (
                   <TableRow key={idx}>
                     <TableCell>{row.yearExcluded}</TableCell>
-                    <TableCell>{getCourseName(row.courseCode)} ({row.courseCode})</TableCell>
+                    <TableCell>{getQualificationName(row.courseCode)} ({row.courseCode})</TableCell>
                     <TableCell className="text-right">{row.count}</TableCell>
                   </TableRow>
                 ))}
@@ -410,7 +410,7 @@ export default function StopStartPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Year returned</TableHead>
-                  <TableHead>Course</TableHead>
+                  <TableHead>Qualification</TableHead>
                   <TableHead className="text-right">Count</TableHead>
                 </TableRow>
               </TableHeader>
@@ -418,7 +418,7 @@ export default function StopStartPage() {
                 {reEntriesByYearAndCourseData.map((row, idx) => (
                   <TableRow key={idx}>
                     <TableCell>{row.yearReturned}</TableCell>
-                    <TableCell>{getCourseName(row.courseCode)} ({row.courseCode})</TableCell>
+                    <TableCell>{getQualificationName(row.courseCode)} ({row.courseCode})</TableCell>
                     <TableCell className="text-right">{row.count}</TableCell>
                   </TableRow>
                 ))}

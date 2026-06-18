@@ -15,7 +15,7 @@ const USER_PASSWORDS: Record<string, string> = {
   "district@tut.ac.za": "Test@123",
   "province@tut.ac.za": "Test@123",
   "mashilom1@tut.ac.za": "admin@123",
-  "spmazibuko07@gmail.com": "polokwane@TT123",
+  "spmazibuko07@gmail.com": "pretoria@TT123",
 }
 
 function findUserByEmail(email: string): User | undefined {

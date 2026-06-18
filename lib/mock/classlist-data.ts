@@ -1,5 +1,6 @@
 import type { Learner } from "@/lib/types"
 import { SASO_DASHBOARD_STATS } from "@/lib/tut-saso-data"
+import { formatStudentNumber } from "@/lib/student-numbers"
 
 export const CLASSLIST_ACADEMIC_YEAR = SASO_DASHBOARD_STATS.academicYear
 
@@ -266,7 +267,7 @@ function generateAdditionalStudents(): ClasslistMockStudent[] {
     students.push(
       buildStudent(
         studentId,
-        `${CLASSLIST_ACADEMIC_YEAR}${String(studentSequence).padStart(5, "0")}`,
+        formatStudentNumber(studentSequence, CLASSLIST_ACADEMIC_YEAR),
         name,
         surname,
         moduleCode,
@@ -299,7 +300,7 @@ function generateAdditionalStudents(): ClasslistMockStudent[] {
 export const CLASSLIST_SEED_STUDENTS: ClasslistMockStudent[] = [
   buildStudent(
     1,
-    `${CLASSLIST_ACADEMIC_YEAR}00001`,
+    formatStudentNumber(1, CLASSLIST_ACADEMIC_YEAR),
     "Thabo",
     "Mokoena",
     "16E105X",

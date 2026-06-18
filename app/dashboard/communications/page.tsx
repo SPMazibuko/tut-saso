@@ -27,7 +27,7 @@ const mockStudents = [
   {
     id: "1",
     name: "John Smith",
-    studentNumber: "2020123456",
+    studentNumber: "202001234",
     moduleCode: "CSC101",
     status: "probation",
     department: "Computer Science",
@@ -36,7 +36,7 @@ const mockStudents = [
   {
     id: "2",
     name: "Mary Johnson",
-    studentNumber: "2020123457",
+    studentNumber: "202001235",
     moduleCode: "CSC101",
     status: "readmitted",
     department: "Computer Science",
@@ -45,7 +45,7 @@ const mockStudents = [
   {
     id: "3",
     name: "James Brown",
-    studentNumber: "2020123458",
+    studentNumber: "202001236",
     moduleCode: "ENG205",
     status: "other",
     department: "Engineering",
@@ -54,7 +54,7 @@ const mockStudents = [
   {
     id: "4",
     name: "Sarah Davis",
-    studentNumber: "2020123459",
+    studentNumber: "202001237",
     moduleCode: "BUS301",
     status: "probation",
     department: "Business",
@@ -63,7 +63,7 @@ const mockStudents = [
   {
     id: "5",
     name: "Michael Wilson",
-    studentNumber: "2020123460",
+    studentNumber: "202001238",
     moduleCode: "SCI401",
     status: "other",
     department: "Science",
@@ -254,7 +254,7 @@ const mockConversations: Conversation[] = [
       id: "1",
       conversationId: "4",
       senderId: "admin",
-      content: "Welcome to Solusi! Please read the orientation guide and confirm your attendance at the faculty briefing.",
+      content: "Welcome to SASO! Please read the orientation guide and confirm your attendance at the faculty briefing.",
       sentAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
       readBy: ["admin", "s1"],
     },
@@ -551,7 +551,7 @@ const mockMessages: Record<string, Message[]> = {
       id: "1",
       conversationId: "4",
       senderId: "admin",
-      content: "Welcome to Solusi! Please read the orientation guide and confirm your attendance at the faculty briefing.",
+      content: "Welcome to SASO! Please read the orientation guide and confirm your attendance at the faculty briefing.",
       sentAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
       readBy: ["admin", "s1"],
     },

@@ -1,7 +1,7 @@
 import type { Learner } from "./types"
 import { getSubjectName } from "./subject-courses"
 import { getModuleName } from "./modules"
-import { getCourseName, getCourseCodeFromModule } from "./sa-courses"
+import { getQualificationCodeFromModule, getQualificationName } from "./tut-saso-data"
 
 // Cohort analytics: summary, by subject/course, by module
 export interface CohortSummary {
@@ -102,9 +102,11 @@ export function getAvailableSubjectCodes(learners: Learner[]): string[] {
   return Array.from(set).sort()
 }
 
-/** Returns the course code for a learner (courseCode or derived from moduleCode). */
+/** Returns the qualification code for a learner (qualificationCode or derived from moduleCode). */
 export function getLearnerCourseCode(l: Learner): string {
-  const code = l.courseCode ?? (l.moduleCode ? getCourseCodeFromModule(l.moduleCode) : null)
+  const code =
+    l.qualificationCode ??
+    (l.moduleCode ? getQualificationCodeFromModule(l.moduleCode) : l.courseCode ?? null)
   return code || "Other"
 }
 
@@ -141,7 +143,7 @@ export function getCohortSummaryByCourse(
     const inProgression = total - droppedOut - excluded
     return {
       courseCode,
-      courseName: getCourseName(courseCode),
+      courseName: getQualificationName(courseCode),
       inProgression,
       droppedOut,
       excluded,

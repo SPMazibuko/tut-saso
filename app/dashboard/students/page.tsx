@@ -129,7 +129,7 @@ export default function ClassListPage() {
     // Student 1: Sifiso Mazibuko - Academic Warning, Sci-Bono completed, 4 supported subjects
     const student1: Learner = {
       id: 1001,
-      studentNumber: "ST20241001",
+      studentNumber: "202410001",
       name: "Sifiso",
       surname: "Mazibuko",
       email: "sifiso.mazibuko@student.edu",
@@ -180,7 +180,7 @@ export default function ClassListPage() {
     // Student 2: Hannah Martinez - Subject Failed (avg < 50%), Sci-Bono inactive, 1 supported subject
     const student2: Learner = {
       id: 1002,
-      studentNumber: "ST20241002",
+      studentNumber: "202410002",
       name: "Hannah",
       surname: "Martinez",
       email: "hannah.martinez@student.edu",

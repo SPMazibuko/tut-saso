@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { isAuthenticated, login } from "@/lib/auth"
-import { isSelectableRole } from "@/lib/role-mapping"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -61,7 +60,7 @@ const PORTALS = [
 const HIGHLIGHTS = [
   { value: "15,000+", label: "Students supported" },
   { value: "24/7", label: "Digital access" },
-  { value: "4", label: "Faculties connected" },
+  { value: "1", label: "Faculties connected" },
 ]
 
 export default function HomePage() {
@@ -69,7 +68,6 @@ export default function HomePage() {
   const loginRef = useRef<HTMLElement>(null)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -79,19 +77,13 @@ export default function HomePage() {
     }
   }, [router])
 
-  const scrollToLogin = (role?: string) => {
-    if (role) setSelectedRole(role)
-    loginRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     try {
-      const role = isSelectableRole(selectedRole) ? selectedRole : null
-      const user = login(email, password, role)
+      const user = login(email, password)
 
       if (user) {
         router.push("/dashboard")
@@ -122,7 +114,7 @@ export default function HomePage() {
             </div>
             <div>
               <h1 className="text-lg font-semibold tracking-tight sm:text-xl">SASO System</h1>
-              <p className="text-xs text-zinc-400 sm:text-sm">SASO TUT</p>
+              <p className="text-xs text-zinc-400 sm:text-sm">SASO ICT</p>
             </div>
           </div>
           <div className="w-10" aria-hidden />
@@ -163,19 +155,17 @@ export default function HomePage() {
           <div className="grid gap-5 md:grid-cols-3">
             {PORTALS.map((portal, i) => {
               const Icon = portal.icon
-              const isSelected = selectedRole === portal.role
 
               return (
                 <button
                   key={portal.title}
                   type="button"
-                  onClick={() => scrollToLogin(portal.role)}
+                  onClick={() => router.push("/select-role")}
                   className={cn(
                     "group animate-in fade-in slide-in-from-bottom-4 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b p-6 text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
                     portal.accent,
                     portal.ring,
                     portal.glow,
-                    isSelected && "ring-2 ring-white/30",
                   )}
                   style={{ animationDelay: `${250 + i * 100}ms`, animationFillMode: "backwards" }}
                 >
@@ -220,14 +210,6 @@ export default function HomePage() {
                     Enter your credentials to access the SASO system
                   </CardDescription>
                 </div>
-                {selectedRole && (
-                  <p className="text-xs text-zinc-500">
-                    Signing in via{" "}
-                    <span className="font-medium text-zinc-300">
-                      {PORTALS.find((p) => p.role === selectedRole)?.title ?? "selected portal"}
-                    </span>
-                  </p>
-                )}
               </CardHeader>
               <CardContent className="pb-8 pt-2">
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -243,7 +225,7 @@ export default function HomePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="username" className="text-sm text-zinc-300">
-                      Username (student number)
+                      Username
                     </Label>
                     <Input
                       id="username"
@@ -313,7 +295,7 @@ export default function HomePage() {
           </Link>
           .
         </p>
-        <p className="mt-3 text-xs text-zinc-600">© {new Date().getFullYear()} SASO System · Tshwane University of Technology</p>
+        <p className="mt-3 text-xs text-zinc-600">© {new Date().getFullYear()} SASO System · Information and Communication Technology</p>
       </footer>
     </div>
   )

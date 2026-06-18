@@ -11,7 +11,7 @@ export function Footer() {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                 <GraduationCap className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">iPASS</span>
+              <span className="text-xl font-bold">SASO System</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Empowering academic success through predictive analytics and coordinated support.
@@ -98,7 +98,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} iPASS. All rights reserved. Built with care for education.</p>
+          <p>© {new Date().getFullYear()} SASO System. All rights reserved. Built with care for education.</p>
         </div>
       </div>
     </footer>

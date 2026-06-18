@@ -470,7 +470,7 @@ export function getSchoolSummaries(): SchoolSummary[] {
 //   const schools = getSchoolSummaries()
 //   return schools[0] || {
 //     id: "school-1",
-//     name: "iPASS High School",
+//     name: "SASO High School",
 //     districtId: "dist-gp-1",
 //     provinceId: "prov-gp",
 //     stats: getDashboardStats(),

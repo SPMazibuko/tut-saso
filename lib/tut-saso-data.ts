@@ -229,6 +229,42 @@ const SASO_FACULTY_BASE: SasofacultyRecord[] = [
   { moduleCode: "WNE316D", moduleName: "WIRELESS NETWORKS 316R", qualification: "DPIT20", qualificationName: "Dip (Information Technology)", qualificationCode: "DPIT20", campus: "SOSHANGUVE (SOUTH)", departmentName: "INFORMATION TECHNOLOGY", offering_type_name: "SOSHANGUVE (SOUTH) - FULL TIME", blockCode: "1", totalStudents: 24, totalCancellations: 0, validCancellations: 0, invalidCancellations: 0, activeStudents: 24, inactiveStudents: 24, passed: 0, qualifyMainStream: 0, reExam: 0, qualifyReExam: 0, absentMainExam: 0, above70: 0, failedMainExam: 0, marksBetween50And59: 0, marksBetween60And74: 0, marksAbove74: 0 },
 ]
 
+const EXTRA_MODULE_QUALIFICATION_CODES: Record<string, string> = {
+  PG1115D: "DPRS20",
+  PPB115D: "DPRS20",
+  SIS216D: "DPIF20",
+  CN1216D: "DPIT20",
+  DE1115D: "DPYE20_NP6602",
+}
+
+const MODULE_QUALIFICATION_CODE_MAP: Record<string, string> = {
+  ...EXTRA_MODULE_QUALIFICATION_CODES,
+  ...Object.fromEntries(SASO_FACULTY_BASE.map((record) => [record.moduleCode, record.qualificationCode])),
+}
+
+function inferQualificationCodeFromModule(moduleCode: string): string {
+  const upper = moduleCode.toUpperCase()
+  if (upper.startsWith("PPA") || upper.startsWith("PG") || upper.startsWith("PPB") || upper.startsWith("ADS")) return "DPRS20"
+  if (upper.startsWith("BU") || upper.startsWith("SY") || upper.startsWith("DB") || upper.startsWith("ITP") || upper.startsWith("SIS")) return "DPIF20"
+  if (upper.startsWith("CN") || upper.startsWith("CH") || upper.startsWith("WN") || upper.startsWith("NM")) {
+    return upper.includes("F0") || upper.startsWith("CHOF") ? "DPITF0" : "DPIT20"
+  }
+  if (upper.startsWith("TM") || upper.startsWith("IV") || upper.startsWith("MT") || upper.startsWith("CFA") || upper.startsWith("DTP")) return "DPMC20"
+  if (upper.startsWith("DE") || upper.startsWith("EL") || upper.startsWith("DP")) return "DPYE20_NP6602"
+  if (upper.startsWith("16") || upper.startsWith("CAP")) return "DPIF20"
+  return "DPIF20"
+}
+
+export function getQualificationCodeFromModule(moduleCode: string): string {
+  const normalized = moduleCode.replace(/\s+/g, "").toUpperCase()
+  return MODULE_QUALIFICATION_CODE_MAP[normalized] ?? inferQualificationCodeFromModule(normalized)
+}
+
+export function getQualificationName(code: string): string {
+  const normalized = code.replace(/\s+/g, "").toUpperCase()
+  return TUT_QUALIFICATIONS[normalized] ?? code
+}
+
 function enrichWithMockOutcomes(record: SasofacultyRecord): SasofacultyRecord {
   const active = Math.max(record.activeStudents, 1)
   const hash = record.moduleCode.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0)
@@ -236,9 +272,9 @@ function enrichWithMockOutcomes(record: SasofacultyRecord): SasofacultyRecord {
   const passed = Math.round(active * passRate)
   const absentMainExam = Math.max(1, Math.round(active * 0.04))
   const failedMainExam = Math.max(0, active - passed - absentMainExam)
-  const qualifyMainStream = Math.round(passed * 0.88)
-  const reExam = Math.round(failedMainExam * 0.42)
-  const qualifyReExam = Math.round(reExam * 0.58)
+  const qualifyMainStream = passed
+  const reExam = failedMainExam > 0 ? Math.max(1, Math.round(failedMainExam * 0.42)) : 0
+  const qualifyReExam = reExam > 0 ? Math.max(1, Math.round(reExam * 0.58)) : 0
   const above70 = Math.round(passed * 0.4)
   const marksAbove74 = Math.round(passed * 0.26)
   const marksBetween60And74 = Math.round(passed * 0.36)

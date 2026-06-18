@@ -1,5 +1,6 @@
 import type { AttendanceMark, AttendanceSession, AttendanceSessionSettings, AttendanceCaptureMethod } from "./types"
 import { mockIdentifiedModules } from "@/lib/mock/module-identification"
+import { formatStudentNumber } from "@/lib/student-numbers"
 
 function uuid(): string {
   if (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function") {
@@ -82,7 +83,7 @@ const LAST_NAMES = [
 function makeStudent(studentId: number) {
   const first = FIRST_NAMES[studentId % FIRST_NAMES.length] ?? "Student"
   const last = LAST_NAMES[(studentId * 7) % LAST_NAMES.length] ?? "User"
-  const studentNumber = `ST2024${String(studentId).padStart(3, "0")}`
+  const studentNumber = formatStudentNumber(studentId, 2024)
   return { studentId, studentNumber, studentName: `${first} ${last}` }
 }
 

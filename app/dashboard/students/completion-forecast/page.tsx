@@ -15,7 +15,7 @@ import {
   getAvailableCourseCodes,
   getLearnerCourseCode,
 } from "@/lib/cohort-summary"
-import { getCourseName } from "@/lib/sa-courses"
+import { getQualificationName } from "@/lib/tut-saso-data"
 
 const mockRiskFactors = [
   { factor: "Low Attendance", impact: 35.2, students: 420 },
@@ -182,16 +182,16 @@ export default function CompletionForecastPage() {
                 </Select>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-muted-foreground">Course</span>
+                <span className="text-sm font-medium text-muted-foreground">Qualification</span>
                 <Select value={courseFilter} onValueChange={setCourseFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="All courses" />
+                  <SelectTrigger className="w-[220px]">
+                    <SelectValue placeholder="All qualifications" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All courses</SelectItem>
+                    <SelectItem value="all">All qualifications</SelectItem>
                     {availableCourses.map((code) => (
                       <SelectItem key={code} value={code}>
-                        {getCourseName(code)}
+                        {code} — {getQualificationName(code)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -236,16 +236,16 @@ export default function CompletionForecastPage() {
             {(cohortYear !== "all" || courseFilter !== "all") && (
               <p className="text-sm text-muted-foreground">
                 {courseFilter !== "all"
-                  ? `Showing ${cohortSummary.total.toLocaleString()} students (first year ${cohortYear === "all" ? "all" : cohortYear}, course: ${getCourseName(courseFilter)})`
+                  ? `Showing ${cohortSummary.total.toLocaleString()} students (first year ${cohortYear === "all" ? "all" : cohortYear}, qualification: ${getQualificationName(courseFilter)} — ${courseFilter})`
                   : `Cohort size: ${cohortSummary.total.toLocaleString()} students (first year in ${cohortYear})`}
               </p>
             )}
             <div>
-              <p className="text-sm font-medium text-muted-foreground mb-2">By course</p>
+              <p className="text-sm font-medium text-muted-foreground mb-2">By qualification</p>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Course</TableHead>
+                    <TableHead>Qualification</TableHead>
                     <TableHead className="text-right">In progression</TableHead>
                     <TableHead className="text-right">Dropped out</TableHead>
                     <TableHead className="text-right">Excluded</TableHead>
@@ -256,7 +256,7 @@ export default function CompletionForecastPage() {
                   {cohortByCourse.map((row) => (
                     <TableRow key={row.courseCode}>
                       <TableCell>
-                        {row.courseName} ({row.courseCode})
+                        {getQualificationName(row.courseCode)} ({row.courseCode})
                       </TableCell>
                       <TableCell className="text-right">
                         {row.inProgression}

@@ -7,6 +7,7 @@ import type { Learner } from "@/lib/types"
 import { mockStudents } from "@/lib/mock-data"
 import { listAttendanceMarks } from "@/lib/attendance/store"
 import { getSessionAnalytics } from "@/lib/classpoint/mock-analytics"
+import { formatStudentNumber } from "@/lib/student-numbers"
 
 function hashString(s: string): number {
   let h = 0
@@ -87,7 +88,7 @@ export function getSessionRoster(sessionId: string): SessionRosterResult {
     const attemptedPct = totalQuestions > 0 ? (attemptedQuestions / totalQuestions) * 100 : 0
     const participant = attended && attemptedPct > 50
 
-    const studentNumber = mark?.studentNumber ?? `ST2024${String(id).padStart(3, "0")}`
+    const studentNumber = mark?.studentNumber ?? formatStudentNumber(id, 2024)
     const studentName = mark?.studentName ?? (learner ? `${learner.name} ${learner.surname}` : `Student ${id}`)
 
     const isOnProbation = learner?.isOnProbation === true

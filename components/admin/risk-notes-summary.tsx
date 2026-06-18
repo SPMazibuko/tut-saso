@@ -13,6 +13,7 @@ import { Search, Filter, Download, Eye, AlertTriangle, TrendingUp, TrendingDown,
 import type { RiskNote, RiskNoteSummary } from "@/lib/types"
 import { generateRiskNoteSummary, calculateWorkingDays, addWorkingDays, shouldEscalate, getNextEscalationLevel, getStatusFromEscalationLevel } from "@/lib/utils/risk-notes"
 import { format } from "date-fns"
+import { formatStudentNumber } from "@/lib/student-numbers"
 
 interface RiskNotesSummaryProps {
   riskNotes: RiskNote[]
@@ -80,7 +81,7 @@ export function generateMockRiskNotes(): RiskNote[] {
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
     const module = modules[Math.floor(Math.random() * modules.length)]
-    const studentNumber = `2020${String(1000000 + i).padStart(6, '0')}`
+    const studentNumber = formatStudentNumber(i + 1, 2020)
     const studentId = String(i + 1)
     
     // Generate random creation date (within last 30 days)

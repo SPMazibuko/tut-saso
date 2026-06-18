@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     const mockData: FailedStudent[] = [
       {
         id: "1",
-        studentNumber: "STU001",
+        studentNumber: "202500001",
         studentName: "John Doe",
         subjectCode: "MATH",
         subjectName: "Mathematics",
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       },
       {
         id: "2",
-        studentNumber: "STU002",
+        studentNumber: "202500002",
         studentName: "Jane Smith",
         subjectCode: "PHY",
         subjectName: "Physical Sciences",
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
       },
       {
         id: "3",
-        studentNumber: "STU003",
+        studentNumber: "202500003",
         studentName: "Bob Johnson",
         subjectCode: "MATH",
         subjectName: "Mathematics",
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
       },
       {
         id: "4",
-        studentNumber: "STU004",
+        studentNumber: "202500004",
         studentName: "Alice Williams",
         subjectCode: "ECO",
         subjectName: "Economics",

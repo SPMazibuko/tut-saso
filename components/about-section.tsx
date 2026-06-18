@@ -7,7 +7,7 @@ export function AboutSection() {
       <div className="container">
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">About iPASS</h2>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">About SASO System</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto text-pretty leading-relaxed">
               We integrate data, analytics, and academic support to create a comprehensive ecosystem that empowers
               institutions to make data-informed decisions and improve student outcomes.
@@ -54,7 +54,7 @@ export function AboutSection() {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Collaboration Across Education</h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  iPASS bridges the gap between Student Affairs, Residence Life, Academic Departments, and Support
+                  SASO System bridges the gap between Student Affairs, Residence Life, Academic Departments, and Support
                   Services, creating a unified approach to student success.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">

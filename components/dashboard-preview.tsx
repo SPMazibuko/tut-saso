@@ -73,7 +73,7 @@ export function DashboardPreview() {
             <div className="aspect-video rounded-lg bg-muted/50 flex items-center justify-center">
               <img
                 src="/modern-analytics-dashboard-with-charts-and-graphs-.jpg"
-                alt="iPASS Analytics Dashboard"
+                alt="SASO System Analytics Dashboard"
                 className="rounded-lg w-full h-full object-cover"
               />
             </div>

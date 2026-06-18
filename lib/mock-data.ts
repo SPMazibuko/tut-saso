@@ -21,7 +21,9 @@ import type {
   SciBonoImprovements,
 } from "./types"
 import { SOUTH_AFRICAN_PROVINCES } from "./sa-provinces-data"
-import { SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
+import { getQualificationCodeFromModule, SASO_MODULE_CODES, TUT_CAMPUSES } from "./tut-saso-data"
+import { getCourseCodeFromModule } from "./sa-courses"
+import { formatStudentNumber } from "./student-numbers"
 
 // -----------------------------
 // Generators & random utilities
@@ -271,7 +273,8 @@ function generateStudents(count: number): Learner[] {
     // Assign subject, module, and group (course derived from module)
     const subjectCode = pickOne(subjectCodes)
     const moduleCode = pickOne(moduleCodes)
-    const courseCode = (moduleCode.match(/^([A-Za-z]+)/)?.[1] ?? "").toUpperCase() || "Other"
+    const qualificationCode = getQualificationCodeFromModule(moduleCode)
+    const courseCode = getCourseCodeFromModule(moduleCode)
     const group = pickOne(groups)
     
     // Assign teacher (1-3)
@@ -409,7 +412,7 @@ function generateStudents(count: number): Learner[] {
     const student: Learner = {
       // Required fields matching type definition
       id: i + 1, // Numeric ID
-      studentNumber: `ST${enrollmentYear}${(i + 1).toString().padStart(3, "0")}`,
+      studentNumber: formatStudentNumber(i + 1, enrollmentYear),
       name: first,
       surname: last,
       email: buildEmail(first, last),
@@ -417,6 +420,7 @@ function generateStudents(count: number): Learner[] {
       subjectCode,
       moduleCode,
       courseCode,
+      qualificationCode,
       assessments: {
         AS,
         CT,
@@ -448,7 +452,7 @@ function generateStudents(count: number): Learner[] {
       districtId: district.id,
       schoolId: `campus-${campus.id}`,
       // Legacy studentId for backward compatibility
-      studentId: `STU${(i + 1).toString().padStart(3, "0")}`,
+      studentId: formatStudentNumber(i + 1, enrollmentYear),
       gender,
       // Funding and residency fields
       fundingType,
@@ -494,7 +498,7 @@ function generateStudents(count: number): Learner[] {
     out[0].surname = "Mazibuko"
     out[0].email = "spmazibuko07@gmail.com"
     out[0].studentNumber = "221234567"
-    out[0].studentId = "STU001"
+    out[0].studentId = "221234567"
     out[0].provinceId = "prov-gp"
     out[0].districtId = "dist-gp-2"
     out[0].schoolId = "campus-soshanguve-south"

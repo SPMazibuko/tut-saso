@@ -1,4 +1,4 @@
-// Core data types for the iPASS system
+// Core data types for the SASO System
 
 export type UserRole = "admin" | "teacher" | "student" | "parent" | "district-admin" | "provincial-admin"
 
@@ -69,6 +69,8 @@ export interface Learner {
   moduleCode?: string
   /** SA course/programme code (e.g. ENG, BUS, HRM) – derived from moduleCode or set explicitly. */
   courseCode?: string
+  /** TUT qualification code (e.g. DPRS20, DPIF20) – derived from moduleCode or set explicitly. */
+  qualificationCode?: string
   assessments: AssessmentScore
   attendance: AttendanceSummary
   riskLevel: "Good" | "At Risk" | "Satisfactory"
@@ -868,7 +870,7 @@ export type ModuleRiskLevel = 'Low' | 'Medium' | 'High'
 export type EventType = 'Lecture' | 'Tutorial' | 'Lab' | 'Assessment' | 'Meeting'
 export type EventStatus = 'scheduled' | 'completed' | 'cancelled'
 export type UserType = 'student' | 'tutor' | 'admin' | 'lecturer'
-// Solusi University Departments organized by Faculty
+// TUT ICT departments organized by faculty
 export type Department = 
   // Faculty of Education, Humanities, Agriculture, Sciences & Health Professions
   | 'Education' 
