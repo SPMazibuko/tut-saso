@@ -231,13 +231,6 @@ export default function MELMetricsPage() {
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">SBA On-Time Uploads</span>
-                    <span className="text-sm font-bold">{metrics.monitoring.dataQuality.sbaOnTimeUploads.toFixed(1)}%</span>
-                  </div>
-                  <Progress value={metrics.monitoring.dataQuality.sbaOnTimeUploads} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">Attendance Completeness</span>
                     <span className="text-sm font-bold">{metrics.monitoring.dataQuality.attendanceCompleteness.toFixed(1)}%</span>
                   </div>
