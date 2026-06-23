@@ -4,6 +4,7 @@ import { StudentViewLayout } from "@/components/student-view/student-view-layout
 import { CircuitLabBuilder } from "@/components/student-view/circuit-lab-builder"
 import { RoboticsBuilderProvider } from "@/hooks/useRoboticsBuilder"
 import { RoboticsSimulationProvider } from "@/hooks/useRoboticsSimulation"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function CircuitLabPage() {
   return (
@@ -19,6 +20,7 @@ export default function CircuitLabPage() {
           <CircuitLabBuilder />
         </RoboticsBuilderProvider>
       </RoboticsSimulationProvider>
+      <Toaster />
     </StudentViewLayout>
   )
 }

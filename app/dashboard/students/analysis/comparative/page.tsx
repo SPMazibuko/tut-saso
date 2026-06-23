@@ -35,19 +35,19 @@ export default function ComparativeAnalysisPage() {
   const metricsChartData = metrics.slice(0, 10).map((m) => ({
     name: m.name,
     attendance: m.averageAttendance,
-    aps: m.averageAPS,
+    // aps: m.averageAPS,
     passRate: m.passRate,
     atRisk: m.atRiskPercentage,
   }))
 
   const exportToCSV = () => {
-    const headers = ["Level", "Name", "Total Students", "Avg Attendance", "Avg APS", "Pass Rate", "At Risk %"]
+    const headers = ["Level", "Name", "Total Students", "Avg Attendance", "Pass Rate", "At Risk %"]
     const rows = metrics.map((m) => [
       m.level,
       m.name,
       m.totalStudents.toString(),
       m.averageAttendance.toString(),
-      m.averageAPS.toString(),
+      // m.averageAPS.toString(),
       m.passRate.toString(),
       m.atRiskPercentage.toString(),
     ])
@@ -168,7 +168,7 @@ export default function ComparativeAnalysisPage() {
         description="Comparison of key metrics across top performers"
         bars={[
           { dataKey: "attendance", name: "Avg Attendance %", color: "#8884d8" },
-          { dataKey: "aps", name: "Avg APS", color: "#82ca9d" },
+          // { dataKey: "aps", name: "Avg APS", color: "#82ca9d" },
           { dataKey: "passRate", name: "Pass Rate %", color: "#ffc658" },
         ]}
       />
@@ -193,7 +193,7 @@ export default function ComparativeAnalysisPage() {
               title="Performance Comparison"
               metrics={[
                 { key: "averageAttendance", name: "Attendance" },
-                { key: "averageAPS", name: "APS" },
+                // { key: "averageAPS", name: "APS" },
                 { key: "passRate", name: "Pass Rate" },
                 { key: "atRiskPercentage", name: "At Risk %" },
               ]}
@@ -216,7 +216,7 @@ export default function ComparativeAnalysisPage() {
                   <TableHead>Name</TableHead>
                   <TableHead className="text-right">Students</TableHead>
                   <TableHead className="text-right">Avg Attendance</TableHead>
-                  <TableHead className="text-right">Avg APS</TableHead>
+                  {/* <TableHead className="text-right">Avg APS</TableHead> */}
                   <TableHead className="text-right">Pass Rate</TableHead>
                   <TableHead className="text-right">At Risk %</TableHead>
                   <TableHead className="text-right">Risk Distribution</TableHead>
@@ -228,7 +228,7 @@ export default function ComparativeAnalysisPage() {
                     <TableCell className="font-medium">{metric.name}</TableCell>
                     <TableCell className="text-right">{metric.totalStudents}</TableCell>
                     <TableCell className="text-right">{metric.averageAttendance.toFixed(1)}%</TableCell>
-                    <TableCell className="text-right">{metric.averageAPS.toFixed(1)}</TableCell>
+                    {/* <TableCell className="text-right">{metric.averageAPS.toFixed(1)}</TableCell> */}
                     <TableCell className="text-right">{metric.passRate.toFixed(1)}%</TableCell>
                     <TableCell className="text-right">{metric.atRiskPercentage.toFixed(1)}%</TableCell>
                     <TableCell className="text-right text-sm">

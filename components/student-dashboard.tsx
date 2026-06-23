@@ -78,8 +78,8 @@ export function StudentDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Current APS</CardTitle>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
@@ -88,7 +88,7 @@ export function StudentDashboard() {
             <div className="text-2xl font-bold">{student.aps.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">Faculty {student.grade}</p>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -233,7 +233,7 @@ export function StudentDashboard() {
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    {/* <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">APS</span>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{student.aps.toFixed(2)}</span>
@@ -249,7 +249,7 @@ export function StudentDashboard() {
                           <Minus className="h-4 w-4 text-muted-foreground" />
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Attendance</span>
                       <div className="flex items-center gap-2">
@@ -269,14 +269,14 @@ export function StudentDashboard() {
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <p>
+                    {/* <p>
                       {comparison.school.comparison.aps.difference !== 0 && (
                         <span>
                           {comparison.school.comparison.aps.status === "above" ? "+" : ""}
                           {comparison.school.comparison.aps.difference.toFixed(2)} APS difference
                         </span>
                       )}
-                    </p>
+                    </p> */}
                     <p>
                       {comparison.school.comparison.attendance.difference !== 0 && (
                         <span>
@@ -296,7 +296,7 @@ export function StudentDashboard() {
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    {/* <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">APS</span>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{student.aps.toFixed(2)}</span>
@@ -312,7 +312,7 @@ export function StudentDashboard() {
                           <Minus className="h-4 w-4 text-muted-foreground" />
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Attendance</span>
                       <div className="flex items-center gap-2">
@@ -332,14 +332,14 @@ export function StudentDashboard() {
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <p>
+                    {/* <p>
                       {comparison.district.comparison.aps.difference !== 0 && (
                         <span>
                           {comparison.district.comparison.aps.status === "above" ? "+" : ""}
                           {comparison.district.comparison.aps.difference.toFixed(2)} APS difference
                         </span>
                       )}
-                    </p>
+                    </p> */}
                     <p>
                       {comparison.district.comparison.attendance.difference !== 0 && (
                         <span>
@@ -359,7 +359,7 @@ export function StudentDashboard() {
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    {/* <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">APS</span>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{student.aps.toFixed(2)}</span>
@@ -375,7 +375,7 @@ export function StudentDashboard() {
                           <Minus className="h-4 w-4 text-muted-foreground" />
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Attendance</span>
                       <div className="flex items-center gap-2">
@@ -395,14 +395,14 @@ export function StudentDashboard() {
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <p>
+                    {/* <p>
                       {comparison.province.comparison.aps.difference !== 0 && (
                         <span>
                           {comparison.province.comparison.aps.status === "above" ? "+" : ""}
                           {comparison.province.comparison.aps.difference.toFixed(2)} APS difference
                         </span>
                       )}
-                    </p>
+                    </p> */}
                     <p>
                       {comparison.province.comparison.attendance.difference !== 0 && (
                         <span>

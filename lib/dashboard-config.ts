@@ -78,7 +78,7 @@ export function getDashboardConfig(role: UserRole): DashboardLayout {
     student: {
       role: "student",
       widgets: [
-        { id: "current-aps", title: "Current APS", component: "StatsCard", size: "small", required: true },
+        // { id: "current-aps", title: "Current APS", component: "StatsCard", size: "small", required: true },
         { id: "attendance-rate", title: "Attendance Rate", component: "StatsCard", size: "small", required: true },
         { id: "pending-assignments", title: "Pending Assignments", component: "StatsCard", size: "small", required: true },
         { id: "average-grade", title: "Average Grade", component: "StatsCard", size: "small", required: true },
@@ -89,10 +89,10 @@ export function getDashboardConfig(role: UserRole): DashboardLayout {
         rows: 2,
         columns: 4,
         grid: [
-          { widgetId: "current-aps", row: 0, col: 0 },
-          { widgetId: "attendance-rate", row: 0, col: 1 },
-          { widgetId: "pending-assignments", row: 0, col: 2 },
-          { widgetId: "average-grade", row: 0, col: 3 },
+          // { widgetId: "current-aps", row: 0, col: 0 },
+          { widgetId: "attendance-rate", row: 0, col: 0 },
+          { widgetId: "pending-assignments", row: 0, col: 1 },
+          { widgetId: "average-grade", row: 0, col: 2 },
           { widgetId: "recent-activities", row: 1, col: 0, span: 2 },
           { widgetId: "upcoming-deadlines", row: 1, col: 2, span: 2 },
         ],

@@ -8,6 +8,7 @@ export interface GamificationStats {
   circuitsBuilt: number
   badges: string[]
   completedQuizIds: string[]
+  completedDailyDates: string[]
   lastActiveDate: string | null
 }
 
@@ -40,6 +41,7 @@ function defaultStats(): GamificationStats {
     circuitsBuilt: 0,
     badges: [],
     completedQuizIds: [],
+    completedDailyDates: [],
     lastActiveDate: null,
   }
 }
@@ -64,6 +66,35 @@ function saveStats(stats: GamificationStats) {
 function todayKey(): string {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+}
+
+export function getTodayKey(): string {
+  return todayKey()
+}
+
+function hashString(str: string): number {
+  let h = 0
+  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const copy = [...arr]
+  let s = seed
+  for (let i = copy.length - 1; i > 0; i--) {
+    s = (s * 1103515245 + 12345) & 0x7fffffff
+    const j = s % (i + 1)
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
+function formatTodayLabel(): string {
+  return new Date().toLocaleDateString("en-ZA", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  })
 }
 
 function updateStreak(stats: GamificationStats): GamificationStats {
@@ -114,12 +145,20 @@ export function addXp(amount: number, reason?: "quiz" | "circuit"): Gamification
   if (stats.streak >= 7 && !stats.badges.includes("Streak Champion")) {
     stats.badges.push("Streak Champion")
   }
+  const dailyCount = stats.completedDailyDates?.length ?? 0
+  if (dailyCount >= 7 && !stats.badges.includes("Daily Scholar")) {
+    stats.badges.push("Daily Scholar")
+  }
 
   saveStats(stats)
   return stats
 }
 
 export function completeQuiz(quizId: string, scorePercent: number, baseXp: number): GamificationStats {
+  if (quizId.startsWith("daily-")) {
+    return completeDailyQuiz(scorePercent, baseXp)
+  }
+
   const stats = getGamificationStats()
   if (stats.completedQuizIds.includes(quizId)) return stats
 
@@ -133,6 +172,95 @@ export function completeQuiz(quizId: string, scorePercent: number, baseXp: numbe
   }
   saveStats(updated)
   return updated
+}
+
+export function isDailyQuizCompletedToday(): boolean {
+  const stats = getGamificationStats()
+  const dates = stats.completedDailyDates ?? []
+  return dates.includes(todayKey())
+}
+
+export function completeDailyQuiz(scorePercent: number, baseXp = 100): GamificationStats {
+  const today = todayKey()
+  const stats = getGamificationStats()
+  const dates = stats.completedDailyDates ?? []
+  if (dates.includes(today)) return stats
+
+  const bonus = scorePercent === 100 ? Math.round(baseXp * 0.25) : 0
+  const earned = Math.round(baseXp * (scorePercent / 100)) + bonus
+
+  let updated = addXp(earned, "quiz")
+  updated = {
+    ...updated,
+    completedDailyDates: [...dates, today],
+  }
+  saveStats(updated)
+  return updated
+}
+
+function getDailyQuestionPool(department: string): QuizQuestion[] {
+  const fromModules = getQuizzesForDepartment(department).flatMap((q) => q.questions)
+  const extra: QuizQuestion[] = [
+    {
+      id: "extra-1",
+      prompt: "Which TUT faculty commonly offers Informatics qualifications?",
+      options: ["Faculty of Arts", "Faculty of ICT", "Faculty of Law", "Faculty of Health"],
+      correctIndex: 1,
+      explanation: "Informatics programmes sit under the ICT faculty at TUT.",
+    },
+    {
+      id: "extra-2",
+      prompt: "What does CPU stand for?",
+      options: ["Central Processing Unit", "Computer Power Utility", "Core Program Unit", "Cached Processing Upload"],
+      correctIndex: 0,
+      explanation: "CPU = Central Processing Unit.",
+    },
+    {
+      id: "extra-3",
+      prompt: "Binary 1010 in decimal is:",
+      options: ["8", "10", "12", "14"],
+      correctIndex: 1,
+      explanation: "1010₂ = 8 + 2 = 10.",
+    },
+    {
+      id: "extra-4",
+      prompt: "Agile development favours:",
+      options: ["Big upfront design only", "Iterative delivery and feedback", "No documentation ever", "Waterfall phases"],
+      correctIndex: 1,
+      explanation: "Agile emphasises short iterations and continuous feedback.",
+    },
+    {
+      id: "extra-5",
+      prompt: "HTTPS adds which property on top of HTTP?",
+      options: ["Speed", "Encryption", "Compression only", "Caching"],
+      correctIndex: 1,
+      explanation: "HTTPS encrypts traffic using TLS.",
+    },
+  ]
+  return [...fromModules, ...extra]
+}
+
+/** Fresh 5-question quiz that rotates daily — one attempt per calendar day. */
+export function getDailyQuiz(department: string): ModuleQuiz {
+  const today = todayKey()
+  const pool = getDailyQuestionPool(department)
+  const seed = hashString(`${today}-${department}`)
+  const picked = seededShuffle(pool, seed).slice(0, 5)
+
+  const questions = picked.map((q, i) => ({
+    ...q,
+    id: `daily-${today}-q${i}`,
+  }))
+
+  return {
+    id: `daily-${today}`,
+    moduleCode: "DAILY",
+    title: "Quiz of the Day",
+    description: `${formatTodayLabel()} — new questions every day to keep your streak alive.`,
+    difficulty: "Intermediate",
+    xpReward: 100,
+    questions,
+  }
 }
 
 export function recordCircuitBuild(): GamificationStats {

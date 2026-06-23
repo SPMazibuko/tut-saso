@@ -83,7 +83,7 @@ export interface Learner {
   grade?: string
   enrollmentDate?: Date
   avatar?: string
-  aps?: number
+  // aps?: number
   attendanceRate?: number
   riskScore?: number
   lastAssessment?: Date
@@ -246,8 +246,8 @@ export interface LearnerProfile {
   assessments: Assessment[]
   sbaBreakdowns: SBABreakdown[]
   riskFlags: RiskFactor[]
-  historicalGrades?: Array<{ grade: string; aps: number; year: number }>
-  currentAPS: number
+  // historicalGrades?: Array<{ grade: string; aps: number; year: number }>
+  // currentAPS: number
   overallRiskLevel: Learner["riskLevel"]
   overallRiskScore: number
 }
@@ -280,7 +280,8 @@ export interface DashboardStats {
   atRiskStudents: number
   activeInterventions: number
   averageAttendance: number
-  averageAPS: number
+  // averageAPS: number
+  averageAPS?: number
   alertsToday: number
   riskDistribution: {
     low: number
@@ -1197,7 +1198,8 @@ export interface ComparativeMetrics {
   name: string
   totalStudents: number
   averageAttendance: number
-  averageAPS: number
+  // averageAPS: number
+  averageAPS?: number
   passRate: number
   atRiskPercentage: number
   riskDistribution: {

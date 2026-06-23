@@ -76,7 +76,7 @@ export default function StudentViewDashboardPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+          {/* <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -88,7 +88,7 @@ export default function StudentViewDashboardPage() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           <Card>
             <CardContent className="p-6">
@@ -200,11 +200,11 @@ export default function StudentViewDashboardPage() {
                     Module Quizzes
                   </CardTitle>
                   <CardDescription>
-                    Test your knowledge with TUT module quizzes and earn XP
+                    A fresh quiz every day plus module challenges — earn XP and grow your streak
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button size="sm">Take a Quiz</Button>
+                  <Button size="sm">Today&apos;s Quiz</Button>
                 </CardContent>
               </Card>
             </Link>

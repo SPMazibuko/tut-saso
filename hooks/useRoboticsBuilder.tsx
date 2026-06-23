@@ -30,11 +30,34 @@ type RoboticsBuilderAction =
   | { type: "removeConnection"; id: string }
   | { type: "removeComponent"; id: string }
   | { type: "renameComponent"; id: string; name: string }
+  | { type: "updateComponentProps"; id: string; props: Record<string, unknown> }
   | { type: "setFirmwareCode"; code: string }
   | { type: "reset" }
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+function createDefaultState(activePanel: ActivePanel = "properties"): RoboticsBuilderState {
+  const arduino = getComponentTypeById("arduino-uno")
+  const initialArduinoComponent: PlacedComponent = {
+    id: generateId(),
+    typeId: arduino?.id ?? "arduino-uno",
+    name: arduino?.name ?? "Arduino Uno",
+    x: 200,
+    y: 150,
+    props: arduino?.defaultProps ?? {},
+  }
+
+  return {
+    projectName: "My Circuit",
+    isSimulating: false,
+    activePanel,
+    components: [initialArduinoComponent],
+    connections: [],
+    selectedComponentId: null,
+    firmwareCode: defaultFirmware(),
+  }
 }
 
 function initialState(): RoboticsBuilderState {
@@ -53,7 +76,7 @@ function initialState(): RoboticsBuilderState {
     return {
       projectName: restored.name || "My Circuit",
       isSimulating: false,
-      activePanel: "components",
+      activePanel: "properties",
       components: restored.components.length ? restored.components : [initialArduinoComponent],
       connections: restored.connections || [],
       selectedComponentId: null,
@@ -61,15 +84,7 @@ function initialState(): RoboticsBuilderState {
     }
   }
 
-  return {
-    projectName: "My Circuit",
-    isSimulating: false,
-    activePanel: "components",
-    components: [initialArduinoComponent],
-    connections: [],
-    selectedComponentId: null,
-    firmwareCode: defaultFirmware(),
-  }
+  return createDefaultState()
 }
 
 function reducer(state: RoboticsBuilderState, action: RoboticsBuilderAction): RoboticsBuilderState {
@@ -121,10 +136,17 @@ function reducer(state: RoboticsBuilderState, action: RoboticsBuilderAction): Ro
         ...state,
         components: state.components.map((c) => (c.id === action.id ? { ...c, name: action.name } : c)),
       }
+    case "updateComponentProps":
+      return {
+        ...state,
+        components: state.components.map((c) =>
+          c.id === action.id ? { ...c, props: { ...c.props, ...action.props } } : c,
+        ),
+      }
     case "setFirmwareCode":
       return { ...state, firmwareCode: action.code }
     case "reset":
-      return { ...state, isSimulating: false }
+      return createDefaultState(state.activePanel)
     default:
       return state
   }
@@ -143,6 +165,7 @@ type RoboticsBuilderContextValue = RoboticsBuilderState & {
   removeConnection: (id: string) => void
   removeComponent: (id: string) => void
   renameComponent: (id: string, name: string) => void
+  updateComponentProps: (id: string, props: Record<string, unknown>) => void
   setFirmwareCode: (code: string) => void
 }
 
@@ -167,6 +190,7 @@ export function RoboticsBuilderProvider({ children }: { children: React.ReactNod
       removeConnection: (id) => dispatch({ type: "removeConnection", id }),
       removeComponent: (id) => dispatch({ type: "removeComponent", id }),
       renameComponent: (id, name) => dispatch({ type: "renameComponent", id, name }),
+      updateComponentProps: (id, props) => dispatch({ type: "updateComponentProps", id, props }),
       setFirmwareCode: (code) => dispatch({ type: "setFirmwareCode", code }),
     }),
     [state],

@@ -4,9 +4,7 @@ import { useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Award, TrendingUp, BookOpen, GraduationCap, AlertTriangle } from "lucide-react"
-import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { BookOpen, GraduationCap, AlertTriangle } from "lucide-react"
 import { StudentViewLayout } from "@/components/student-view/student-view-layout"
 import { getStudentDashboardSummary, getStudentViewModules } from "@/lib/student-view-data"
 
@@ -14,12 +12,12 @@ export default function StudentProgressPage() {
   const modules = useMemo(() => getStudentViewModules(), [])
   const summary = useMemo(() => getStudentDashboardSummary(modules), [modules])
 
-  const semesterTrend = [
-    { semester: "2024 S2", aps: 2.9 },
-    { semester: "2025 S1", aps: 3.1 },
-    { semester: "2025 S2", aps: 3.3 },
-    { semester: "2026 S1", aps: summary.aps },
-  ]
+  // const semesterTrend = [
+  //   { semester: "2024 S2", aps: 2.9 },
+  //   { semester: "2025 S1", aps: 3.1 },
+  //   { semester: "2025 S2", aps: 3.3 },
+  //   { semester: "2026 S1", aps: summary.aps },
+  // ]
 
   const markDistribution = [
     { range: "75–100%", count: modules.filter((m) => (m.currentMark ?? 0) >= 75).length },
@@ -36,12 +34,12 @@ export default function StudentProgressPage() {
         <div>
           <h1 className="text-3xl font-bold">Academic Progress</h1>
           <p className="text-muted-foreground">
-            APS, credit progression and performance across all registered modules
+            Credit progression and performance across all registered modules
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-4">
-          <Card>
+        <div className="grid gap-4 md:grid-cols-3">
+          {/* <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Current APS</CardTitle>
               <Award className="h-4 w-4 text-muted-foreground" />
@@ -53,7 +51,7 @@ export default function StudentProgressPage() {
                 Improving trend
               </p>
             </CardContent>
-          </Card>
+          </Card> */}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Average Mark</CardTitle>
@@ -94,7 +92,7 @@ export default function StudentProgressPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>APS Trend</CardTitle>
               <CardDescription>Semester-over-semester academic progress score</CardDescription>
@@ -115,9 +113,9 @@ export default function StudentProgressPage() {
                 </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
-          </Card>
+          </Card> */}
 
-          <Card>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Mark Distribution</CardTitle>
               <CardDescription>Performance bands across {modules.length} modules</CardDescription>

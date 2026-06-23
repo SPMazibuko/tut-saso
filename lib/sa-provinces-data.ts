@@ -539,7 +539,7 @@ export function generateProvinceSummaries(): ProvinceSummary[] {
           baseStats.activeInterventions * multiplier * province.districts.length * 5,
         ),
         averageAttendance: Math.max(60, Math.min(95, baseStats.averageAttendance + (Math.random() - 0.5) * 10)),
-        averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
+        // averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
         alertsToday: Math.round(baseStats.alertsToday * multiplier * province.districts.length * 5),
         riskDistribution: {
           low: Math.round(baseStats.riskDistribution.low * multiplier * province.districts.length * 5),
@@ -577,7 +577,7 @@ export function generateDistrictSummaries(): DistrictSummary[] {
           atRiskStudents: Math.round(baseStats.atRiskStudents * multiplier * 5),
           activeInterventions: Math.round(baseStats.activeInterventions * multiplier * 5),
           averageAttendance: Math.max(60, Math.min(95, baseStats.averageAttendance + (Math.random() - 0.5) * 10)),
-          averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
+          // averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
           alertsToday: Math.round(baseStats.alertsToday * multiplier * 5),
           riskDistribution: {
             low: Math.round(baseStats.riskDistribution.low * multiplier * 5),
@@ -622,7 +622,7 @@ export function generateSchoolSummaries(): SchoolSummary[] {
               60,
               Math.min(95, baseStats.averageAttendance + (Math.random() - 0.5) * 10),
             ),
-            averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
+            // averageAPS: Math.max(2.0, Math.min(4.0, baseStats.averageAPS + (Math.random() - 0.5) * 0.5)),
             alertsToday: Math.round(baseStats.alertsToday * multiplier),
             riskDistribution: {
               low: Math.round(baseStats.riskDistribution.low * multiplier),

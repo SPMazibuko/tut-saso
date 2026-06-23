@@ -43,7 +43,7 @@ export function getComparativeMetrics(
   // Calculate metrics
   const totalStudents = filteredStudents.length
   const averageAttendance = filteredStudents.reduce((sum, s) => sum + (s.attendanceRate || s.attendance.percentage), 0) / totalStudents
-  const averageAPS = filteredStudents.reduce((sum, s) => sum + (s.aps || 0), 0) / totalStudents
+  // const averageAPS = filteredStudents.reduce((sum, s) => sum + (s.aps || 0), 0) / totalStudents
   const passed = filteredStudents.filter((s) => {
     const avgScore = (s.assessments.AS + s.assessments.CT + s.assessments.WR) / 3
     return avgScore >= 50
@@ -64,7 +64,7 @@ export function getComparativeMetrics(
     name,
     totalStudents,
     averageAttendance: Math.round(averageAttendance * 10) / 10,
-    averageAPS: Math.round(averageAPS * 10) / 10,
+    // averageAPS: Math.round(averageAPS * 10) / 10,
     passRate: Math.round(passRate * 10) / 10,
     atRiskPercentage: Math.round(atRiskPercentage * 10) / 10,
     riskDistribution,
@@ -122,7 +122,7 @@ export function getStudentComparison(student: Learner, students?: Learner[]): {
     name: `${student.name} ${student.surname}`,
     totalStudents: 1,
     averageAttendance: student.attendanceRate || student.attendance.percentage,
-    averageAPS: student.aps || 0,
+    // averageAPS: student.aps || 0,
     passRate: (() => {
       const avgScore = (student.assessments.AS + student.assessments.CT + student.assessments.WR) / 3
       return avgScore >= 50 ? 100 : 0
@@ -183,14 +183,14 @@ export function compareGroups(
       return {
         totalStudents: 0,
         averageAttendance: 0,
-        averageAPS: 0,
+        // averageAPS: 0,
         passRate: 0,
         atRiskPercentage: 0,
       }
     }
 
     const avgAttendance = students.reduce((sum, s) => sum + (s.attendanceRate || s.attendance.percentage), 0) / students.length
-    const avgAPS = students.reduce((sum, s) => sum + (s.aps || 0), 0) / students.length
+    // const avgAPS = students.reduce((sum, s) => sum + (s.aps || 0), 0) / students.length
     const passed = students.filter((s) => {
       const avgScore = (s.assessments.AS + s.assessments.CT + s.assessments.WR) / 3
       return avgScore >= 50
@@ -202,7 +202,7 @@ export function compareGroups(
     return {
       totalStudents: students.length,
       averageAttendance: Math.round(avgAttendance * 10) / 10,
-      averageAPS: Math.round(avgAPS * 10) / 10,
+      // averageAPS: Math.round(avgAPS * 10) / 10,
       passRate: Math.round(passRate * 10) / 10,
       atRiskPercentage: Math.round(atRiskPercentage * 10) / 10,
     }
@@ -226,13 +226,13 @@ export function compareGroups(
       difference: m1.averageAttendance - m2.averageAttendance,
       percentageDifference: m2.averageAttendance > 0 ? ((m1.averageAttendance - m2.averageAttendance) / m2.averageAttendance) * 100 : 0,
     },
-    {
-      metric: "Average APS",
-      group1: m1.averageAPS,
-      group2: m2.averageAPS,
-      difference: m1.averageAPS - m2.averageAPS,
-      percentageDifference: m2.averageAPS > 0 ? ((m1.averageAPS - m2.averageAPS) / m2.averageAPS) * 100 : 0,
-    },
+    // {
+    //   metric: "Average APS",
+    //   group1: m1.averageAPS,
+    //   group2: m2.averageAPS,
+    //   difference: m1.averageAPS - m2.averageAPS,
+    //   percentageDifference: m2.averageAPS > 0 ? ((m1.averageAPS - m2.averageAPS) / m2.averageAPS) * 100 : 0,
+    // },
     {
       metric: "Pass Rate",
       group1: m1.passRate,

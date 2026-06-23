@@ -639,7 +639,7 @@ export default function DashboardPage() {
                     <div>
                       <p className="text-sm font-medium">{student.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        Faculty {student.grade} • APS: {student.aps?.toFixed(2) ?? "N/A"}
+                        Faculty {student.grade}
                       </p>
                     </div>
                   </div>

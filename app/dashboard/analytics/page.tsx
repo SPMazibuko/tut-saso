@@ -20,19 +20,28 @@ export default function AnalyticsPage() {
   // Calculate grade distribution
   const gradeDistribution = students.reduce(
     (acc, student) => {
-      acc[student.grade] = (acc[student.grade] || 0) + 1
+      const grade = student.grade ?? "Unknown"
+      acc[grade] = (acc[grade] || 0) + 1
       return acc
     },
     {} as Record<string, number>,
   )
 
   // Calculate APS ranges
-  const apsRanges = {
-    "3.5-4.0": students.filter((s) => s.aps >= 3.5).length,
-    "3.0-3.49": students.filter((s) => s.aps >= 3.0 && s.aps < 3.5).length,
-    "2.5-2.99": students.filter((s) => s.aps >= 2.5 && s.aps < 3.0).length,
-    "2.0-2.49": students.filter((s) => s.aps >= 2.0 && s.aps < 2.5).length,
-    "Below 2.0": students.filter((s) => s.aps < 2.0).length,
+  // const apsRanges = {
+  //   "3.5-4.0": students.filter((s) => s.aps >= 3.5).length,
+  //   "3.0-3.49": students.filter((s) => s.aps >= 3.0 && s.aps < 3.5).length,
+  //   "2.5-2.99": students.filter((s) => s.aps >= 2.5 && s.aps < 3.0).length,
+  //   "2.0-2.49": students.filter((s) => s.aps >= 2.0 && s.aps < 2.5).length,
+  //   "Below 2.0": students.filter((s) => s.aps < 2.0).length,
+  // }
+
+  const attendanceRanges = {
+    "90-100%": students.filter((s) => (s.attendanceRate ?? 0) >= 90).length,
+    "80-89%": students.filter((s) => (s.attendanceRate ?? 0) >= 80 && (s.attendanceRate ?? 0) < 90).length,
+    "70-79%": students.filter((s) => (s.attendanceRate ?? 0) >= 70 && (s.attendanceRate ?? 0) < 80).length,
+    "60-69%": students.filter((s) => (s.attendanceRate ?? 0) >= 60 && (s.attendanceRate ?? 0) < 70).length,
+    "Below 60%": students.filter((s) => (s.attendanceRate ?? 0) < 60).length,
   }
 
   return (
@@ -56,7 +65,7 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average APS</CardTitle>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
@@ -65,7 +74,7 @@ export default function AnalyticsPage() {
             <div className="text-2xl font-bold">{stats.averageAPS?.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">Out of 4.0</p>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -95,7 +104,7 @@ export default function AnalyticsPage() {
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* APS Distribution */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>APS Distribution</CardTitle>
             <CardDescription>Student performance by APS range</CardDescription>
@@ -120,7 +129,7 @@ export default function AnalyticsPage() {
               })}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Attendance Distribution */}
         <Card>
@@ -130,7 +139,7 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {Object.entries(apsRanges).map(([range, count]) => {
+              {Object.entries(attendanceRanges).map(([range, count]) => {
                 const percentage = (count / students.length) * 100
                 return (
                   <div key={range} className="space-y-2">

@@ -24,11 +24,11 @@ export default function ParentPortalPage() {
               <CardDescription>Faculty {s.grade} • Student ID {s.studentId}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
+              <div className="grid grid-cols-2 gap-4">
+                {/* <div>
                   <p className="text-sm text-muted-foreground">APS</p>
                   <p className="text-2xl font-semibold">{s.aps.toFixed(2)}</p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm text-muted-foreground">Attendance</p>
                   <p className="text-2xl font-semibold">{s.attendanceRate}%</p>

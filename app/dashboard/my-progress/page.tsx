@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { mockCourses, mockAssignments } from "@/lib/mock-data"
-import { TrendingUp, TrendingDown, Award, Target, BookOpen, CheckCircle2 } from "lucide-react"
-import { Area, AreaChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { Target, BookOpen, CheckCircle2 } from "lucide-react"
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 export default function MyProgressPage() {
@@ -14,12 +14,12 @@ export default function MyProgressPage() {
   const [assignments] = useState(mockAssignments)
 
   // Mock APS trend data over semesters
-  const apsData = [
-    { semester: "Fall 2023", aps: 3.6 },
-    { semester: "Spring 2024", aps: 3.7 },
-    { semester: "Fall 2024", aps: 3.8 },
-    { semester: "Spring 2025", aps: 3.9 },
-  ]
+  // const apsData = [
+  //   { semester: "Fall 2023", aps: 3.6 },
+  //   { semester: "Spring 2024", aps: 3.7 },
+  //   { semester: "Fall 2024", aps: 3.8 },
+  //   { semester: "Spring 2025", aps: 3.9 },
+  // ]
 
   // Mock grade distribution
   const gradeDistribution = [
@@ -31,9 +31,9 @@ export default function MyProgressPage() {
   ]
 
   // Calculate statistics
-  const currentAPS = 3.8
-  const previousAPS = 3.7
-  const apsChange = currentAPS - previousAPS
+  // const currentAPS = 3.8
+  // const previousAPS = 3.7
+  // const apsChange = currentAPS - previousAPS
   const completedAssignments = assignments.filter((a) => a.status === "graded").length
   const totalAssignments = assignments.length
   const completionRate = (completedAssignments / totalAssignments) * 100
@@ -50,8 +50,8 @@ export default function MyProgressPage() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
+      <div className="grid gap-4 md:grid-cols-3">
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Current APS</CardTitle>
             <Award className="h-4 w-4 text-muted-foreground" />
@@ -73,7 +73,7 @@ export default function MyProgressPage() {
               <span className="ml-1">from last semester</span>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -114,7 +114,7 @@ export default function MyProgressPage() {
       </div>
 
       {/* APS Trend Chart */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>APS Trend</CardTitle>
           <CardDescription>Your APS progression over time</CardDescription>
@@ -169,7 +169,7 @@ export default function MyProgressPage() {
             </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Faculty Distribution */}
@@ -256,13 +256,13 @@ export default function MyProgressPage() {
           <CardDescription>Track your progress towards your academic goals</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Maintain 3.8+ APS</span>
               <Badge variant="default">On Track</Badge>
             </div>
             <Progress value={95} className="h-2" />
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
