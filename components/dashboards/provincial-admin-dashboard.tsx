@@ -125,10 +125,10 @@ export function ProvincialAdminDashboard() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Performance</p>
               <div className="mt-2 space-y-1">
-                <div className="flex justify-between text-sm">
+                {/* <div className="flex justify-between text-sm">
                   <span>Average APS</span>
                   <span className="font-bold">{stats.averageAPS?.toFixed(2) || "N/A"}</span>
-                </div>
+                </div> */}
                 <div className="flex justify-between text-sm">
                   <span>Avg Attendance</span>
                   <span className="font-bold">{stats.averageAttendance.toFixed(1)}%</span>

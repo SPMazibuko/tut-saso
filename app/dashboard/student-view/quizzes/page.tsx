@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { Trophy, Flame, Star, Zap, CheckCircle2, ArrowLeft, Award } from "lucide-react"
+import { Trophy, Flame, Star, Zap, CheckCircle2, ArrowLeft, Award, CalendarDays } from "lucide-react"
 import { StudentViewLayout } from "@/components/student-view/student-view-layout"
 import { getStudentEnrollment } from "@/lib/student-view-data"
 import {
   completeQuiz,
+  getDailyQuiz,
   getGamificationStats,
   getQuizzesForDepartment,
   getXpProgress,
+  isDailyQuizCompletedToday,
   type GamificationStats,
   type ModuleQuiz,
 } from "@/lib/student-gamification"
@@ -41,11 +43,18 @@ export default function StudentQuizzesPage() {
   }, [])
 
   const quizzes = useMemo(() => getQuizzesForDepartment(enrollment.department), [enrollment.department])
+  const dailyQuiz = useMemo(() => getDailyQuiz(enrollment.department), [enrollment.department])
+  const dailyDone = useMemo(() => isDailyQuizCompletedToday(), [stats.completedDailyDates, stats.lastActiveDate])
   const xpProgress = getXpProgress(stats.totalXp)
 
-  const startQuiz = (quiz: ModuleQuiz) => {
-    if (stats.completedQuizIds.includes(quiz.id)) {
-      toast({ title: "Already completed", description: "You've already earned XP for this quiz." })
+  const startQuiz = (quiz: ModuleQuiz, isDaily = false) => {
+    if (isDaily) {
+      if (isDailyQuizCompletedToday()) {
+        toast({ title: "Already completed today", description: "Come back tomorrow for a new quiz of the day." })
+        return
+      }
+    } else if (stats.completedQuizIds.includes(quiz.id)) {
+      toast({ title: "Already completed", description: "You've already earned XP for this module quiz." })
       return
     }
     setActiveQuiz(quiz)
@@ -83,6 +92,12 @@ export default function StudentQuizzesPage() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Badge variant="outline" className="font-mono">{activeQuiz.moduleCode}</Badge>
+              {activeQuiz.moduleCode === "DAILY" && (
+                <Badge className="bg-primary text-primary-foreground gap-1">
+                  <Flame className="h-3 w-3" />
+                  Daily
+                </Badge>
+              )}
               <Badge variant={difficultyVariant(activeQuiz.difficulty)}>{activeQuiz.difficulty}</Badge>
             </div>
             <h1 className="text-2xl font-bold">{activeQuiz.title}</h1>
@@ -228,6 +243,59 @@ export default function StudentQuizzesPage() {
           </div>
         )}
 
+        <Card className={dailyDone ? "border-muted" : "border-primary/40 bg-primary/5"}>
+          <CardHeader>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge className="bg-primary text-primary-foreground gap-1">
+                    <CalendarDays className="h-3 w-3" />
+                    Quiz of the Day
+                  </Badge>
+                  {dailyDone && (
+                    <Badge variant="secondary" className="gap-1">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Done today
+                    </Badge>
+                  )}
+                </div>
+                <CardTitle className="text-xl">{dailyQuiz.title}</CardTitle>
+                <CardDescription className="mt-1">{dailyQuiz.description}</CardDescription>
+              </div>
+              <Flame className={`h-10 w-10 shrink-0 ${dailyDone ? "text-muted-foreground" : "text-orange-500"}`} />
+            </div>
+          </CardHeader>
+          <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="text-sm text-muted-foreground space-y-1">
+              <p className="flex items-center gap-1">
+                <Trophy className="h-4 w-4" />
+                +{dailyQuiz.xpReward} XP · {dailyQuiz.questions.length} questions
+              </p>
+              <p className="flex items-center gap-1">
+                <Flame className="h-4 w-4" />
+                {dailyDone
+                  ? "Next quiz unlocks tomorrow — keep your streak going!"
+                  : "Complete today to extend your day streak"}
+              </p>
+            </div>
+            <Button
+              size="lg"
+              variant={dailyDone ? "outline" : "default"}
+              disabled={dailyDone}
+              onClick={() => startQuiz(dailyQuiz, true)}
+            >
+              {dailyDone ? "Completed Today" : "Start Today's Quiz"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-3">Module Quizzes</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            One-time module challenges — the daily quiz above always refreshes with new questions.
+          </p>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
           {quizzes.map((quiz) => {
             const done = stats.completedQuizIds.includes(quiz.id)
@@ -248,7 +316,7 @@ export default function StudentQuizzesPage() {
                     <Trophy className="h-4 w-4" />
                     +{quiz.xpReward} XP · {quiz.questions.length} questions
                   </span>
-                  <Button size="sm" variant={done ? "outline" : "default"} onClick={() => startQuiz(quiz)}>
+                  <Button size="sm" variant={done ? "outline" : "default"} onClick={() => startQuiz(quiz, false)}>
                     {done ? "Completed" : "Start Quiz"}
                   </Button>
                 </CardContent>

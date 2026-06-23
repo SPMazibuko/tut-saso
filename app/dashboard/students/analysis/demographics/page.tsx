@@ -62,18 +62,18 @@ export default function DemographicsAnalysisPage() {
   const correlationData = correlations.map((corr) => ({
     name: `${corr.demographic} - ${corr.value}`,
     attendance: corr.averageAttendance,
-    aps: corr.averageAPS,
+    // aps: corr.averageAPS,
     passRate: corr.passRate,
     atRisk: corr.atRiskPercentage,
   }))
 
   const exportToCSV = () => {
-    const headers = ["Demographic", "Value", "Average Attendance", "Average APS", "Pass Rate", "At Risk %"]
+    const headers = ["Demographic", "Value", "Average Attendance", "Pass Rate", "At Risk %"]
     const rows = correlations.map((c) => [
       c.demographic,
       c.value,
       c.averageAttendance.toFixed(2),
-      c.averageAPS.toFixed(2),
+      // c.averageAPS.toFixed(2),
       c.passRate.toFixed(2),
       c.atRiskPercentage.toFixed(2),
     ])
@@ -203,7 +203,7 @@ export default function DemographicsAnalysisPage() {
         description="Academic performance metrics by demographic groups"
         bars={[
           { dataKey: "attendance", name: "Average Attendance %", color: "#8884d8" },
-          { dataKey: "aps", name: "Average APS", color: "#82ca9d" },
+          // { dataKey: "aps", name: "Average APS", color: "#82ca9d" },
           { dataKey: "passRate", name: "Pass Rate %", color: "#ffc658" },
           { dataKey: "atRisk", name: "At Risk %", color: "#ff6b6b" },
         ]}

@@ -201,17 +201,17 @@ function generateStudents(count: number): Learner[] {
       { value: 12, weight: 1.0 },
     ])
 
-    const apsRaw = clamp(randomNormal(2.7, 0.7), 0, 4)
-    const aps = Math.round(apsRaw * 10) / 10
+    // const apsRaw = clamp(randomNormal(2.7, 0.7), 0, 4)
+    // const aps = Math.round(apsRaw * 10) / 10
 
     const attendanceRaw = clamp(randomNormal(90, 8), 60, 100)
     const attendanceRate = Math.round(attendanceRaw)
 
-    // Derive risk from APS and attendance with noise
-    const apsComponent = (1 - aps / 4) * 55 // up to 55 points
+    // Derive risk from attendance with noise (APS disabled)
+    // const apsComponent = (1 - aps / 4) * 55 // up to 55 points
     const attendanceComponent = (1 - (attendanceRate - 60) / 40) * 35 // up to 35 points
     const noise = clamp(randomNormal(0, 8), -10, 10)
-    const riskScore = clamp(Math.round(apsComponent + attendanceComponent + noise), 5, 95)
+    const riskScore = clamp(Math.round(attendanceComponent + noise), 5, 95)
     const oldRiskLevel =
       riskScore > 80 ? "critical" : riskScore > 60 ? "high" : riskScore > 35 ? "medium" : "low"
     
@@ -441,7 +441,7 @@ function generateStudents(count: number): Learner[] {
       // Legacy fields for backward compatibility
       grade: String(grade),
       enrollmentDate,
-      aps,
+      // aps,
       attendanceRate,
       riskScore,
       lastAssessment,
@@ -624,7 +624,7 @@ function generateRiskFactors(students: Learner[]): RiskFactor[] {
         resolved: false,
       })
     }
-    if (assessmentPP < 50 || (s.aps !== undefined && s.aps < 2.5)) {
+    if (assessmentPP < 50 /* || (s.aps !== undefined && s.aps < 2.5) */) {
       factors.push({
         id: uuid(),
         studentId: String(s.id),

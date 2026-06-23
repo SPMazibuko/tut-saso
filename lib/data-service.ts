@@ -124,7 +124,7 @@ export function getDashboardStats(studentsOverride?: Learner[]): DashboardStats 
   }
 
   const totalAttendance = students.reduce((sum, s) => sum + (s.attendanceRate || s.attendance?.percentage || 0), 0)
-  const totalAPS = students.reduce((sum, s) => sum + (s.aps || 0), 0)
+  // const totalAPS = students.reduce((sum, s) => sum + (s.aps || 0), 0)
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -135,7 +135,7 @@ export function getDashboardStats(studentsOverride?: Learner[]): DashboardStats 
     atRiskStudents: students.filter((s) => s.riskLevel === "At Risk" || s.riskLevel === "Satisfactory").length,
     activeInterventions: mockInterventions.filter((i) => i.status === "in-progress").length,
     averageAttendance: students.length ? totalAttendance / students.length : 0,
-    averageAPS: students.length ? totalAPS / students.length : 0,
+    // averageAPS: students.length ? totalAPS / students.length : 0,
     alertsToday,
     riskDistribution,
   }

@@ -220,7 +220,7 @@ export function getStudentDashboardSummary(modules: StudentModule[]) {
       ? modules.reduce((sum, m) => sum + m.attendanceRate, 0) / modules.length
       : 0
   const atRiskCount = modules.filter((m) => m.riskLevel === "At Risk").length
-  const aps = Math.min(4, Math.max(1.5, (averageMark / 25) * 0.8 + (averageAttendance / 100) * 1.2))
+  // const aps = Math.min(4, Math.max(1.5, (averageMark / 25) * 0.8 + (averageAttendance / 100) * 1.2))
 
   const enrollment = getStudentEnrollment()
 
@@ -234,7 +234,7 @@ export function getStudentDashboardSummary(modules: StudentModule[]) {
     totalCredits,
     averageMark: Math.round(averageMark),
     averageAttendance: Math.round(averageAttendance),
-    aps: Number(aps.toFixed(2)),
+    // aps: Number(aps.toFixed(2)),
     academicStanding: atRiskCount > 2 ? "Probation" : atRiskCount > 0 ? "Satisfactory" : "Good Standing",
     atRiskModules: atRiskCount,
   }

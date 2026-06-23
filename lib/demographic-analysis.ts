@@ -40,7 +40,8 @@ export interface DemographicCorrelation {
   demographic: string
   value: string
   averageAttendance: number
-  averageAPS: number
+  // averageAPS: number
+  averageAPS?: number
   passRate: number
   atRiskPercentage: number
 }
@@ -192,7 +193,7 @@ export function getDemographicCorrelations(students?: Learner[]): DemographicCor
   Object.entries(genderGroups).forEach(([gender, group]) => {
     if (group.length === 0) return
     const avgAttendance = group.reduce((sum, s) => sum + (s.attendanceRate || s.attendance.percentage), 0) / group.length
-    const avgAPS = group.reduce((sum, s) => sum + (s.aps || 0), 0) / group.length
+    // const avgAPS = group.reduce((sum, s) => sum + (s.aps || 0), 0) / group.length
     const passRate = group.filter((s) => {
       const avgScore = (s.assessments.AS + s.assessments.CT + s.assessments.WR) / 3
       return avgScore >= 50
@@ -203,7 +204,7 @@ export function getDemographicCorrelations(students?: Learner[]): DemographicCor
       demographic: "gender",
       value: gender,
       averageAttendance: avgAttendance,
-      averageAPS: avgAPS,
+      // averageAPS: avgAPS,
       passRate,
       atRiskPercentage: atRisk,
     })
@@ -219,7 +220,7 @@ export function getDemographicCorrelations(students?: Learner[]): DemographicCor
   Object.entries(incomeGroups).forEach(([income, group]) => {
     if (group.length === 0) return
     const avgAttendance = group.reduce((sum, s) => sum + (s.attendanceRate || s.attendance.percentage), 0) / group.length
-    const avgAPS = group.reduce((sum, s) => sum + (s.aps || 0), 0) / group.length
+    // const avgAPS = group.reduce((sum, s) => sum + (s.aps || 0), 0) / group.length
     const passRate = group.filter((s) => {
       const avgScore = (s.assessments.AS + s.assessments.CT + s.assessments.WR) / 3
       return avgScore >= 50
@@ -230,7 +231,7 @@ export function getDemographicCorrelations(students?: Learner[]): DemographicCor
       demographic: "income",
       value: income,
       averageAttendance: avgAttendance,
-      averageAPS: avgAPS,
+      // averageAPS: avgAPS,
       passRate,
       atRiskPercentage: atRisk,
     })

@@ -73,35 +73,35 @@ export function getStudentHierarchy(student: Learner): StudentHierarchy | null {
  */
 export interface HierarchyComparison {
   student: {
-    aps: number
+    // aps: number
     attendanceRate: number
     riskLevel: Learner["riskLevel"]
     riskScore: number
   }
   school: {
-    avgAPS: number
+    // avgAPS: number
     avgAttendance: number
     atRiskPercentage: number
     comparison: {
-      aps: { difference: number; status: "above" | "below" | "equal" }
+      // aps: { difference: number; status: "above" | "below" | "equal" }
       attendance: { difference: number; status: "above" | "below" | "equal" }
     }
   }
   district: {
-    avgAPS: number
+    // avgAPS: number
     avgAttendance: number
     atRiskPercentage: number
     comparison: {
-      aps: { difference: number; status: "above" | "below" | "equal" }
+      // aps: { difference: number; status: "above" | "below" | "equal" }
       attendance: { difference: number; status: "above" | "below" | "equal" }
     }
   }
   province: {
-    avgAPS: number
+    // avgAPS: number
     avgAttendance: number
     atRiskPercentage: number
     comparison: {
-      aps: { difference: number; status: "above" | "below" | "equal" }
+      // aps: { difference: number; status: "above" | "below" | "equal" }
       attendance: { difference: number; status: "above" | "below" | "equal" }
     }
   }
@@ -112,7 +112,7 @@ export function getHierarchyComparison(student: Learner): HierarchyComparison | 
   if (!hierarchy) return null
 
   const studentData = {
-    aps: student.aps,
+    // aps: student.aps,
     attendanceRate: student.attendanceRate,
     riskLevel: student.riskLevel,
     riskScore: student.riskScore,
@@ -122,21 +122,21 @@ export function getHierarchyComparison(student: Learner): HierarchyComparison | 
   const schoolStats = hierarchy.school.summary?.stats
   const schoolData = schoolStats
     ? {
-        avgAPS: schoolStats.averageAPS,
+        // avgAPS: schoolStats.averageAPS,
         avgAttendance: schoolStats.averageAttendance,
         atRiskPercentage:
           ((schoolStats.atRiskStudents / schoolStats.totalStudents) * 100) || 0,
         comparison: {
-          aps: compareValues(student.aps, schoolStats.averageAPS),
+          // aps: compareValues(student.aps, schoolStats.averageAPS),
           attendance: compareValues(student.attendanceRate, schoolStats.averageAttendance),
         },
       }
     : {
-        avgAPS: 0,
+        // avgAPS: 0,
         avgAttendance: 0,
         atRiskPercentage: 0,
         comparison: {
-          aps: { difference: 0, status: "equal" as const },
+          // aps: { difference: 0, status: "equal" as const },
           attendance: { difference: 0, status: "equal" as const },
         },
       }
@@ -145,21 +145,21 @@ export function getHierarchyComparison(student: Learner): HierarchyComparison | 
   const districtStats = hierarchy.district.summary?.stats
   const districtData = districtStats
     ? {
-        avgAPS: districtStats.averageAPS,
+        // avgAPS: districtStats.averageAPS,
         avgAttendance: districtStats.averageAttendance,
         atRiskPercentage:
           ((districtStats.atRiskStudents / districtStats.totalStudents) * 100) || 0,
         comparison: {
-          aps: compareValues(student.aps, districtStats.averageAPS),
+          // aps: compareValues(student.aps, districtStats.averageAPS),
           attendance: compareValues(student.attendanceRate, districtStats.averageAttendance),
         },
       }
     : {
-        avgAPS: 0,
+        // avgAPS: 0,
         avgAttendance: 0,
         atRiskPercentage: 0,
         comparison: {
-          aps: { difference: 0, status: "equal" as const },
+          // aps: { difference: 0, status: "equal" as const },
           attendance: { difference: 0, status: "equal" as const },
         },
       }
@@ -168,21 +168,21 @@ export function getHierarchyComparison(student: Learner): HierarchyComparison | 
   const provinceStats = hierarchy.province.summary?.stats
   const provinceData = provinceStats
     ? {
-        avgAPS: provinceStats.averageAPS,
+        // avgAPS: provinceStats.averageAPS,
         avgAttendance: provinceStats.averageAttendance,
         atRiskPercentage:
           ((provinceStats.atRiskStudents / provinceStats.totalStudents) * 100) || 0,
         comparison: {
-          aps: compareValues(student.aps, provinceStats.averageAPS),
+          // aps: compareValues(student.aps, provinceStats.averageAPS),
           attendance: compareValues(student.attendanceRate, provinceStats.averageAttendance),
         },
       }
     : {
-        avgAPS: 0,
+        // avgAPS: 0,
         avgAttendance: 0,
         atRiskPercentage: 0,
         comparison: {
-          aps: { difference: 0, status: "equal" as const },
+          // aps: { difference: 0, status: "equal" as const },
           attendance: { difference: 0, status: "equal" as const },
         },
       }
@@ -228,13 +228,12 @@ export function getPercentileRanking(
   student: Learner,
   allStudentsInContext: Learner[],
 ): PercentileRanking {
-  // For demo purposes, we'll estimate based on APS and attendance
-  // In production, this would use actual ranking calculations
+  // For demo purposes, estimate ranking based on attendance (APS disabled)
 
-  const studentScore = student.aps * 20 + student.attendanceRate // Combined score
+  const studentScore = student.attendanceRate
 
   const sortedScores = allStudentsInContext
-    .map((s) => s.aps * 20 + s.attendanceRate)
+    .map((s) => s.attendanceRate)
     .sort((a, b) => b - a)
 
   const studentIndex = sortedScores.findIndex((score) => score <= studentScore)

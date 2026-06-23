@@ -60,8 +60,8 @@ export function ParentDashboard() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Current APS</p>
-              <p className="text-2xl font-bold">{child.aps?.toFixed(2) || "N/A"}</p>
+              {/* <p className="text-sm font-medium text-muted-foreground">Current APS</p>
+              <p className="text-2xl font-bold">{child.aps?.toFixed(2) || "N/A"}</p> */}
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Attendance</p>

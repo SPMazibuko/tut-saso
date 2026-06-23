@@ -34,7 +34,7 @@ export default function SubDistrictPage({ params }: { params: { provinceId: stri
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{s.name}</p>
-                    <p className="text-xs text-muted-foreground">APS: {s.stats.averageAPS.toFixed(2)}</p>
+                    {/* <p className="text-xs text-muted-foreground">APS: {s.stats.averageAPS.toFixed(2)}</p> */}
                   </div>
                   <span className="text-sm">At Risk: {s.stats.atRiskStudents}</span>
                 </div>

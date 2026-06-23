@@ -230,10 +230,10 @@ export default function StudentProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 rounded-lg bg-muted">
+              {/* <div className="text-center p-4 rounded-lg bg-muted">
                 <p className="text-3xl font-bold text-primary">{summary.aps}</p>
                 <p className="text-sm text-muted-foreground mt-1">APS Score</p>
-              </div>
+              </div> */}
               <div className="text-center p-4 rounded-lg bg-muted">
                 <p className="text-3xl font-bold">{summary.registeredModules}</p>
                 <p className="text-sm text-muted-foreground mt-1">Modules</p>

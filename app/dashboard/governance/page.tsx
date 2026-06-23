@@ -308,7 +308,7 @@ function MultiLevelGovernanceView() {
               totalStudents={school.stats.totalStudents}
               atRisk={school.stats.atRiskStudents}
               avgAttendance={school.stats.averageAttendance}
-              avgGpa={school.stats.averageAPS}
+              // avgGpa={school.stats.averageAPS}
             />
           </CardContent>
         </Card>
@@ -415,12 +415,12 @@ function StatsGrid({
   totalStudents,
   atRisk,
   avgAttendance,
-  avgGpa,
+  // avgGpa,
 }: {
   totalStudents: number
   atRisk: number
   avgAttendance: number
-  avgGpa: number
+  // avgGpa: number
 }) {
   return (
     <div className="grid grid-cols-2 gap-4">
@@ -436,10 +436,10 @@ function StatsGrid({
         <p className="text-sm text-muted-foreground">Attendance</p>
         <p className="text-2xl font-semibold">{avgAttendance.toFixed(1)}%</p>
       </div>
-      <div>
+      {/* <div>
         <p className="text-sm text-muted-foreground">Average APS</p>
         <p className="text-2xl font-semibold">{avgGpa.toFixed(2)}</p>
-      </div>
+      </div> */}
     </div>
   )
 }

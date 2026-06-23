@@ -43,7 +43,7 @@ export function getLearnerProfile(studentId: string): LearnerProfile | null {
     assessments,
     sbaBreakdowns,
     riskFlags,
-    currentAPS: student.aps,
+    // currentAPS: student.aps,
     overallRiskLevel: student.riskLevel,
     overallRiskScore: student.riskScore,
   }

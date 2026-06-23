@@ -158,7 +158,6 @@ function buildAcademicSystemPrompt(
     prompt += `\n\nSTUDENT PROFILE:
 - Grade: ${profile.grade}
 - Attendance Rate: ${profile.attendanceRate}%
-- Current APS: ${profile.currentAPS}
 - Overall Risk Level: ${profile.overallRiskLevel}
 - Recent Assessments: ${profile.assessments.length} found
 - Risk Flags: ${profile.riskFlags.length} active`

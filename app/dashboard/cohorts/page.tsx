@@ -10,15 +10,19 @@ export default function CohortsPage() {
   useEffect(() => setStudents(getStudents()), [])
 
   const byGrade = students.reduce<Record<string, Learner[]>>((acc, s) => {
-    acc[s.grade] = acc[s.grade] || []
-    acc[s.grade].push(s)
+    const grade = s.grade ?? "Unknown"
+    acc[grade] = acc[grade] || []
+    acc[grade].push(s)
     return acc
   }, {})
 
-  // Identify bottleneck subjects placeholder (using APS as proxy)
+  // Identify bottleneck subjects placeholder (using attendance as proxy)
   const bottlenecks = Object.entries(byGrade)
-    .map(([grade, list]) => ({ grade, lowApsPct: Math.round((list.filter((s) => s.aps < 2.5).length / list.length) * 100) }))
-    .sort((a, b) => b.lowApsPct - a.lowApsPct)
+    .map(([grade, list]) => ({
+      grade,
+      lowAttendancePct: Math.round((list.filter((s) => (s.attendanceRate ?? 0) < 75).length / list.length) * 100),
+    }))
+    .sort((a, b) => b.lowAttendancePct - a.lowAttendancePct)
 
   return (
     <div className="p-6 space-y-6">
@@ -30,19 +34,22 @@ export default function CohortsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Faculties Overview</CardTitle>
-          <CardDescription>Students per faculty and low-APS share</CardDescription>
+          <CardDescription>Students per faculty and low-attendance share</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-3">
             {Object.entries(byGrade)
               .sort(([a], [b]) => Number(a) - Number(b))
               .map(([grade, list]) => {
-                const lowAps = Math.round((list.filter((s) => s.aps < 2.5).length / list.length) * 100)
+                const lowAttendance = Math.round(
+                  (list.filter((s) => (s.attendanceRate ?? 0) < 75).length / list.length) * 100,
+                )
                 return (
                   <div key={grade} className="p-3 rounded-lg border bg-card">
                     <p className="font-medium">Faculty {grade}</p>
                     <p className="text-sm text-muted-foreground">Students: {list.length}</p>
-                    <p className="text-sm">Low APS: {lowAps}%</p>
+                    <p className="text-sm">Low attendance: {lowAttendance}%</p>
+                    {/* <p className="text-sm">Low APS: {lowAps}%</p> */}
                   </div>
                 )
               })}
@@ -53,14 +60,15 @@ export default function CohortsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Potential Bottlenecks</CardTitle>
-          <CardDescription>Faculties with higher concentration of low APS</CardDescription>
+          <CardDescription>Faculties with higher concentration of low attendance</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             {bottlenecks.map((b) => (
               <div key={b.grade} className="flex items-center justify-between p-3 rounded-lg border bg-card">
                 <span className="text-sm">Faculty {b.grade}</span>
-                <span className="text-sm">Low APS: {b.lowApsPct}%</span>
+                <span className="text-sm">Low attendance: {b.lowAttendancePct}%</span>
+                {/* <span className="text-sm">Low APS: {b.lowApsPct}%</span> */}
               </div>
             ))}
           </div>
@@ -69,5 +77,3 @@ export default function CohortsPage() {
     </div>
   )
 }
-
-
